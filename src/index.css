@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../src/assets/fonts/Lato/Lato-Regular.woff');
+  src: url('../src/assets/fonts/Lato/Lato-Regular.woff2');
+}
+
+body{
+  font-family: 'Lato', sans-serif;
+}
