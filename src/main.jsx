@@ -9,7 +9,7 @@ import Login from './pages/Login'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-    <Route path='*' element={< Login />}></Route>
+    <Route path='/' element={< Login />}></Route>
       {/* <Route path='' element={< Home/>} />
       <Route path='app' element={<App/>}/>
       <Route path='about' element={< About />} />
@@ -19,7 +19,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path='github' element={< Github/>} /> */}
 
-      <Route path='/' element={<Error404page/>}></Route>
+      <Route path='*' element={<Error404page/>}></Route>
     
     </Route>
   )

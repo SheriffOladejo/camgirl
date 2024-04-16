@@ -8,6 +8,10 @@
   src: url('../src/assets/fonts/Lato/Lato-Regular.woff2');
 }
 
+/* img {
+  src: url(../src/assets/icons/home.png);
+} */
+
 body{
   font-family: 'Lato', sans-serif;
 }
