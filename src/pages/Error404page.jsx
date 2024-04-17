@@ -10,8 +10,8 @@ function Error404page() {
 
         <h4 className="font-[900] capitalize text-[2rem]">Page not found</h4>
         <p className="text-[12px]">Sorry we cannot find the page youre looking for </p>
-
-        <a className=" bg-color-8 px-20 py-1 rounded-full " href="/">Back To Home</a>
+{/* fix nav */}
+        <a className=" bg-color-8 px-20 py-1 rounded-full " href="/home">Back To Home</a>
       </div>
 
     </div>

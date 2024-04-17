@@ -7,18 +7,21 @@ export default {
   theme: {
     colors: {
       color: {
-        0: '#000',
-        1: '#FDC4CB',
+        grey: '#636363',
+        lightGrey: '#E6E6E6',
         2: '#FEDCE0',
         3: '#FCA7B1',
         4: '#FB8A98',
         5: '#FA6C7E',
         7: '#FA6C7E',
-        8: '#F94F64',
+        pink: '#F94F64',
         9: '#CF4253',
         a: '#A63543',
         b: '#A63543',
         c: '#531A21',
+        white:'#fff',
+        black: '#000',
+        blue: "#4285F4"
       }
 
     },

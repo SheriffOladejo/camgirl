@@ -5,11 +5,13 @@ import './index.css'
 import Error404page from './pages/Error404page'
 // pages
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-    <Route path='/' element={< Login />}></Route>
+    <Route path='/login' element={< Login />}></Route>
+    <Route path='/signup' element={< Signup />}></Route>
       {/* <Route path='' element={< Home/>} />
       <Route path='app' element={<App/>}/>
       <Route path='about' element={< About />} />

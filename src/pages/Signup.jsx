@@ -1,10 +1,11 @@
+
 import Logo from "../components/Logo"
 import FormInput from "../components/FormInput"
 import { FormProvider, handleSubmit } from "../contexts/FormContext"
 import { useState } from "react"
 // import icon for password open and close eye
 
-function Login() {
+function Signup() {
 
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -14,7 +15,7 @@ function Login() {
   return (
     <section className="w-full h-[100vh] flex ">
 
-      <div className="hidden md:flex md:w-[50%] login py-8 px-4">
+      <div className="hidden md:flex md:w-[50%] signup py-8 px-4">
         <Logo color={"text-color-white"} />
         <div className="flex flex-col justify-center items-center h-[80%] fixed pl-10 lg:pl-[10%]">
           <h1 className="text-color-white font-bold text-[4rem] text-center">Just<span className="text-color-pink">fans</span>.ng</h1>
@@ -74,4 +75,4 @@ function Login() {
   )
 }
 
-export default Login
+export default  Signup

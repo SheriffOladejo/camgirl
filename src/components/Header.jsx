@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import Logo from "./Logo";
 
 function Header({ placeholder }) {
 
@@ -12,10 +13,7 @@ function Header({ placeholder }) {
 
   return (
     <header className="text-[16px] px-10 pt-8 pb-6   md:flex md:justify-between">
-      <div >
-        {/* logo */}
-        <p className="text-color-0 font-bold ">Just<span className="text-color-8">fans</span>.ng</p>
-      </div>
+     <Logo color={"text-color-0"}/>
       <div className=" md:flex w-80 items-center justify-between hidden">
         {/* search bar */}
         <div className="relative">
