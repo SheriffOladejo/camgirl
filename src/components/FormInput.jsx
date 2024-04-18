@@ -1,29 +1,29 @@
 // FormInput.js
-import React from 'react';
-import {  useFormContext } from '../contexts/FormContext';
+import {useState} from 'react';
 
-const FormInput = ({ name, type, placeholder, className }) => {
-  const { formData, handleInputChange, errors } = useFormContext();
+function FormInput({ name, type, placeholder, value, onChange, error }) {
+  const [formInput, setFormInput] = useState("");
+  const [formError, setFormError] = useState("");
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormInput(value);
 
-  const handleChange = (e) => {
-    handleInputChange(name, e.target.value);
-  };
-
-  return (
     
-   <div>
-    <input
-     className={`${className}text-color-black placeholder:text-color-lightGrey border border-color-lightGrey placeholder:text-[0.8rem] w-[100%] outline-none rounded`}
-      type={type}
-      name={name}
-      value={formData[name] || ''}
-      onChange={handleChange}
-      placeholder={placeholder}
-    />
-    {errors[name] && <div className="error">{errors.name}</div>}
+  };
+  return (
+    <div>
+      <input
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(name, e.target.value)}
+        className="text-color-black placeholder:text-color-lightGrey border-2 border-color-lightGrey placeholder:text-[0.8rem] w-[100%] outline-none rounded px-4 py-1"
+      />
+      {error && <p className="text-color-red text-[0.7rem]">{error}</p>}
+      {formError && <p className="text-color-red text-[0.7rem]">{formError}</p>}
     </div>
-  
   );
-};
+}
 
 export default FormInput;

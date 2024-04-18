@@ -1,21 +1,108 @@
 import Logo from "../components/Logo"
 import FormInput from "../components/FormInput"
-import { FormProvider, handleSubmit } from "../contexts/FormContext"
+
 import { useState } from "react"
+
+
 // import icon for password open and close eye
 
 function Login() {
+  const [formInput, setFormInput] = useState({
+    username: "",
+     email: "",
+     password: "",
+     
+   });
+   const [formErrors, setFormErrors] = useState({
+     username: "",
+     email: "",
+     password: "",
+    
+   });
+ 
+   const handleInputChange = (name, value) => {
+     setFormInput({
+       ...formInput,
+       [name]: value,
+     });
+     // Reset corresponding error message if the input is changed
+     setFormErrors({
+       ...formErrors,
+       [name]: '',
+     });
+     // Validate input based on name
+     if (name === "email") {
+       // Perform email validation
+       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+       if (!emailRegex.test(value)) {
+      setFormErrors({ [name]: "Invalid email address" });
+       } else {
+         setFormErrors("");
+       }
+ 
+     } else if (name === "password") {
+       // Perform password validation
+       // Example: Minimum password length validation
+       if (value.length < 6) {
+          
+       setFormErrors({ [name]: "Password must be at least 6 characters long" });
+       } else {
+         setFormErrors("");
+       }
+     } else if (name === "confirmPassword") {
+       // You should compare with the value directly from the input, not from formInput state
+       if (value !== formInput.password) {
+         ({ [name]: "Passwords do not match" });
+       } else {
+         setFormErrors("");
+       }
+     }
+   };
+ 
+   const handleSubmit = (e) => {
+     e.preventDefault();
+ 
+     let errors = {};
+     
+     if (!formInput.email) {
+       errors.email = 'Email is required';
+     }
+     if (!formInput.username) {
+       errors.username = 'Username is required';
+     }
+     if (!formInput.password) {
+       errors.password = 'Password is required';
+     }
+  
+ 
+     // Update form errors
+     setFormErrors(errors);
+ 
+     // If there are no errors, submit the form
+     if (Object.keys(errors).length === 0) {
+       console.log('Form submitted:', formInput);
+       // Your form submission logic goes here
+     }
+   };
 
-  const [password, setPassword] = useState("")
+
+  // password visibility toggle
   const [showPassword, setShowPassword] = useState(false)
   const togglePassword = () => {
     setShowPassword((prev) => !prev)
   }
+  // const onSubmit = (data) => {
+  //   console.log('Form submitted:', data); // Handle form submission
+  // };
+
+
   return (
     <section className="w-full h-[100vh] flex ">
 
-      <div className="hidden md:flex md:w-[50%] login py-8 px-4">
-        <Logo color={"text-color-white"} />
+      <div className="hidden md:flex md:w-[50%] login py-8 px-4 relative" >
+
+        <div className="absolute inset-0 bg-color-black opacity-60"></div>
+        <Logo color="text-color-white" className="fixed" />
         <div className="flex flex-col justify-center items-center h-[80%] fixed pl-10 lg:pl-[10%]">
           <h1 className="text-color-white font-bold text-[4rem] text-center">Just<span className="text-color-pink">fans</span>.ng</h1>
           <p className="text-[1rem] text-color-white">Join and support your favorite creators today.</p>
@@ -31,41 +118,58 @@ function Login() {
               <span> <a href="/signup" className="text-color-pink ">Sign up</a></span>
             </p>
             {/* action:  whwere we want the user to be taken to after submitting the form */}
-            <FormProvider>
 
-              <form method="post" onSubmit={handleSubmit} className="space-y-6 pr-4" >
-                <FormInput name="email" type="text" placeholder="Email address or phone number" className="px-4 py-2 " />
-                <div className="relative"> <FormInput name="password" type={showPassword ? 'text' : 'password'} placeholder="Confirm Password" className="px-4 py-4"
-                />
 
-                <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0 flex items-center px-2">
-                  {/* {showPassword ? officon : openicon} */}
+            <form onSubmit={handleSubmit} method='post' className="space-y-6 pr-4" >
+              <FormInput name="email" type="text" placeholder="Email address or phone number"
+                value={formInput.email}
+                onChange={handleInputChange}
+                error={formErrors.email} />
+
+
+              <div className="relative"> <FormInput
+                name="password"
+                type={showPassword ?
+                  'text' : 'password'
+                }
+                placeholder=" Password"
+                value={formInput.password}
+                onChange={handleInputChange}
+                error={formErrors.password}
+              />
+
+
+                <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0 bottom-3 flex items-center px-2">
+                  {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/password.png" alt="show-password"
+
+                  /> : <img className="h-4 w-4" src="../src/assets/icons/closePass.png" alt="close-password"
+
+                  />}
                 </button>
-                {/* <a href="">
-                <img className="absolute " src="../src/assets/icons/password.png" alt="toggle-password"
-                    onClick={togglePassword}
-                  />
-                </a>
-                  */}
 
-                </div>
-                {/* add link */}
-                <a href="#" className="flex justify-end text-[0.9rem] text-color-grey">Forgot Password?</a>
-                <div >
-                <button type="submit" className="bg-color-pink w-full rounded-full py-2 text-color-white font-semibold hover:bg-color-pink/80">Log In</button>
-                <div className="flex  items-center justify-center pt-4 space-x-4">
+              </div>
+              {/* add link */}
+              <a href="#" className="flex justify-end text-[0.9rem] text-color-grey">Forgot Password?</a>
+              <div >
+                <button
+
+                  type="submit" className="bg-color-pink w-full rounded-full py-2 text-color-white font-semibold text-[0.8rem] hover:bg-color-pink/80"
+                >Log In</button>
+                <div
+                  className="flex  items-center justify-center pt-4 space-x-4"
+                >
                   <span className="w-[40%] bg-color-grey h-[0.5px]"></span>
                   <p className="text-color-grey">or</p>
                   <span className="w-[40%] bg-color-grey h-[0.5px]"></span>
                 </div>
-                <button className="bg-color-blue w-full relative mt-4 py-2 rounded-full hover:bg-color-blue/80">
-                  <img src="../src/assets/icons/google.png" alt="" className="absolute left-4 rounded-full"/>
+                <button className="bg-color-blue w-full relative mt-4 py-2 rounded-full text-color-white hover:bg-color-blue/80 font-semibold text-[0.8rem]">
+                  <img src="../src/assets/icons/google.png" alt="" className="absolute left-4 rounded-full " />
                   Sign in with Google
                 </button>
-                </div>
-                
-              </form>
-            </FormProvider>
+              </div>
+
+            </form>
+
           </div>
         </div>
       </div>

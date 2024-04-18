@@ -8,7 +8,7 @@ export default {
     colors: {
       color: {
         grey: '#636363',
-        lightGrey: '#E6E6E6',
+        lightGrey: '#EBEBEB',
         2: '#FEDCE0',
         3: '#FCA7B1',
         4: '#FB8A98',
@@ -21,7 +21,9 @@ export default {
         c: '#531A21',
         white:'#fff',
         black: '#000',
-        blue: "#4285F4"
+        blue: "#4285F4",
+        red: '#E72929',
+        green: '#41B06E'
       }
 
     },
