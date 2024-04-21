@@ -3,17 +3,21 @@ import Logo from "../components/Logo"
 import FormInput from "../components/FormInput"
 
 import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
 
-// import icon for password open and close eye
-
+// check if the user has a profile
+// send the form data to a database
+ {/* check if username is available */}
 function Signup() {
+  const navigate = useNavigate();
+  const [termsChecked, setTermsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setTermsChecked(!termsChecked);
+  };
  
-  // const onSubmit = async (data) => {
-  //   await login(data.email, data.password)
-  //   reset()
-  // }
   const [formInput, setFormInput] = useState({
-   username: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -40,7 +44,7 @@ function Signup() {
       // Perform email validation
       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
       if (!emailRegex.test(value)) {
-     setFormErrors({ [name]: "Invalid email address" });
+        setFormErrors({ [name]: "Invalid email address" });
       } else {
         setFormErrors("");
       }
@@ -49,8 +53,8 @@ function Signup() {
       // Perform password validation
       // Example: Minimum password length validation
       if (value.length < 6) {
-         
-      setFormErrors({ [name]: "Password must be at least 6 characters long" });
+
+        setFormErrors({ [name]: "Password must be at least 6 characters long" });
       } else {
         setFormErrors("");
       }
@@ -66,9 +70,11 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+     
+
 
     let errors = {};
-    
+
     if (!formInput.email) {
       errors.email = 'Email is required';
     }
@@ -84,13 +90,21 @@ function Signup() {
 
     // Update form errors
     setFormErrors(errors);
-
+ // Check if the checkbox is checked  
+ if (!termsChecked) {
+  alert("Please accept the terms and conditions to create an account.");
+  return;
+}
+};
     // If there are no errors, submit the form
     if (Object.keys(errors).length === 0) {
       console.log('Form submitted:', formInput);
-      // Your form submission logic goes here
+      localStorage.setItem('formData', JSON.stringify(formInput))
+      navigate('/profilesetup')
+  
+      
     }
-  };
+   
   // password visibility toggle
 
   const [showPassword, setShowPassword] = useState(false)
@@ -104,12 +118,10 @@ function Signup() {
   const handleSignupFan = () => setSignUpType('fan')
 
   const handleSignupCreator = () => setSignUpType('creator')
-  // const onSubmit = (data) => {
-  //   console.log('Form submitted:', data); // Handle form submission
-  // };
+  
 
   return (
-    <section className="w-full h-[100vh] flex ">
+    <section className="w-full h-[105vh] flex ">
 
       <div className="hidden md:flex md:w-[50%] signup py-8 px-4 relative" >
 
@@ -121,14 +133,14 @@ function Signup() {
           <p className="text-[1rem] text-color-white">Join and support your favorite creators today.</p>
         </div>
       </div>
-      <div className="px-6 pt-6 md:px-0 md:pt-0 w-full md:w-[50%]">
+      <div className="px-6 pt-6 md:px-20 md:pt-0 w-full md:w-[50%]">
         <Logo className="text-[1.5rem] md:hidden" />
         <div className="w-full py-8 md:py-13  items-center justify-center md:flex-col md:flex md:text-left ">
 
           <div className="w-full space-y-2 md:w-[80%] ">
             <h3 className="text-color-black text-[1.5rem] font-bold">Create <span className="text-color-pink">Your Account</span></h3>
             <p className="text-[0.8rem] text-color-grey font-semibold">Already have an account?
-              <span> <a href="/login" className="text-color-pink ">Log In</a></span>
+              <span> <Link to="/login" className="text-color-pink ">Log In</Link></span>
             </p>
 
             <div className=" flex pt-4" >
@@ -151,33 +163,32 @@ function Signup() {
 
             </div>
 
-            {/* action:  whwere we want the user to be taken to after submitting the form */}
+       
 
-
-            <form onSubmit={handleSubmit}  method="post"  className="space-y-4 pr-4 pt-4" >
+            <form action="/profilesetup" onSubmit={handleSubmit} method="post" className="space-y-4 pr-4 pt-4" >
               {/* check if username is available */}
               <FormInput name="username" type="text" placeholder="Enter Username"
-               value={formInput.username}
-               onChange={handleInputChange}
-               error={formErrors.username} 
-                 />
+                value={formInput.username}
+                onChange={handleInputChange}
+                error={formErrors.username}
+              />
               <FormInput name="email" type="text" placeholder="Email address or phone number"
                 value={formInput.email}
                 onChange={handleInputChange}
-                error={formErrors.email} 
-          />
-             
-              <div className="relative"> <FormInput 
-              name="password" 
-              type={showPassword ?
-                 'text' : 'password'
-                }
-                 placeholder=" Password" 
-                 value={formInput.password}
-                onChange={handleInputChange}
-                error={formErrors.password} 
+                error={formErrors.email}
               />
-              
+
+              <div className="relative"> <FormInput
+                name="password"
+                type={showPassword ?
+                  'text' : 'password'
+                }
+                placeholder=" Password"
+                value={formInput.password}
+                onChange={handleInputChange}
+                error={formErrors.password}
+              />
+
 
                 <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0  flex items-center px-2">
                   {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/openPass.png" alt="show-password"
@@ -188,23 +199,28 @@ function Signup() {
                 </button>
 
               </div>
-               <FormInput name="confirmPassword" 
-               type={showPassword ? 'text' : 'password'} placeholder="Confirm Password"
-               value={formInput.confirmPassword}
+              <FormInput name="confirmPassword"
+                type={showPassword ? 'text' : 'password'} placeholder="Confirm Password"
+                value={formInput.confirmPassword}
                 onChange={handleInputChange}
                 error={formErrors.confirmPassword}
-                 />
-              
-               
+              />
 
-              
-              {/* add link */}
-              <a href="#" className="flex justify-end text-[0.9rem] text-color-grey">Forgot Password?</a>
+
+
+
+
+
               {/* handle this */}
-              <div>
-                <input type="checkbox" name="" id="" />
-                <p>By clicking on Create Free Account, I acknowledge that I am 18+ years old and I accept the <a href=""> Terms & Conditions</a></p>
+              <div className="flex space-x-2">
+                <input type="checkbox" name="checkbox" id="termsCheckbox" className="rounded-full checkbox-input"
+                  checked={termsChecked}
+                  onChange={handleCheckboxChange} />
+                <label htmlFor="termsCheckbox" className="text-[0.7rem] w-[70%] md:w-full">
+                  By clicking on Create Free Account, I acknowledge that I am 18+ years old and I accept the <a href="" className="text-color-pink"> Terms & Conditions</a>
+                </label>
               </div>
+
               <div >
                 <button type="submit" className="bg-color-pink w-full rounded-full py-2 text-color-white font-semibold text-[0.8rem] hover:bg-color-pink/80">Create Account</button>
                 <div className="flex  items-center justify-center pt-4 space-x-4">

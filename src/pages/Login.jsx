@@ -1,12 +1,13 @@
 import Logo from "../components/Logo"
 import FormInput from "../components/FormInput"
-
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react"
 
 
 // import icon for password open and close eye
 
 function Login() {
+  const navigate = useNavigate();
   const [formInput, setFormInput] = useState({
     username: "",
      email: "",
@@ -62,6 +63,7 @@ function Login() {
    const handleSubmit = (e) => {
      e.preventDefault();
  
+ 
      let errors = {};
      
      if (!formInput.email) {
@@ -81,7 +83,13 @@ function Login() {
      // If there are no errors, submit the form
      if (Object.keys(errors).length === 0) {
        console.log('Form submitted:', formInput);
-       // Your form submission logic goes here
+       
+        //  logged user  comes from protected routes
+     if(formInput.email === loggeduser.email && formInput.password === loggeduser.password  ){
+      localStorage.setItem('Loggedin',true)
+      navigate('/')}else{
+       alert("incorrect password and email")
+      }
      }
    };
 
@@ -115,7 +123,7 @@ function Login() {
           <div className="w-full space-y-4 md:w-[80%] ">
             <h3 className="text-color-black text-[1.5rem] font-bold">Log <span className="text-color-pink">In</span></h3>
             <p className="text-[0.9rem] text-color-grey font-semibold">Don't have an account?
-              <span> <a href="/signup" className="text-color-pink ">Sign up</a></span>
+              <span> <Link to="/signup" className="text-color-pink ">Sign up</Link></span>
             </p>
             {/* action:  whwere we want the user to be taken to after submitting the form */}
 
@@ -163,7 +171,7 @@ function Login() {
                   <span className="w-[40%] bg-color-grey h-[0.5px]"></span>
                 </div>
                 <button className="bg-color-blue w-full relative mt-4 py-2 rounded-full text-color-white hover:bg-color-blue/80 font-semibold text-[0.8rem]">
-                  <img src="../src/assets/icons/google.png" alt="" className="absolute left-4 rounded-full " />
+                  <img src="../src/assets/icons/google.png" alt="" className="absolute w-4 h-4 left-4 rounded-full " />
                   Sign in with Google
                 </button>
               </div>

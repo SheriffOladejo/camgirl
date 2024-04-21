@@ -1,34 +1,35 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import {Route, RouterProvider, createBrowserRouter, createRoutesFromElements} from 'react-router-dom' 
-import './index.css'
-import Error404page from './pages/Error404page'
-// pages
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route>
-    <Route path='/login' element={< Login />}></Route>
-    <Route path='/signup' element={< Signup />}></Route>
-      {/* <Route path='' element={< Home/>} />
-      <Route path='app' element={<App/>}/>
-      <Route path='about' element={< About />} />
-      <Route path='contact' element={< Contact />} />
-      <Route path='user/' element={<User/>}>
-        <Route path=':userid' element={<User/>}/>
-      </Route>
-      <Route path='github' element={< Github/>} /> */}
-
-      <Route path='*' element={<Error404page/>}></Route>
-    
-    </Route>
-  )
-)
-
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProtectedRoutes from './services/ProtectedRoutes';
+import './index.css';
+import Error404page from './pages/Error404page';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Home from './pages/Home';
+import ProfileSetup from './pages/ProfileSetup';
+import Layout from './services/Layout';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+         
+        <Route path="/profilesetup" element={<ProfileSetup />} />
+       
+        {/* protected routes */}
+        {/* we should check if its a fan or creator profile to know what to bring up */}
+        {/* <Route path='/' element={<ProtectedRoutes />}> */}
+          <Route path='/' element={<Layout />} >
+          <Route path="" element={<Home />} />
+          </Route>
+
+        {/* </Route> */}
+        {/* 404 */}
+        <Route path="*" element={<Error404page />} />
+      </Routes>
+    </Router>
   </React.StrictMode>,
-)
+
+);

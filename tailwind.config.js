@@ -23,10 +23,17 @@ export default {
         black: '#000',
         blue: "#4285F4",
         red: '#E72929',
-        green: '#41B06E'
+        green: '#41B06E',
+        offwhite: "#F5F5F5"
       }
 
     },
+    flex: {
+      '2': 2,
+      '6':6,
+      '3': 3
+    }
+    
   },
   plugins: [],
 }

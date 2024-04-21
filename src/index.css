@@ -26,9 +26,30 @@
 } */
 .login{
   background: #000 url(../src/assets/background/image\ 8.png) no-repeat fixed center;
+  background-size: cover;
   
 }
 .signup{
   background: #000 url(../src/assets/background/image\ 9.png) no-repeat fixed center;
   
 }
+
+.checkbox-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #ccc;
+  border-radius: 50%; /* Rounded shape for the checkbox */
+  cursor: pointer;
+  outline: none;
+  margin-top: 3px; /* Adjust vertical alignment */
+}
+
+.checkbox-input:checked {
+  background-color: #007bff;
+  border-color: #636363;
+}
+
+
