@@ -31,7 +31,7 @@
 }
 .signup{
   background: #000 url(../src/assets/background/image\ 9.png) no-repeat fixed center;
-  
+  background-size: cover;
 }
 
 .checkbox-input {
@@ -53,3 +53,21 @@
 }
 
 
+.profileStyle {
+  background: #000 url(../src/assets/background/bgimg.jpg) no-repeat fixed center;
+  background-size: cover;
+};
+
+.progress-bar{
+  appearance: none;
+
+}
+
+.progress-bar::-webkit-progress-bar{
+  background-color: #D9D9D9;
+  height: 4px;
+}
+.progress-bar::-webkit-progress-value{
+  background-color: #F94F64;
+ 
+}

@@ -60,3 +60,22 @@ export const headerNav = [
   },
   
 ];
+
+export const fauxUsers = [
+  {
+    username: "user1",
+    isCertified: true,
+    subscriptionStatus: "Premium"
+  },
+  {
+    username: "user2",
+    isCertified: false,
+    subscriptionStatus: "Free"
+  },
+  {
+    username: "user3",
+    isCertified: true,
+    subscriptionStatus: "Premium"
+  },
+  // Add more faux users as needed
+];

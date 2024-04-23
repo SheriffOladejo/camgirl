@@ -95,15 +95,16 @@ function Signup() {
   alert("Please accept the terms and conditions to create an account.");
   return;
 }
-};
-    // If there are no errors, submit the form
-    if (Object.keys(errors).length === 0) {
-      console.log('Form submitted:', formInput);
-      localStorage.setItem('formData', JSON.stringify(formInput))
-      navigate('/profilesetup')
+ // If there are no errors, submit the form
+ if (Object.keys(errors).length === 0) {
+  console.log('Form submitted:', formInput);
+  localStorage.setItem('formData', JSON.stringify(formInput))
+  navigate('/profilesetup')
+
   
-      
-    }
+}
+
+};
    
   // password visibility toggle
 
@@ -165,7 +166,7 @@ function Signup() {
 
        
 
-            <form action="/profilesetup" onSubmit={handleSubmit} method="post" className="space-y-4 pr-4 pt-4" >
+            <form action="/fanprofilesetup" onSubmit={handleSubmit} method="post" className="space-y-4 pr-4 pt-4" >
               {/* check if username is available */}
               <FormInput name="username" type="text" placeholder="Enter Username"
                 value={formInput.username}
@@ -193,7 +194,7 @@ function Signup() {
                 <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0  flex items-center px-2">
                   {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/openPass.png" alt="show-password"
 
-                  /> : <img className="h-4 w-4" src="../src/assets/icons/closePass.png" alt="close-password"
+                  /> : <img className="h-3 w-3" src="../src/assets/icons/closePass.png" alt="close-password"
 
                   />}
                 </button>

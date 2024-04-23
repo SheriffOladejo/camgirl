@@ -9,6 +9,7 @@ export default {
       color: {
         grey: '#636363',
         lightGrey: '#EBEBEB',
+        lighterGrey:'#F9FAFB',
         2: '#FEDCE0',
         3: '#FCA7B1',
         4: '#FB8A98',

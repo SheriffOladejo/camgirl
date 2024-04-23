@@ -6,7 +6,7 @@ function LeftBar() {
  
   const [activeIndex, setActiveIndex] = useState(0);
   return (
-    <div className='hidden md:flex flex-col rounded-xl bg-color-white flex-2 pt-5 pr-4 pb-4'>
+    <div className='hidden md:sticky md:flex flex-col rounded-xl bg-color-white flex-2 pt-5 pr-4 pb-4'>
     
       <nav >
         {/* profile */}

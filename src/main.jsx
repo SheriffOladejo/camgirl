@@ -6,24 +6,34 @@ import './index.css';
 import Error404page from './pages/Error404page';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Home from './pages/Home';
-import ProfileSetup from './pages/ProfileSetup';
+import FanHome from './pages/fanPages/Home';
+import ProfileSetup from './pages/fanPages/ProfileSetup';
+import SetupProfile from './pages/creatorpages/SetupProfile';
 import Layout from './services/Layout';
+
+import VerifyId from './pages/creatorpages/VerifyId';
+import AlmostDone from './pages/creatorpages/AlmostDone';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-         
-        <Route path="/profilesetup" element={<ProfileSetup />} />
-       
+
+        {/* fan */}
+
+        <Route path="/profile-setup" element={<ProfileSetup />} />
+
+        {/* create */}
+        <Route path="/setup-profile" element={<SetupProfile />} />
+        <Route path="/verify-id" element={<VerifyId />} />
+        <Route path="/almost-done" element={<AlmostDone />} />
         {/* protected routes */}
         {/* we should check if its a fan or creator profile to know what to bring up */}
         {/* <Route path='/' element={<ProtectedRoutes />}> */}
-          <Route path='/' element={<Layout />} >
-          <Route path="" element={<Home />} />
-          </Route>
+        <Route path='/' element={<Layout />} >
+          <Route path="" element={<FanHome />} />
+        </Route>
 
         {/* </Route> */}
         {/* 404 */}

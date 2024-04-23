@@ -3,95 +3,95 @@ import FormInput from "../components/FormInput"
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react"
 
-
-// import icon for password open and close eye
+// google signin
 
 function Login() {
   const navigate = useNavigate();
   const [formInput, setFormInput] = useState({
     username: "",
-     email: "",
-     password: "",
-     
-   });
-   const [formErrors, setFormErrors] = useState({
-     username: "",
-     email: "",
-     password: "",
-    
-   });
- 
-   const handleInputChange = (name, value) => {
-     setFormInput({
-       ...formInput,
-       [name]: value,
-     });
-     // Reset corresponding error message if the input is changed
-     setFormErrors({
-       ...formErrors,
-       [name]: '',
-     });
-     // Validate input based on name
-     if (name === "email") {
-       // Perform email validation
-       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-       if (!emailRegex.test(value)) {
-      setFormErrors({ [name]: "Invalid email address" });
-       } else {
-         setFormErrors("");
-       }
- 
-     } else if (name === "password") {
-       // Perform password validation
-       // Example: Minimum password length validation
-       if (value.length < 6) {
-          
-       setFormErrors({ [name]: "Password must be at least 6 characters long" });
-       } else {
-         setFormErrors("");
-       }
-     } else if (name === "confirmPassword") {
-       // You should compare with the value directly from the input, not from formInput state
-       if (value !== formInput.password) {
-         ({ [name]: "Passwords do not match" });
-       } else {
-         setFormErrors("");
-       }
-     }
-   };
- 
-   const handleSubmit = (e) => {
-     e.preventDefault();
- 
- 
-     let errors = {};
-     
-     if (!formInput.email) {
-       errors.email = 'Email is required';
-     }
-     if (!formInput.username) {
-       errors.username = 'Username is required';
-     }
-     if (!formInput.password) {
-       errors.password = 'Password is required';
-     }
-  
- 
-     // Update form errors
-     setFormErrors(errors);
- 
-     // If there are no errors, submit the form
-     if (Object.keys(errors).length === 0) {
-       console.log('Form submitted:', formInput);
-       
-        //  logged user  comes from protected routes
-     if(formInput.email === loggeduser.email && formInput.password === loggeduser.password  ){
-      localStorage.setItem('Loggedin',true)
-      navigate('/')}else{
-       alert("incorrect password and email")
+    email: "",
+    password: "",
+
+  });
+  const [formErrors, setFormErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+
+  });
+
+  const handleInputChange = (name, value) => {
+    setFormInput({
+      ...formInput,
+      [name]: value,
+    });
+    // Reset corresponding error message if the input is changed
+    setFormErrors({
+      ...formErrors,
+      [name]: '',
+    });
+    // Validate input based on name
+    if (name === "email") {
+      // Perform email validation
+      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+      if (!emailRegex.test(value)) {
+        setFormErrors({ [name]: "Invalid email address" });
+      } else {
+        setFormErrors("");
       }
-     }
-   };
+
+    } else if (name === "password") {
+      // Perform password validation
+      // Example: Minimum password length validation
+      if (value.length < 6) {
+
+        setFormErrors({ [name]: "Password must be at least 6 characters long" });
+      } else {
+        setFormErrors("");
+      }
+    } else if (name === "confirmPassword") {
+      // You should compare with the value directly from the input, not from formInput state
+      if (value !== formInput.password) {
+        ({ [name]: "Passwords do not match" });
+      } else {
+        setFormErrors("");
+      }
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+
+    let errors = {};
+
+    if (!formInput.email) {
+      errors.email = 'Email is required';
+    }
+    if (!formInput.username) {
+      errors.username = 'Username is required';
+    }
+    if (!formInput.password) {
+      errors.password = 'Password is required';
+    }
+
+
+    // Update form errors
+    setFormErrors(errors);
+
+    // If there are no errors, submit the form
+    if (Object.keys(errors).length === 0) {
+      console.log('Form submitted:', formInput);
+
+      //  logged user  comes from protected routes
+      if (formInput.email === loggeduser.email && formInput.password === loggeduser.password) {
+        localStorage.setItem('Loggedin', true)
+        navigate('/')
+      } else {
+        alert("incorrect password and email")
+      }
+    }
+  };
 
 
   // password visibility toggle
@@ -128,7 +128,7 @@ function Login() {
             {/* action:  whwere we want the user to be taken to after submitting the form */}
 
 
-            <form onSubmit={handleSubmit} method='post' className="space-y-6 pr-4" >
+            <form action="/" onSubmit={handleSubmit} method='post' className="space-y-6 pr-4" >
               <FormInput name="email" type="text" placeholder="Email address or phone number"
                 value={formInput.email}
                 onChange={handleInputChange}
@@ -147,10 +147,10 @@ function Login() {
               />
 
 
-                <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0 bottom-3 flex items-center px-2">
-                  {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/password.png" alt="show-password"
+                <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0  flex items-center px-2">
+                  {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/openPass.png" alt="show-password"
 
-                  /> : <img className="h-4 w-4" src="../src/assets/icons/closePass.png" alt="close-password"
+                  /> : <img className="h-3 w-3" src="../src/assets/icons/closePass.png" alt="close-password"
 
                   />}
                 </button>
