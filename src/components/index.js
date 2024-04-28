@@ -62,20 +62,102 @@ export const headerNav = [
 ];
 
 export const fauxUsers = [
-  {
-    username: "user1",
-    isCertified: true,
-    subscriptionStatus: "Premium"
-  },
-  {
-    username: "user2",
-    isCertified: false,
-    subscriptionStatus: "Free"
-  },
-  {
-    username: "user3",
-    isCertified: true,
-    subscriptionStatus: "Premium"
-  },
-  // Add more faux users as needed
+  { username: "user1", isCertified: true, subscriptionStatus: "Premium" },
+  { username: "user2", isCertified: false, subscriptionStatus: "Free" },
+  { username: "user3", isCertified: true, subscriptionStatus: "Premium" },
+  { username: "user4", isCertified: false, subscriptionStatus: "Premium" },
+  { username: "user5", isCertified: true, subscriptionStatus: "Free" },
+  { username: "user6", isCertified: true, subscriptionStatus: "Premium" },
+  { username: "user7", isCertified: false, subscriptionStatus: "Free" },
+  { username: "user8", isCertified: true, subscriptionStatus: "Premium" },
+  { username: "user9", isCertified: false, subscriptionStatus: "Premium" },
+  { username: "user10", isCertified: true, subscriptionStatus: "Free" },
+  { username: "user11", isCertified: true, subscriptionStatus: "Premium" },
+  { username: "user12", isCertified: false, subscriptionStatus: "Free" },
+  { username: "user13", isCertified: true, subscriptionStatus: "Premium" },
+  { username: "user14", isCertified: false, subscriptionStatus: "Premium" },
+  { username: "user15", isCertified: true, subscriptionStatus: "Free" },
+  { username: "user16", isCertified: true, subscriptionStatus: "Premium" },
+  { username: "user17", isCertified: false, subscriptionStatus: "Free" },
+  { username: "user18", isCertified: true, subscriptionStatus: "Premium" },
+  { username: "user19", isCertified: false, subscriptionStatus: "Premium" },
+  { username: "user20", isCertified: true, subscriptionStatus: "Free" }
 ];
+
+export const stories = [
+  {
+      
+      name: "Adventure Time",
+      img: "../src/assets/background/bgimg.jpg"
+  },
+  {
+          name: "Lost in Space",
+      img: "../src/assets/background/bgimg.jpg"
+  },
+  {
+   
+      name: "Mystery Island",
+      img: "../src/assets/background/bgimg.jpg"
+  },
+  {
+     
+      name: "The Forest",
+      img: "../src/assets/background/bgimg.jpg"
+  },
+  {
+     
+      name: "Underwater Quest",
+      img: "../src/assets/background/bgimg.jpg"
+  },
+  {
+  
+    name: "Adventure Time",
+    img: "../src/assets/background/bgimg.jpg"
+},
+{
+ 
+    name: "Lost in Space",
+    img: "../src/assets/background/bgimg.jpg"
+},
+{
+ 
+    name: "Mystery Island",
+    img: "../src/assets/background/bgimg.jpg"
+},
+{
+   
+    name: "The Forest",
+    img: "../src/assets/background/bgimg.jpg"
+},
+{
+   
+    name: "Underwater Quest",
+    img: "../src/assets/background/bgimg.jpg"
+},
+{
+  
+  name: "Adventure Time",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+  name: "Lost in Space",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+  name: "Mystery Island",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+  name: "The Forest",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+ 
+  name: "Underwater Quest",
+  img: "../src/assets/background/bgimg.jpg"
+}
+];
+
+

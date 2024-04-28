@@ -12,7 +12,7 @@ function Header({ placeholder }) {
   
 
   return (
-    <header className="text-[16px] px-10 pt-8 pb-6   md:flex md:justify-between md:items-center">
+    <header className="text-[16px] px-10 pt-8 pb-6   md:flex md:justify-between md:items-center sticky top-0 z-20 bg-color-white md:shadow-md">
      <Logo color={"text-color-0"}/>
       <div className=" md:flex w-80 items-center justify-between hidden">
         {/* search bar */}

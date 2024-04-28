@@ -1,5 +1,5 @@
 import FormInput from "../../components/FormInput";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import Logo from "../../components/Logo";
 
 function SetupProfile() {
@@ -9,8 +9,47 @@ function SetupProfile() {
     username: "",
     DOB: ""
   });
+  const [errors, setErrors] = useState({
+    firstname: "",
+    lastname: "",
+    username: "",
+    DOB: ""
+  });
+  const validateForm = () => {
+    const errorsCopy = { ...errors };
+    let isValid = true;
 
+    if (!formInput.firstname) {
+      errorsCopy.firstname = "Please enter your first name.";
+      isValid = false;
+    } else {
+      errorsCopy.firstname = "";
+    }
 
+    if (!formInput.lastname) {
+      errorsCopy.lastname = "Please enter your last name.";
+      isValid = false;
+    } else {
+      errorsCopy.lastname = "";
+    }
+
+    if (!formInput.username) {
+      errorsCopy.username = "Please choose a username.";
+      isValid = false;
+    } else {
+      errorsCopy.username = "";
+    }
+
+    if (!formInput.DOB) {
+      errorsCopy.DOB = "Please enter your date of birth.";
+      isValid = false;
+    } else {
+      errorsCopy.DOB = "";
+    }
+
+    setErrors(errorsCopy);
+    return isValid;
+  };
   const handleInputChange = (name, value) => {
     setFormInput({
       ...formInput,
@@ -20,11 +59,17 @@ function SetupProfile() {
 
  
 
-  const submitProfile = () => {
-    localStorage.setItem('creatorprofileData', JSON.stringify(formInput));
-  
-  };
+  const submitProfile = (event) => {
+    event.preventDefault();
+    const isValid = validateForm();
 
+    if (isValid) {
+      localStorage.setItem("creatorprofileData", JSON.stringify(formInput));
+      alert("Profile setup completed successfully!");
+    } else {
+      alert("Please fill in all the required fields.");
+    }
+  };
   return (
     <section className="py-8 px-6 md:py-10 md:px-10 bg-offwhite">
       <Logo />
@@ -46,6 +91,7 @@ function SetupProfile() {
               value={formInput.firstname}
               onChange={handleInputChange}
             />
+             {errors.firstname && <p className="text-color-red text-[0.7rem]">{errors.firstname}</p>}
           </div>
           <div>
             <label htmlFor="lastname" className="font-medium text-[0.8rem]">Last name</label>
@@ -57,6 +103,7 @@ function SetupProfile() {
               value={formInput.lastname}
               onChange={handleInputChange}
             />
+             {errors.lastname && <p className="text-color-red text-[0.7rem]">{errors.lastname}</p>}
           </div>
           </div>
           <div>
@@ -69,6 +116,7 @@ function SetupProfile() {
               value={formInput.username}
               onChange={handleInputChange}
             />
+             {errors.username && <p className="text-color-red text-[0.7rem]">{errors.username}</p>}
           </div>
           <div>
             <label htmlFor="dateofbirth" className="font-medium text-[0.8rem]">First name</label>
@@ -80,6 +128,7 @@ function SetupProfile() {
               value={formInput.DOB}
               onChange={handleInputChange}
             />
+             {errors.DOB && <p className="text-color-red text-[0.7rem]">{errors.DOB}</p>}
           </div>
           <div className="flex justify-between">
             <div className="flex cursor-pointer space-x-2 items-center" onClick={() => window.history.back()}>

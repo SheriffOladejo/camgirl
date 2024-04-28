@@ -13,6 +13,7 @@ import Layout from './services/Layout';
 
 import VerifyId from './pages/creatorpages/VerifyId';
 import AlmostDone from './pages/creatorpages/AlmostDone';
+import Home from './pages/creatorpages/Home'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
@@ -31,8 +32,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         {/* protected routes */}
         {/* we should check if its a fan or creator profile to know what to bring up */}
         {/* <Route path='/' element={<ProtectedRoutes />}> */}
-        <Route path='/' element={<Layout />} >
-          <Route path="" element={<FanHome />} />
+        <Route element={<Layout />} >
+          <Route path="fanhome" element={<FanHome />} />
+          <Route path='/home' element={<Home/>}/>
         </Route>
 
         {/* </Route> */}

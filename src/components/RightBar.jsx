@@ -1,29 +1,29 @@
-import { useRef } from 'react'
-import Slider from 'react-slick';
+
 import ProfileSuggestion from './ProfileSuggestion'
 import { fauxUsers } from '.';
 function RightBar() {
-  const sliderRef = useRef(null);
+  // Group fauxUsers into arrays of 4 users each
+  const groupedUsers = fauxUsers.reduce((acc, user, index) => {
+    const groupIndex = Math.floor(index / 4);
+    if (!acc[groupIndex]) {
+      acc[groupIndex] = [];
+    }
+    acc[groupIndex].push(user);
+    return acc;
+  }, []);
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1
-  };
 
   const leftClick = () => {
-    sliderRef.current.slickNext();
+   
   }
   const rightClick = () => {
-    sliderRef.current.slickPrev();
+   
   }
   return (
 
 
 
-    <div className='flex-3 '>
+    <div className=' hidden md:flex flex-col md:w-[40%] sticky top-[30%] overflow-y-scroll right-bar pt-24 rounded'>
       <div className='bg-color-white px-3 py-4'>
         <div className='flex justify-between items-center '>
           <p className='font-semibold text-[0.8rem]'>Suggestion</p>
@@ -37,21 +37,23 @@ function RightBar() {
 
           </div>
         </div>
-        {fauxUsers && fauxUsers.length > 0 ? (
-          <Slider {...settings} ref={sliderRef}>
-            {fauxUsers.map((user, index) => (
-              <ProfileSuggestion
-                key={index}
-                username={user.username}
-                isCertified={user.isCertified}
-                subscriptionStatus={user.subscriptionStatus}
-              />
-            ))}
-          </Slider>
-        ) : (
-          <p>No users available</p>
-        )}
-     
+        <div>
+          {groupedUsers.map((group, index) => (
+            <div key={index} >
+              <div className="flex flex-col gap-4">
+                {group.map((user, userIndex) => (
+                  <ProfileSuggestion
+                    key={userIndex}
+                    username={user.username}
+                    isCertified={user.isCertified}
+                    subscriptionStatus={user.subscriptionStatus}
+                  />
+                ))}
+         </div>
+         </div>
+         ))}
+      
+     </div>
         {/* pagination */}
         <div>
           <span></span>

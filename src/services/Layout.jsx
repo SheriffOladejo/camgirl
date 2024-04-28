@@ -6,17 +6,17 @@ import RightBar from '../components/RightBar'
 
 function Layout() {
   return (
-    <>
+    <section className="bg-color-lightGrey ">
       <Header />
-      <div className="flex justify-between px-20 bg-color-lightGrey py-10">
+      <div className="flex justify-between md:px-20 ">
         <LeftBar />
-        <div className='flex-6'>
+        <div className='md:w-[50%] pt-6'>
         <Outlet />
         </div>
        
         <RightBar />
       </div>
-    </>
+    </section>
   )
 }
 

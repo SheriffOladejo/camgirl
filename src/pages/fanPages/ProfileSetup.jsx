@@ -1,7 +1,7 @@
 import FormInput from "../../components/FormInput";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Logo from "../../components/Logo";
-
+import DragAndDrop from "../../components/DragAndDrop";
 function ProfileSetup() {
   const [formInput, setFormInput] = useState({
     username: "",
@@ -10,6 +10,12 @@ function ProfileSetup() {
   });
 
   const [imageDataUrl, setImageDataUrl] = useState("");
+  const [errors, setErrors] = useState({
+    username: "",
+    message: "",
+    picture: ''
+  });
+
 
   const handleInputChange = (name, value) => {
     setFormInput({
@@ -17,51 +23,107 @@ function ProfileSetup() {
       [name]: value
     });
   };
+  const fileInputRef = useRef();
 
-  const handlePictureChange = (event) => {
-    const pictureFile = event.target.files[0];
+  const openFileDialog = () => {
+    fileInputRef.current.click();
+  };
+  const handleFileDrop = (files) => {
+    // Handle dropped files
+    const file = files[0];  // Assuming only one file is dropped
+   file && updateImageInState(file);
+  };
+  const updateImageInState = (file) => {
     const reader = new FileReader();
-
     reader.onload = (event) => {
       const dataUrl = event.target.result;
       setImageDataUrl(dataUrl);
-      localStorage.setItem("profileImageDataUrl", dataUrl);
+      setFormInput(prev => ({
+        ...prev,
+        picture: dataUrl
+      }));
+      localStorage.setItem("creatorprofileimg", dataUrl);
     };
-
-    reader.readAsDataURL(pictureFile); // Convert the uploaded image to a data URL
+    reader.readAsDataURL(file);
   };
 
+  const handlePictureChange = (event) => {
+    const file = event.target.files[0];
+    updateImageInState(file);
+  };
   useEffect(() => {
-    const storedImageDataUrl = localStorage.getItem("profileImageDataUrl");
+    const storedImageDataUrl = localStorage.getItem("fanprofileImage");
     if (storedImageDataUrl) {
       setImageDataUrl(storedImageDataUrl);
     }
   }, []);
+  const validateForm = () => {
+    const errorsCopy = { ...errors };
+    let isValid = true;
 
-  const submitProfile = () => {
-    localStorage.setItem('profileData', JSON.stringify(formInput));
-    alert('Profile picture uploaded successfully!');
+    if (!formInput.username) {
+      errorsCopy.username = "Please choose a username.";
+      isValid = false;
+    } else {
+      errorsCopy.username = "";
+    }
+
+    
+    if (!formInput.picture) {
+      errorsCopy.picture = alert("Add an image.");
+      isValid = false;
+    } else {
+      errorsCopy.picture = "";
+    }
+    if (!formInput.message) {
+      errorsCopy.message = "Please add a bio.";
+      isValid = false;
+    } else {
+      errorsCopy.message = "";
+    }
+
+    setErrors(errorsCopy);
+    return isValid;
   };
+
+  const submitProfile = (event) => {
+    event.preventDefault();
+    const isValid = validateForm();
+
+    if (isValid) {
+      localStorage.setItem("fanprofileData", JSON.stringify(formInput));
+      alert("Profile picture uploaded successfully!");
+    } else {
+      alert("Please fill in all the required fields.");
+    }
+  };
+
+  
 
   return (
     <section className="py-8 px-6 md:py-10 md:px-10 bg-offwhite">
       <Logo />
       <div className="max-w-lg mx-auto p-6 md:p-20 md:shadow-xl">
         <h1 className="font-bold text-[1.7rem] text-center">Set up your profile</h1>
-        <div className="flex flex-col justify-center items-center pt-4 space-y-2">
-          <div className="relative cursor-pointer">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePictureChange}
-              className="bg-color-2 rounded-full w-20 h-20 z-20 relative opacity-0 cursor-pointer"
-            />
-            <img src="../src/assets/icons/addImg.png" alt="upload image" className="w-16 h-16 absolute top-2 left-0" />
-            <img src={imageDataUrl} alt="upload" className="w-16 h-16 absolute top-2 left-0 opacity-0" />
-          </div>
-          <p className="text-[0.8rem] font-medium">Upload a profile picture</p>
-        </div>
-        <form action="#" onSubmit={submitProfile} method="post" className="space-y-5 pr-4 pt-4">
+        <div className="flex flex-col justify-center items-center">
+           
+           {/* hide when a file is in */}
+           <DragAndDrop
+            onFileDrop={handleFileDrop} onChange={handlePictureChange} className={`flex justify-center items-center cursor-pointer bg-color-2 rounded-full w-14 h-14   ${imageDataUrl ? 'hidden' : 'flex'}`} >
+               <input
+                 ref={fileInputRef}
+                 type="file"
+                 style={{ display: 'none' }}
+                 onChange={handlePictureChange}
+               />
+             <img onClick={openFileDialog} src="../src/assets/icons/addImg.png" alt="upload" className="w-7 h-7 " />
+            
+            
+           </DragAndDrop>
+           {imageDataUrl  && <img src={imageDataUrl} alt="Uploaded document" className="w-full h-40" />}
+           <label htmlFor="picture" className="font-medium text-[0.8rem]">Upload a profile picture</label>
+         </div>
+        <form action="/fanhome" onSubmit={submitProfile} method="post" className="space-y-5 pr-4 pt-4">
           <div>
             <label htmlFor="username" className="font-medium text-[0.8rem]">Display name</label>
             <FormInput
@@ -72,6 +134,7 @@ function ProfileSetup() {
               value={formInput.username}
               onChange={handleInputChange}
             />
+              {errors.username && <p className="text-color-red text-[0.7rem]">{errors.username}</p>}
           </div>
           <div>
             <label htmlFor="message" className="font-medium text-[0.8rem] ">Add a bio</label>
@@ -82,6 +145,8 @@ function ProfileSetup() {
               rows='4'
               className="text-color-black placeholder:text-color-lightGrey border-2 border-color-lightGrey placeholder:text-[0.8rem] w-[100%] outline-none rounded px-4 py-2"
             />
+            {errors.message && <p className="text-color-red text-[0.7rem]">{errors.message}</p>}
+
           </div>
           <div className="flex justify-between">
             <div className="flex cursor-pointer space-x-2 items-center" onClick={() => window.history.back()}>

@@ -71,3 +71,11 @@
   background-color: #F94F64;
  
 }
+
+.right-bar::-webkit-scrollbar{
+  display: none;
+}
+
+.carousel-body::-webkit-scrollbar{
+  display: none;
+}
