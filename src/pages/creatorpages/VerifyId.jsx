@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import Logo from "../../components/Logo";
 import DragAndDrop from "../../components/DragAndDrop";
+import { useNavigate } from "react-router-dom";
 
 function VerifyId() {
+  const navigate = useNavigate()
   const [formInput, setFormInput] = useState({
     country: "",
     picture: null
@@ -97,7 +99,13 @@ function VerifyId() {
 
     if (isValid) {
       localStorage.setItem('verifyId', JSON.stringify(formInput));
-      window.location.href = '/almost-done';
+      setFormInput(prevState => ({
+        ...prevState,
+        picture: null
+      }));
+        // Reset imageDataUrl to hide the image
+    setImageDataUrl("");
+      navigate('/almost-done');
       alert('We\'ll get back to you!');
     } else {
       alert('Please fill in all the required fields.');
@@ -131,7 +139,7 @@ function VerifyId() {
             <label htmlFor="picture" className="font-medium text-[0.8rem]">Provide verification document</label>
             {/* hide when a file is in */}
             <DragAndDrop
-              onFileDrop={handleFileDrop} onChange={handlePictureChange} className={`mt-2 flex flex-col space-y-2 bg-color-2 items-center justify-center border-dashed border-2 border-color-3 w-full h-40 ${imageDataUrl ? 'hidden' : 'flex'}`} >
+              onFileDrop={handleFileDrop} onChange={handlePictureChange} className={`mt-2 flex flex-col space-y-2 bg-color-2 items-center justify-center border-dashed border-2 border-color-3 w-full h-40 ${formInput.picture ? 'hidden' : 'flex'}`} >
               <img src="../src/assets/icons/fileupload.png" alt="upload" className="w-8 h-8" />
               <h6 className="font-semibold ">Drag & drop files or <span>
                 <input
@@ -144,7 +152,7 @@ function VerifyId() {
               <p className="text-[0.8rem]">Supported formats JPEG,PNG,PDF,WORD</p>
 
             </DragAndDrop>
-            {imageDataUrl && <img src={imageDataUrl} alt="Uploaded document" className="w-full h-40" />}
+            {formInput.picture && <img src={imageDataUrl} alt="Uploaded document" className="w-full h-40" />}
           </div>
           <div className="flex justify-between">
             <div className="flex cursor-pointer space-x-2 items-center" onClick={() => window.history.back()}>

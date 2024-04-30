@@ -3,11 +3,14 @@ import Header from '../components/Header'
 import LeftBar from '../components/LeftBar'
 import { Outlet } from 'react-router-dom'
 import RightBar from '../components/RightBar'
+import MobileHeader from '../components/MobileHeader'
+import { useMediaQuery } from 'react-responsive';
 
 function Layout() {
+  const isMobile = useMediaQuery({ maxWidth: 768 }); // Define the breakpoint for mobile screens
   return (
-    <section className="bg-color-lightGrey ">
-      <Header />
+    <section className="md:bg-color-lightGrey ">
+      {isMobile ? <MobileHeader /> : <Header />}
       <div className="flex justify-between md:px-20 ">
         <LeftBar />
         <div className='md:w-[50%] pt-6'>

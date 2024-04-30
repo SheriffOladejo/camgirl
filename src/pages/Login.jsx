@@ -1,11 +1,14 @@
 import Logo from "../components/Logo"
 import FormInput from "../components/FormInput"
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { AuthContext } from "../context/authContext";
 
 // google signin
 
 function Login() {
+  const { currentUser, setCurrentUser } = useContext(AuthContext)
+
   const navigate = useNavigate();
   const [formInput, setFormInput] = useState({
     username: "",
@@ -68,9 +71,8 @@ function Login() {
     if (!formInput.email) {
       errors.email = 'Email is required';
     }
-    if (!formInput.username) {
-      errors.username = 'Username is required';
-    }
+   
+     
     if (!formInput.password) {
       errors.password = 'Password is required';
     }
@@ -78,20 +80,33 @@ function Login() {
 
     // Update form errors
     setFormErrors(errors);
-
+ 
     // If there are no errors, submit the form
     if (Object.keys(errors).length === 0) {
       console.log('Form submitted:', formInput);
 
+         // Get user data from localStorage
+    const userData = JSON.parse(localStorage.getItem('formData'));
+    console.log('Stored user data:', userData);
+
       //  logged user  comes from protected routes
-      if (formInput.email === loggeduser.email && formInput.password === loggeduser.password) {
-        localStorage.setItem('Loggedin', true)
-        navigate('/')
+      if(formInput.password !== userData.password){
+        alert('password incorrect')
+      }
+      else if (userData && formInput.email === userData.email && formInput.password === userData.password) {
+        console.log('User authenticated');
+        // Update currentUser in context
+      setCurrentUser(userData);
+        localStorage.setItem('Loggedin', true);
+        navigate('/fanhome');
       } else {
-        alert("incorrect password and email")
+        console.log('Authentication failed');
+        alert("Incorrect email and password");
       }
     }
+ 
   };
+
 
 
   // password visibility toggle
@@ -128,7 +143,7 @@ function Login() {
             {/* action:  whwere we want the user to be taken to after submitting the form */}
 
 
-            <form action="/" onSubmit={handleSubmit} method='post' className="space-y-6 pr-4" >
+            <form onSubmit={handleSubmit} method='post' className="space-y-6 pr-4" >
               <FormInput name="email" type="text" placeholder="Email address or phone number"
                 value={formInput.email}
                 onChange={handleInputChange}
@@ -148,7 +163,7 @@ function Login() {
 
 
                 <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0  flex items-center px-2">
-                  {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/openPass.png" alt="show-password"
+                  {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/password.png" alt="show-password"
 
                   /> : <img className="h-3 w-3" src="../src/assets/icons/closePass.png" alt="close-password"
 
@@ -170,8 +185,8 @@ function Login() {
                   <p className="text-color-grey">or</p>
                   <span className="w-[40%] bg-color-grey h-[0.5px]"></span>
                 </div>
-                <button className="bg-color-blue w-full relative mt-4 py-2 rounded-full text-color-white hover:bg-color-blue/80 font-semibold text-[0.8rem]">
-                  <img src="../src/assets/icons/google.png" alt="" className="absolute w-4 h-4 left-4 rounded-full " />
+                <button className="bg-color-blue w-full mt-4 py-2 rounded-full flex items-center justify-center text-color-white hover:bg-color-blue/80 font-semibold text-[0.8rem]">
+                  <img src="../src/assets/icons/google.png" alt="" className=" w-4 h-4 mr-2 rounded-full " />
                   Sign in with Google
                 </button>
               </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-
+// auth context, add info
 function ProfileSuggestion({ username, handle, isCertified, subscriptionStatus, online }) {
   return (
       <div className='px-2 py-2'>
@@ -18,7 +18,7 @@ function ProfileSuggestion({ username, handle, isCertified, subscriptionStatus, 
         <p className='text-[0.8rem] '>@{handle}caseyii2</p>
       </div>
       {/* dynamic */}
-      <p className='text-[0.7rem] text-color-pink '>{subscriptionStatus}Free</p>
+      <p className='text-[0.7rem] text-color-pink '>{subscriptionStatus}</p>
     </div>
   </div>
   )

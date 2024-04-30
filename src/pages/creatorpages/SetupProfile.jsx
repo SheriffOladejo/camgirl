@@ -1,8 +1,10 @@
 import FormInput from "../../components/FormInput";
 import { useState} from "react";
 import Logo from "../../components/Logo";
+import { useNavigate } from "react-router-dom";
 
 function SetupProfile() {
+  const navigate = useNavigate()
   const [formInput, setFormInput] = useState({
     firstname: "",
    lastname: "",
@@ -15,6 +17,19 @@ function SetupProfile() {
     username: "",
     DOB: ""
   });
+
+  const calculateAge = (dob) => {
+    const birthday = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthday.getFullYear();
+    const m = today.getMonth() - birthday.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthday.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+
   const validateForm = () => {
     const errorsCopy = { ...errors };
     let isValid = true;
@@ -40,12 +55,20 @@ function SetupProfile() {
       errorsCopy.username = "";
     }
 
+    // Validate Date of Birth for age restriction
     if (!formInput.DOB) {
       errorsCopy.DOB = "Please enter your date of birth.";
       isValid = false;
     } else {
-      errorsCopy.DOB = "";
+      const age = calculateAge(formInput.DOB);
+      if (age < 18) {
+        errorsCopy.DOB = "You must be at least 18 years old to continue.";
+        isValid = false;
+      } else {
+        errorsCopy.DOB = "";
+      }
     }
+
 
     setErrors(errorsCopy);
     return isValid;
@@ -57,7 +80,7 @@ function SetupProfile() {
     });
   };
 
- 
+
 
   const submitProfile = (event) => {
     event.preventDefault();
@@ -65,7 +88,9 @@ function SetupProfile() {
 
     if (isValid) {
       localStorage.setItem("creatorprofileData", JSON.stringify(formInput));
+      
       alert("Profile setup completed successfully!");
+      navigate('/verify-id')
     } else {
       alert("Please fill in all the required fields.");
     }
@@ -84,7 +109,7 @@ function SetupProfile() {
           <div>
             <label htmlFor="firstname" className="font-medium text-[0.8rem]">First name</label>
             <FormInput
-              name="name"
+              name="firstname"
               type="text"
               id="firstname"
               placeholder="Enter first name"
@@ -96,7 +121,7 @@ function SetupProfile() {
           <div>
             <label htmlFor="lastname" className="font-medium text-[0.8rem]">Last name</label>
             <FormInput
-              name="name"
+              name="lastname"
               type="text"
               id="lastname"
               placeholder="Enter last name"
@@ -121,10 +146,10 @@ function SetupProfile() {
           <div>
             <label htmlFor="dateofbirth" className="font-medium text-[0.8rem]">First name</label>
             <FormInput
-              name="birthdate"
-              type="number"
+              name="DOB"
+              type="date"
               id="dateofbirth"
-              placeholder="MM/DD/YYYY"
+              
               value={formInput.DOB}
               onChange={handleInputChange}
             />

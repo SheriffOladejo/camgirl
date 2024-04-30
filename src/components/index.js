@@ -37,29 +37,6 @@ export const navigation = [
   },
   
 ];
-export const headerNav = [
-  {
-    // id: "0",
-
-    url: "",
-    img: "../src/assets/icons/home.png"
-  },
-  
-  {
-    // id: "1",
- 
-    url: "/messages",
-    img: "../src/assets/icons/message.png"
-  },
-  
-  {
-    // id: "2",
-   
-    url: "/notfications",
-    img: "../src/assets/icons/notfication.png"
-  },
-  
-];
 
 export const fauxUsers = [
   { username: "user1", isCertified: true, subscriptionStatus: "Premium" },
@@ -158,6 +135,39 @@ export const stories = [
   name: "Underwater Quest",
   img: "../src/assets/background/bgimg.jpg"
 }
+];
+
+export const Post = [
+  {
+    id: "0",
+    name: "Discover Hidden Gems: Cascade Caverns",
+    img: "../src/assets/images/cascade-caverns.png",
+    description: "Embark on an unforgettable adventure with a visit to the spectacular Cascade Caverns."
+  },
+  {
+    id: "1",
+    name: "Culinary Delights: Explore Local Eats",
+    img: "../src/assets/images/local-eats.png",
+    description: "Dive into the world of culinary wonders and discover the best local foods that tantalize your taste buds."
+  },
+  {
+    id: "2",
+    name: "Wildlife Wonders: Safari Adventures",
+    img: "../src/assets/images/safari-adventure.png",
+    description: "Get close to nature and experience wildlife like never before on a thrilling safari adventure."
+  },
+  {
+    id: "3",
+    name: "Urban Exploration: City Landscapes",
+    img: "../src/assets/images/city-landscapes.png",
+    description: "Join us as we uncover the secrets and sights of the world's most fascinating urban landscapes."
+  },
+  {
+    id: "4",
+    name: "Beach Escapes: Tropical Paradise",
+    img: "../src/assets/images/tropical-paradise.png",
+    description: "Soak up the sun and enjoy the serene beauty of our handpicked tropical paradise beaches."
+  }
 ];
 
 

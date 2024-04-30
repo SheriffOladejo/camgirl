@@ -9,7 +9,7 @@ function Stories() {
   }
 
   return (
-    <section className="flex space-x-2 overflow-hidden mb-8 relative px-4 md:w-full w-[100vw]">
+    <section className="flex space-x-2 overflow-x-hidden mb-8 relative md:px-4 md:w-full w-[94vw]">
       <div className='flex items-center justify-between '>
         <div className=" bg-color-lighterGrey/70 rounded-full p-1 cursor-pointer absolute " onClick={() => handleSlide('left')}  >
           <img src="../src/assets/icons/arrow-left.png" alt="left click" className='w-5 h-5' />

@@ -1,10 +1,12 @@
-import FormInput from "../../components/FormInput";
+
 import { useState, useEffect, useRef } from "react";
 import Logo from "../../components/Logo";
 import DragAndDrop from "../../components/DragAndDrop";
+import { useNavigate } from "react-router-dom";
 function AlmostDone() {
+  const navigate = useNavigate()
   const [formInput, setFormInput] = useState({
-    username: "",
+  
     message: "",
     picture: null
   });
@@ -46,12 +48,12 @@ function AlmostDone() {
     const file = event.target.files[0];
     updateImageInState(file);
   };
-  useEffect(() => {
-    const storedImageDataUrl = localStorage.getItem("creatorprofileimg");
-    if (storedImageDataUrl) {
-      setImageDataUrl(storedImageDataUrl);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedImageDataUrl = localStorage.getItem("creatorprofileimg");
+  //   if (storedImageDataUrl) {
+  //     setImageDataUrl(storedImageDataUrl);
+  //   }
+  // }, []);
   const [errors, setErrors] = useState({
     picture: "",
     message: ""
@@ -86,9 +88,9 @@ function AlmostDone() {
     if (isValid) {
       localStorage.setItem("creatorprofileData", JSON.stringify(formInput));
       alert("Account created successfully!");
-    } else {
-      alert("Please fill in all the required fields.");
-    }
+      navigate('/home')
+     
+    } 
   };
 
   return (
@@ -121,11 +123,12 @@ function AlmostDone() {
           </div>
          
         </div>
-        <form action="/creatorhome" onSubmit={submitProfile} method="post" className="space-y-5 pr-4 pt-4">
+        <form action="/home" onSubmit={submitProfile} method="post" className="space-y-5 pr-4 pt-4">
           
           <div>
             <label htmlFor="message" className="font-medium text-[0.8rem] ">Add a bio</label>
             <textarea
+            name="message"
               id="message"
               value={formInput.message}
               onChange={(e) => handleInputChange('message', e.target.value)}

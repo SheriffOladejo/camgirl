@@ -68,6 +68,13 @@ function Signup() {
     }
   };
 
+   // signup type toggle
+   const [signUpType, setSignUpType] = useState('')
+
+   const handleSignupFan = () => setSignUpType('fan')
+ 
+   const handleSignupCreator = () => setSignUpType('creator')
+   
   const handleSubmit = (e) => {
     e.preventDefault();
      
@@ -98,9 +105,16 @@ function Signup() {
  // If there are no errors, submit the form
  if (Object.keys(errors).length === 0) {
   console.log('Form submitted:', formInput);
-  localStorage.setItem('formData', JSON.stringify(formInput))
-  navigate('/profilesetup')
-
+  
+  // Set user type based on signup type
+  localStorage.setItem("userType", signUpType);
+localStorage.setItem('formData', JSON.stringify(formInput))
+ // Redirect to different profile setup pages based on signup type
+if (signUpType === 'fan') {
+  navigate('/profile-setup');
+} else if (signUpType === 'creator') {
+  navigate('/setup-profile');
+}
   
 }
 
@@ -113,12 +127,7 @@ function Signup() {
     setShowPassword((prev) => !prev)
   }
 
-  // signup type toggle
-  const [signUpType, setSignUpType] = useState('fan')
-
-  const handleSignupFan = () => setSignUpType('fan')
-
-  const handleSignupCreator = () => setSignUpType('creator')
+ 
   
 
   return (
@@ -153,10 +162,10 @@ function Signup() {
                   fan
                 </p>
               </button>
-              <button className={`${signUpType === 'creator' ? 'bg-color-pink text-color-white ' : 'bg-color-lightGrey text-color-grey'} flex px-8 py-2 rounded justify-center items-center space-x-2`}
+              <button className={`${signUpType === 'creator' ? 'bg-color-pink  text-color-white' : 'bg-color-lightGrey text-color-grey'} flex px-8 py-2 rounded justify-center items-center space-x-2`}
                 onClick={handleSignupCreator}>
-                <img className="w-4 h-4" src="../src/assets/icons/profile.png" alt="fan profile" />
-                <p className="text-color-grey text-[0.8rem]">
+                <img className="w-4 h-4" src="../src/assets/icons/profile-white.png" alt="fan profile" />
+                <p className="text-[0.8rem]">
                   Creator
                 </p>
               </button>
@@ -230,8 +239,8 @@ function Signup() {
                   <span className="w-[40%] bg-color-grey h-[0.5px]"></span>
                 </div>
                 {/* add the sign in with google API */}
-                <button className="bg-color-blue w-full relative mt-4 py-2 rounded-full text-[0.8rem] text-color-white hover:bg-color-blue/80 font-semibold">
-                  <img src="../src/assets/icons/google.png" alt="" className="absolute left-4 rounded-full" />
+                <button className="bg-color-blue w-full mt-4 py-2 rounded-full flex items-center justify-center text-color-white hover:bg-color-blue/80 font-semibold text-[0.8rem]">
+                  <img src="../src/assets/icons/google.png" alt="" className=" w-4 h-4 mr-2 rounded-full " />
                   Sign in with Google
                 </button>
               </div>

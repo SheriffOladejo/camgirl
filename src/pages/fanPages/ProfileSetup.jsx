@@ -1,8 +1,10 @@
 import FormInput from "../../components/FormInput";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../../components/Logo";
 import DragAndDrop from "../../components/DragAndDrop";
 function ProfileSetup() {
+  const navigate = useNavigate();
   const [formInput, setFormInput] = useState({
     username: "",
     message: "",
@@ -92,7 +94,7 @@ function ProfileSetup() {
 
     if (isValid) {
       localStorage.setItem("fanprofileData", JSON.stringify(formInput));
-      alert("Profile picture uploaded successfully!");
+      navigate("/fanhome")
     } else {
       alert("Please fill in all the required fields.");
     }
@@ -120,7 +122,7 @@ function ProfileSetup() {
             
             
            </DragAndDrop>
-           {imageDataUrl  && <img src={imageDataUrl} alt="Uploaded document" className="w-full h-40" />}
+           {imageDataUrl  && <img src={imageDataUrl} alt="Uploaded document" className="w-40 h-20" />}
            <label htmlFor="picture" className="font-medium text-[0.8rem]">Upload a profile picture</label>
          </div>
         <form action="/fanhome" onSubmit={submitProfile} method="post" className="space-y-5 pr-4 pt-4">

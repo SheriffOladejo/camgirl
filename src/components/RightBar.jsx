@@ -1,4 +1,4 @@
-
+import { useState } from 'react';
 import ProfileSuggestion from './ProfileSuggestion'
 import { fauxUsers } from '.';
 function RightBar() {
@@ -12,35 +12,42 @@ function RightBar() {
     return acc;
   }, []);
 
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const handleSlide = (direction) => {
+    const slider = document.getElementsByClassName('carousel')[0];
+
+    direction === 'left' ? slider.scrollBy(-400, 0) : slider.scrollBy(400, 0)
+  }
 
   const leftClick = () => {
-   
+    handleSlide('left')
   }
   const rightClick = () => {
-   
+    handleSlide('right')
   }
   return (
 
 
 
-    <div className=' hidden md:flex flex-col md:w-[40%] sticky top-[30%] overflow-y-scroll right-bar pt-24 rounded'>
+    <div className=' hidden md:flex flex-col md:w-[40%] sticky  overflow-x-scroll right-bar pt-28 rounded'>
       <div className='bg-color-white px-3 py-4'>
         <div className='flex justify-between items-center '>
           <p className='font-semibold text-[0.8rem]'>Suggestion</p>
           <div className='flex items-center bg-color-lighterGrey rounded-full  w-90 px-2 py-1.5'>
-            <a onClick={leftClick} href="#">
+            <button onClick={leftClick} >
               <img src="../src/assets/icons/arrow-left.png" alt="left click" className='w-5 h-5' />
-            </a>
-            <a onClick={rightClick} href="#" className='pl-2'>
+            </button>
+            <button onClick={rightClick}  className='pl-2'>
               <img src="../src/assets/icons/arrow-right.png" alt="right click" className='w-5 h-5' />
-            </a>
+            </button>
 
           </div>
         </div>
-        <div>
+        <div className='overflow-x-scroll scroll-smooth flex carousel w-full'>
           {groupedUsers.map((group, index) => (
-            <div key={index} >
-              <div className="flex flex-col gap-4">
+            <div key={index} className='w-full flex flex-col'>
+             
                 {group.map((user, userIndex) => (
                   <ProfileSuggestion
                     key={userIndex}
@@ -49,18 +56,20 @@ function RightBar() {
                     subscriptionStatus={user.subscriptionStatus}
                   />
                 ))}
-         </div>
+        
          </div>
          ))}
       
      </div>
-        {/* pagination */}
-        <div>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+         {/* Pagination */}
+         <div className="flex justify-center mt-4">
+          {groupedUsers.map((_, index) => (
+            <span
+              key={index}
+              onClick={() => setCurrentPage(index)}
+              className={`pagination-dot ${currentPage === index ? 'active' : ''}`}
+            ></span>
+          ))}
         </div>
       </div>
       <div>
