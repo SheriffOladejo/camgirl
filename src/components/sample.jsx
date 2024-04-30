@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ProfileSuggestion from './ProfileSuggestion'
 import { fauxUsers } from '.';
-function RightBar() {
+function sample() {
   // Group fauxUsers into arrays of 4 users each
   const groupedUsers = fauxUsers.reduce((acc, user, index) => {
     const groupIndex = Math.floor(index / 4);
@@ -12,34 +12,17 @@ function RightBar() {
     return acc;
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [cardWidth, setCardWidth] = useState(0);
-  useEffect(() => {
-    const card = document.querySelector('.carousel .suggestion-card');
-    if (card) {
-      setCardWidth(card.offsetWidth);
-    }
-  }, []);
   const handleSlide = (direction) => {
     const slider = document.getElementsByClassName('carousel')[0];
-    const newPage = direction === 'left' ? currentPage - 1 : currentPage + 1;
-    const scrollPosition = -(newPage * cardWidth);
-    slider.scrollTo(scrollPosition, 0);
-  };
+    direction === 'left' ? slider.scrollBy(-400, 0) : slider.scrollBy(400, 0)
+  }
 
   const leftClick = () => {
-    if (currentPage > 0) {
-      handleSlide('left');
-      setCurrentPage(currentPage - 1);
-    }
+    handleSlide('left')
   };
 
   const rightClick = () => {
-    const totalPages = Math.ceil(groupedUsers.length / 4) - 1;
-    if (currentPage < totalPages) {
-      handleSlide('right');
-      setCurrentPage(currentPage + 1);
-    }
+    handleSlide('right')
   };
   return (
 
@@ -131,4 +114,4 @@ function RightBar() {
   )
 }
 
-export default RightBar
+export default sample

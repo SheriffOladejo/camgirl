@@ -79,3 +79,25 @@
 .carousel-body::-webkit-scrollbar{
   display: none;
 }
+.carousel::-webkit-scrollbar{
+  display: none;
+}
+.carousel{
+
+  scrollbar-width: 0;
+}
+
+.pagination-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination-dot.active {
+  background-color: #F94F64;
+}
+ 

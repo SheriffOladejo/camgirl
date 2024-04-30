@@ -1,18 +1,19 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { navigation } from "."
 import { Link } from "react-router-dom";
-
+import { AuthContext } from "../context/authContext";
 function LeftBar() {
- 
+  const { currentUser } = useContext(AuthContext)
+  const profilePic = currentUser ? currentUser.profilePic : null;
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div className='h-[60%] hidden md:sticky top-[20%] z-10  md:flex flex-col rounded-xl bg-color-white md:w-[30%] pt-5 pr-4 pb-4 '>
-    
+
       <nav >
         {/* profile */}
-        <div></div>
+        <div>{profilePic && <img src={profilePic} alt="Profile Pic" />}</div>
         {/* nav */}
-      
+
         {navigation.map((item, index) => (
           <Link
             to={item.url}
@@ -28,10 +29,10 @@ function LeftBar() {
             <span className="text-[0.8rem]">{item.title}</span>
           </Link>
         ))}
-       
+
       </nav>
-      
-      </div>
+
+    </div>
   )
 }
 

@@ -1,8 +1,8 @@
 import React from 'react'
 // auth context, add info
-function ProfileSuggestion({ username, handle, isCertified, subscriptionStatus, online }) {
+function ProfileSuggestion({ username, handle, isCertified, subscriptionStatus, online, className }) {
   return (
-      <div className='px-2 py-2'>
+      <div className={` ${ className && 'px-2 py-2'}`} >
     {/* mapping will occur here cause we need to get the details */}
     <div className='profileStyle flex w-full justify-between items-center rounded p-4 h-16'>
     
