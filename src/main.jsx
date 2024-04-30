@@ -16,11 +16,15 @@ import AlmostDone from './pages/creatorpages/AlmostDone';
 import Home from './pages/creatorpages/Home';
 import PostContent from './pages/PostContent';
 import { AuthContext, AuthContextProvider } from './context/authContext';
+import { LiveUsersProvider } from './context/liveUserContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
+      <LiveUsersProvider>
       <App />
+      </LiveUsersProvider>
+     
     </AuthContextProvider>
   </React.StrictMode>
 );
@@ -46,10 +50,12 @@ function App() {
 
         {/* Protected routes */}
         {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}
+        
           <Route element={<Layout />}>
             <Route path="fanhome" element={<FanHome />} />
             <Route path="/home" element={<Home />} />
           </Route>
+          
         {/* </Route> */}
 
         {/* Redirect root to login if not authenticated */}
