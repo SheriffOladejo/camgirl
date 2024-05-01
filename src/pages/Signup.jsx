@@ -30,44 +30,22 @@ function Signup() {
   });
 
   const handleInputChange = (name, value) => {
-    setFormInput({
-      ...formInput,
-      [name]: value,
-    });
-    // Reset corresponding error message if the input is changed
-    setFormErrors({
-      ...formErrors,
-      [name]: '',
-    });
-    // Validate input based on name
+    setFormInput(prev => ({ ...prev, [name]: value }));
+    validateInput(name, value);
+  }
+  const validateInput = (name, value) => {
+    let errorMsg = '';
     if (name === "email") {
-      // Perform email validation
-      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-      if (!emailRegex.test(value)) {
-        setFormErrors({ [name]: "Invalid email address" });
-      } else {
-        setFormErrors("");
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+        errorMsg = "Invalid email address";
       }
-
-    } else if (name === "password") {
-      // Perform password validation
-      // Example: Minimum password length validation
-      if (value.length < 6) {
-
-        setFormErrors({ [name]: "Password must be at least 6 characters long" });
-      } else {
-        setFormErrors("");
-      }
-    } else if (name === "confirmPassword") {
-      // You should compare with the value directly from the input, not from formInput state
-      if (value !== formInput.password) {
-        ({ [name]: "Passwords do not match" });
-      } else {
-        setFormErrors("");
-      }
+    } else if (name === "password" && value.length < 6) {
+      errorMsg = "Password must be at least 6 characters long";
+    } else if (name === "confirmPassword" && value !== formInput.password) {
+      errorMsg = "Passwords do not match";
     }
+    setFormErrors(prev => ({ ...prev, [name]: errorMsg }));
   };
-
    // signup type toggle
    const [signUpType, setSignUpType] = useState('')
 
@@ -107,8 +85,13 @@ function Signup() {
   console.log('Form submitted:', formInput);
   
   // Set user type based on signup type
-  localStorage.setItem("userType", signUpType);
-localStorage.setItem('formData', JSON.stringify(formInput))
+  localStorage.setItem("userType", JSON.stringify(signUpType));
+   // Store form data in local storage based on signup type
+   if (signUpType === 'fan') {
+    localStorage.setItem('fanProfileData', JSON.stringify(formInput));
+  } else if (signUpType === 'creator') {
+    localStorage.setItem('creatorProfileData', JSON.stringify(formInput));
+  }
  // Redirect to different profile setup pages based on signup type
 if (signUpType === 'fan') {
   navigate('/profile-setup');

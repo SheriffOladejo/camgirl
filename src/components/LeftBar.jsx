@@ -7,7 +7,7 @@ function LeftBar() {
   const profilePic = currentUser ? currentUser.profilePic : null;
   const [activeIndex, setActiveIndex] = useState(0);
   return (
-    <div className='h-[60%] hidden md:fixed left-10 top-[20%] z-10  md:flex flex-col rounded-xl bg-color-white md:w-[20%] pt-5 pr-4 pb-4 '>
+    <div className='h-[60%] hidden md:sticky top-[20%] z-10  md:flex flex-col rounded-xl bg-color-white md:w-[20%] pt-5 pr-4 pb-4 '>
 
       <nav >
         {/* profile */}

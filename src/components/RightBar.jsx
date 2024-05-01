@@ -30,7 +30,7 @@ function  RightBar() {
 
 
 
-    <div className='hidden md:flex flex-col md:w-[20%] md:fixed  h-auto overflow-y-scroll right-4 right-bar pt-28 rounded space-y-4'>
+    <div className='hidden md:flex flex-col md:w-[20%] md:sticky  h-auto overflow-y-scroll right-4 right-bar pt-28 rounded space-y-4'>
       <Carousel text="suggestion">
       {groupedUsers.map((group, index) => (
             <div key={index} className='w-full flex flex-col space-y-4'>

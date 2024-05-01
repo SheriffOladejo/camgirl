@@ -1,17 +1,19 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import Logo from "../../components/Logo";
 import DragAndDrop from "../../components/DragAndDrop";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+
 function AlmostDone() {
   const navigate = useNavigate()
+  const {  setCurrentUser } = useContext(AuthContext);
   const [formInput, setFormInput] = useState({
-  
     message: "",
     picture: null
   });
 
-  const [imageDataUrl, setImageDataUrl] = useState("");
+  const [imageDataUrl, setImageDataUrl] = useState(null);
 
   const handleInputChange = (name, value) => {
     setFormInput({
@@ -34,26 +36,29 @@ function AlmostDone() {
     const reader = new FileReader();
     reader.onload = (event) => {
       const dataUrl = event.target.result;
+      console.log("Data URL:", dataUrl); // Log the data URL
       setImageDataUrl(dataUrl);
       setFormInput(prev => ({
         ...prev,
         picture: dataUrl
       }));
-      localStorage.setItem("creatorprofileimg", dataUrl);
+    
     };
     reader.readAsDataURL(file);
   };
 
   const handlePictureChange = (event) => {
     const file = event.target.files[0];
+    console.log("File selected:", file); // Log the selected file
     updateImageInState(file);
   };
   // useEffect(() => {
   //   const storedImageDataUrl = localStorage.getItem("creatorprofileimg");
-  //   if (storedImageDataUrl) {
+  //   if (storedImageDataUrl && !formInput.picture) {
   //     setImageDataUrl(storedImageDataUrl);
   //   }
   // }, []);
+  
   const [errors, setErrors] = useState({
     picture: "",
     message: ""
@@ -86,10 +91,14 @@ function AlmostDone() {
     const isValid = validateForm();
 
     if (isValid) {
-      localStorage.setItem("creatorprofileData", JSON.stringify(formInput));
+      console.log(formInput)
+      localStorage.setItem("creatorprofileData", JSON.stringify(formInput));      
+      // localStorage.removeItem("creatorprofileimg");
+      setCurrentUser("creator", formInput); 
       alert("Account created successfully!");
       navigate('/home')
-     
+      // Reset the imageDataUrl state variable
+    setImageDataUrl(null);
     } 
   };
 

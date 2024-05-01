@@ -37,6 +37,35 @@ export const navigation = [
   },
   
 ];
+export const mobileNav = [
+  {
+    // id: "0",
+    title: "Home",
+    url: "",
+    img: "../src/assets/icons/home.png"
+  },
+  {
+    // id: "1",
+    title: "Explore",
+    url: "/discover",
+    img: "../src/assets/icons/discover.png"
+  },
+  {
+    // id: "2",
+    title: "Notifications",
+    url: "/notifications",
+    img: "../src/assets/icons/notification.png"
+  },
+  {
+    // id: "3",
+    title: "Messages",
+    url: "/messages",
+    img: "../src/assets/icons/message.png"
+  },
+  
+ 
+  
+];
 
 export const fauxUsers = [
   { username: "user1", isCertified: true, subscriptionStatus: "Premium" },
