@@ -6,7 +6,7 @@ import './index.css';
 import Error404page from './pages/Error404page';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import FanHome from './pages/fanPages/Home';
+import FanHome from './pages/fanPages/FanHome';
 import ProfileSetup from './pages/fanPages/ProfileSetup';
 import SetupProfile from './pages/creatorpages/SetupProfile';
 import Layout from './services/Layout';
@@ -16,11 +16,14 @@ import AlmostDone from './pages/creatorpages/AlmostDone';
 import Home from './pages/creatorpages/Home';
 import PostContent from './pages/PostContent';
 import { AuthContext, AuthContextProvider } from './context/authContext';
+import { LiveUsersProvider } from './context/liveUserContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
+      <LiveUsersProvider>
       <App />
+      </LiveUsersProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );
@@ -46,10 +49,15 @@ function App() {
 
         {/* Protected routes */}
         {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}
+        
           <Route element={<Layout />}>
+          
             <Route path="fanhome" element={<FanHome />} />
+     
             <Route path="/home" element={<Home />} />
+      
           </Route>
+          
         {/* </Route> */}
 
         {/* Redirect root to login if not authenticated */}

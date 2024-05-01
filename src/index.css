@@ -87,17 +87,12 @@
   scrollbar-width: 0;
 }
 
-.pagination-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #ccc;
-  margin: 0 5px;
-  cursor: pointer;
+
+
+ /* Custom CSS to change dot color */
+
+.slick-dots li.slick-active button:before{
+  color: #F94F64 !important;
 }
 
-.pagination-dot.active {
-  background-color: #F94F64;
-}
- 
+

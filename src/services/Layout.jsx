@@ -11,9 +11,9 @@ function Layout() {
   return (
     <section className="md:bg-color-lightGrey ">
       {isMobile ? <MobileHeader /> : <Header />}
-      <div className="flex justify-between md:px-20 ">
+      <div className="flex justify-between md:px-20 w-[100%] ">
         <LeftBar />
-        <div className='md:w-[50%] pt-6'>
+        <div className='md:w-[60%] pt-6'>
         <Outlet />
         </div>
        

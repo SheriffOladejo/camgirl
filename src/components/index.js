@@ -37,6 +37,35 @@ export const navigation = [
   },
   
 ];
+export const mobileNav = [
+  {
+    // id: "0",
+    title: "Home",
+    url: "",
+    img: "../src/assets/icons/home.png"
+  },
+  {
+    // id: "1",
+    title: "Explore",
+    url: "/discover",
+    img: "../src/assets/icons/discover.png"
+  },
+  {
+    // id: "2",
+    title: "Notifications",
+    url: "/notifications",
+    img: "../src/assets/icons/notification.png"
+  },
+  {
+    // id: "3",
+    title: "Messages",
+    url: "/messages",
+    img: "../src/assets/icons/message.png"
+  },
+  
+ 
+  
+];
 
 export const fauxUsers = [
   { username: "user1", isCertified: true, subscriptionStatus: "Premium" },
@@ -136,7 +165,14 @@ export const stories = [
   img: "../src/assets/background/bgimg.jpg"
 }
 ];
-
+export const liveUsers = [
+  { id: 1, username: 'user1', avatar: '../src/assets/profileImg.png' },
+  { id: 2, username: 'user2', avatar: '../src/assets/profileImg.png' },
+  { id: 3, username: 'user3', avatar: '../src/assets/profileImg.png' },
+  { id: 4, username: 'user4', avatar: '../src/assets/profileImg.png' },
+  { id: 5, username: 'user5', avatar: '../src/assets/profileImg.png' },
+  // Add more users as needed
+];
 export const Post = [
   {
     id: "0",

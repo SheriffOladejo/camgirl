@@ -98,7 +98,13 @@ function Login() {
         // Update currentUser in context
       setCurrentUser(userData);
         localStorage.setItem('Loggedin', true);
-        navigate('/fanhome');
+         // Redirect to different home pages based on user type
+         const userType = localStorage.getItem('userType') 
+         if (userType === 'fan') {
+          navigate('/fanhome');
+        } else if (userType === 'creator') {
+          navigate('/home');
+        }
       } else {
         console.log('Authentication failed');
         alert("Incorrect email and password");
