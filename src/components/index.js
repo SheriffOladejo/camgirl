@@ -67,6 +67,43 @@ export const mobileNav = [
   
 ];
 
+export const profileMenu = [
+  {
+    // id: "0",
+    title: "Profile",
+    url: "/profile",
+    img: "../src/assets/icons/profile.png"
+  },
+  {
+    // id: "1",
+    title: "Settings",
+    url: "/settings",
+    img: "../src/assets/icons/setting.png"
+  },
+  {
+    // id: "2",
+    title: "bookmark",
+    url: "/bookmark",
+    img: "../src/assets/icons/bookmark.png"
+  },
+  {
+    // id: "3",
+    title: "Subscriptions",
+    url: "/subscriptions",
+    img: "../src/assets/icons/subscriptions.png"
+  },
+  
+  {
+    // id: "3",
+    title: "Log out",
+    // logout
+    url: "/",
+    img: "../src/assets/icons/logout.png"
+  },
+  
+  
+];
+
 export const fauxUsers = [
   { username: "user1", isCertified: true, subscriptionStatus: "Premium" },
   { username: "user2", isCertified: false, subscriptionStatus: "Free" },

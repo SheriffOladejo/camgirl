@@ -3,15 +3,23 @@ import { navigation } from "."
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 function LeftBar() {
-  const { currentUser } = useContext(AuthContext)
-  const profilePic = currentUser ? currentUser.profilePic : null;
+
+  const { currentUser } = useContext(AuthContext);
+  const { userType } = currentUser;
+  const profilePic = (currentUser[userType]?.picture) || null;
+  const username = (currentUser[userType]?.username) || null;
+
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div className='h-[60%] hidden md:sticky top-[20%] z-10  md:flex flex-col rounded-xl bg-color-white md:w-[20%] pt-5 pr-4 pb-4 '>
 
       <nav >
         {/* profile */}
-        <div>{profilePic && <img src={profilePic} alt="Profile Pic" />}</div>
+        <div className="flex">
+        <div className="p-[1px] rounded-full bg-color-4">{profilePic && <img src={profilePic} alt="Profile Pic"  className="w-8 h-8 rounded-full"/>}</div>
+        <p>{username}</p>
+        </div>
+        
         {/* nav */}
 
         {navigation.map((item, index) => (

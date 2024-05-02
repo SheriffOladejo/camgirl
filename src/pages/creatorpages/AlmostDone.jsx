@@ -92,9 +92,9 @@ function AlmostDone() {
 
     if (isValid) {
       console.log(formInput)
-      localStorage.setItem("creatorprofileData", JSON.stringify(formInput));      
+      localStorage.setItem("creatorProfileData", JSON.stringify(formInput));      
       // localStorage.removeItem("creatorprofileimg");
-      setCurrentUser("creator", formInput); 
+     
       alert("Account created successfully!");
       navigate('/home')
       // Reset the imageDataUrl state variable

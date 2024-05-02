@@ -2,13 +2,15 @@ import { useContext, useEffect, useState } from "react";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
+import ProfileMenu from "./ProfileMenu";
 
 function Header({ placeholder }) {
   const navigate = useNavigate();
   const { currentUser, setCurrentUserType } = useContext(AuthContext);
   const { userType } = currentUser;
   const profilePic = (currentUser[userType]?.picture) || null;
-
+  const username = (currentUser[userType]?.username) || null;
+  const handle = (currentUser[userType]?.handle) || null;
   const toggleMode = () => {
     const newUserType = userType === "creator" ? "fan" : "creator";
     setCurrentUserType(newUserType);
@@ -42,13 +44,14 @@ function Header({ placeholder }) {
           />
         </div>
         <div className="flex space-x-2 items-center">
-          <Link to="#">
+          {/* dynamic home depending on type */}
+          <Link to="/home">
             <img className="w-4 h-4" src="../src/assets/icons/home.png" alt="home" />
           </Link>
-          <Link to="#">
+          <Link to="/messages">
             <img className="w-4 h-4" src="../src/assets/icons/message.png" alt="" />
           </Link>
-          <Link to="#">
+          <Link to="/notifications">
             <img className="w-4 h-4" src="../src/assets/icons/notification.png" alt="" />
           </Link>
           <div className={` relative bg-color-lightGrey rounded-xl cursor-pointer w-8 h-2 items-center transition-all duration-200 ease-in-out ${userType === 'creator' ? 'justify-start' : 'justify-end'}`} onClick={toggleMode}>
@@ -56,11 +59,10 @@ function Header({ placeholder }) {
               {userType === 'creator'  ? <img className="w-4 h-4 mt-[-4px]" src="../src/assets/icons/people-frame.png" alt="" /> : <img className="w-4 h-4 p-1 mt-[-4px] bg-color-pink rounded-full" src="../src/assets/icons/profile-white.png" alt="" />}
             </div>
           </div>
-          <div className="flex justify-between items-center space-x-1">
-            <div className="p-[1px] bg-color-pink rounded-full">
-              {profilePic && <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full"/>}
-            </div>
-            <img src="../src/assets/icons/Icons.png" alt="" className="w-3 h-3"/>
+         
+         
+           <div>
+            <ProfileMenu profilePic={profilePic} username={username} handle={handle} />
           </div>
         </div>
       </div>

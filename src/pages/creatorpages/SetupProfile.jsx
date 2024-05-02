@@ -87,7 +87,7 @@ function SetupProfile() {
     const isValid = validateForm();
 
     if (isValid) {
-      localStorage.setItem("creatorprofileData", JSON.stringify(formInput));
+      localStorage.setItem("creatorSetupData", JSON.stringify(formInput));
       
       alert("Profile setup completed successfully!");
       navigate('/verify-id')
