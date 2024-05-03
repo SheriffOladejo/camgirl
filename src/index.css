@@ -96,3 +96,20 @@
 }
 
 
+.messages-chat-list::-webkit-scrollbar {
+  width: 0.0rem; /* Set the width of the scrollbar to a very small value */
+}
+
+/* Remove scrollbar track on hover (optional) */
+.messages-chat-list::-webkit-scrollbar:hover {
+width: 0.0rem;
+}
+
+.messages-convo-list2::-webkit-scrollbar {
+  width: 0.0rem; /* Set the width of the scrollbar to a very small value */
+}
+
+/* Remove scrollbar track on hover (optional) */
+.messages-convo-list2::-webkit-scrollbar:hover {
+width: 0.0rem;
+}

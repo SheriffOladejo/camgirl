@@ -4,12 +4,13 @@ import FormInput from "../components/FormInput"
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
-
+import DbHelper from '../utils/DbHelper'
 // check if the user has a profile
 // send the form data to a database
  {/* check if username is available */}
 function Signup() {
   const navigate = useNavigate();
+  const dbHelper = new DbHelper()
   const [termsChecked, setTermsChecked] = useState(false);
 
   const handleCheckboxChange = () => {
@@ -47,7 +48,7 @@ function Signup() {
     setFormErrors(prev => ({ ...prev, [name]: errorMsg }));
   };
    // signup type toggle
-   const [signUpType, setSignUpType] = useState('')
+   const [signUpType, setSignUpType] = useState('fan')
 
    const handleSignupFan = () => setSignUpType('fan')
  
@@ -88,6 +89,7 @@ function Signup() {
   localStorage.setItem("userType", JSON.stringify(signUpType));
    // Store form data in local storage based on signup type
    if (signUpType === 'fan') {
+    dbHelper.updateUser('userData', formInput)
     localStorage.setItem('fanProfileData', JSON.stringify(formInput));
   } else if (signUpType === 'creator') {
     localStorage.setItem('creatorProfileData', JSON.stringify(formInput));

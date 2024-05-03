@@ -17,7 +17,7 @@ import Home from './pages/creatorpages/Home';
 import PostContent from './pages/PostContent';
 import { AuthContext, AuthContextProvider } from './context/authContext';
 import { LiveUsersProvider } from './context/liveUserContext';
-
+import Messages from './pages/Messages';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
@@ -41,6 +41,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/messages" element={<Messages />} />
         <Route path="/profile-setup" element={<ProfileSetup />} />
         <Route path="/setup-profile" element={<SetupProfile />} />
         <Route path="/verify-id" element={<VerifyId />} />

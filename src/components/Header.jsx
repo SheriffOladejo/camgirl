@@ -22,13 +22,6 @@ function Header({ placeholder }) {
 
   const handleChange = (e) => setSearchItem(e.target.value);
 
-  // useEffect(() => {
-  //   const storedUserType = localStorage.getItem("userType");
-  //   if (storedUserType) {
-  //     setCurrentUserType(storedUserType);
-  //   }
-  // }, [setCurrentUserType]);
-
   return (
     <header className="text-[16px] px-10 pt-8 pb-6   md:flex md:justify-between md:items-center sticky top-0 z-20 bg-color-white md:shadow-md">
       <Logo color={"text-color-0"} />
