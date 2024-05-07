@@ -113,3 +113,18 @@ width: 0.0rem;
 .messages-convo-list2::-webkit-scrollbar:hover {
 width: 0.0rem;
 }
+
+.feed-item-input {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  border: none;       
+  outline: none;       
+  box-shadow: none;   
+  padding-left: 15px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: black;
+  font-weight: 400;
+  width: 100%;
+}

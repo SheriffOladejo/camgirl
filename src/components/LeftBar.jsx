@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react"
 import { navigation } from "."
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-function LeftBar({className,style}) {
+function LeftBar({className}) {
 
   const { currentUser } = useContext(AuthContext);
   const { userType } = currentUser;
@@ -21,8 +21,9 @@ function LeftBar({className,style}) {
     }
   }, [location.pathname]); // Re-run the effect whenever the pathname changes
 
+
   return (
-    <div style={style} className={className && `hidden md:sticky top-[20%] z-10  md:flex flex-col rounded-xl bg-color-white w-[250px] h-[350px] pt-[30px] pr-4 pb-4 shadow`}>
+    <div  className={className && `hidden md:sticky top-[20%] z-10  md:flex flex-col rounded-xl  bg-color-white h-[350px] pt-[30px] pr-4 pb-4  ${className} shadow`}>
 
       <nav >
         {/* profile */}
@@ -33,19 +34,18 @@ function LeftBar({className,style}) {
         
         {/* nav */}
 
-        {navigation.map((item, index) => (
+        {navigation.map((item, id) => (
           
           <Link
             to={item.url}
-            key={index}
-            className={`flex items-center justify-start p-2 ${activeIndex === index ? 'bg-color-pink  rounded-r-lg text-color-white ' : 'text-color-grey hover:bg-color-pink hover:text-color-white rounded-r-lg'}`}
-       
-            onClick={() => setActiveIndex(index)}
+            key={id}
+            className={`flex items-center justify-start p-2 ${id === activeIndex ? 'bg-color-pink  rounded-r-lg text-color-white ' : 'text-color-grey '}`}
+
           >
-            {activeIndex === index && (
+            {id === activeIndex && (
               <img src="../src/assets/icons/active.png" alt="Active" className="mr-2 w-1 h-2" />
             )}
-            <img src={item.img} alt={item.title} className="mr-2 w-[5px]h-[8px]" />
+            <img src={item.img} alt={item.title} className="mr-2 w-5 h-5" />
             <span className="text-[0.8rem]">{item.title}</span>
           </Link>
         ))}

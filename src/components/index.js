@@ -1,36 +1,36 @@
 export const navigation = [
   {
-    // id: "0",
+    id: "0",
     title: "Home",
-    url: "",
+    url: "/home",
     img: "../src/assets/icons/home.png"
   },
   {
-    // id: "1",
+    id: "1",
     title: "Explore",
     url: "/discover",
     img: "../src/assets/icons/discover.png"
   },
   {
-    // id: "2",
+    id: "2",
     title: "Wallet",
     url: "/wallet",
     img: "../src/assets/icons/wallet.png"
   },
   {
-    // id: "3",
+    id: "3",
     title: "Messages",
     url: "/messages",
     img: "../src/assets/icons/message.png"
   },
   {
-    // id: "4",
+    id: "4",
     title: "Subscriptions",
     url: "/subscriptions",
-    img: "../src/assets/icons/profile-tick.png"
+    img: "../src/assets/icons/subscriptions.png"
   },
   {
-    // id: "5",
+    id: "5",
     title: "Settings",
     url: "/settings",
     img: "../src/assets/icons/setting.png"

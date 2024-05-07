@@ -31,12 +31,12 @@ function ProfileMenu({ profilePic, username, handle }) {
         <>
           <div className='transition-all duration-300 top-10  w-[50%]'>
             <div className="absolute  top-0  flex justify-between items-center space-x-1 bg-color-white ">
-              <div className="p-[1px] bg-color-pink rounded-full">
-                {profilePic && <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full" />}
-
+              {/* profile img */}
+              <div className="p-[1px] bg-color-pink rounded-full w-8 h-7 ">
+                {profilePic && <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full z-[99999] " />}
               </div>
               <div>{username && <h4 alt="username" className="font-semibold ">{username}</h4>}
-                {handle && <p alt="username" className="font-semibold ">{username}</p>}
+                {handle && <p alt="username" className="font-semibold ">{username} @casper</p>}
               </div>
 
               <img onClick={toggleMenu} src="../src/assets/icons/angle-up.png" alt="awwow-up" className="w-2 h-1 cursor-pointer" />
@@ -47,11 +47,11 @@ function ProfileMenu({ profilePic, username, handle }) {
                   <Link
                     to={profile.url}
                     key={index}
-                    className={`flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ${index === activeIndex ? 'bg-color-pink/70  rounded-r-lg text-color-white ' : 'text-color-grey'}`}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    onMouseLeave={() => setActiveIndex(null)} // Consider resetting or not resetting on mouse leave
+                    className={`flex px-4 py-2 text-sm text-color-grey transition-all hover:bg-color-pink ${index === activeIndex ? 'bg-color-pink/70  rounded-r-lg text-color-white ' : 'text-color-grey'}`}
+                    onClick={() => setActiveIndex(index)}
+
                   >
-                   
+
                     <img src={profile.img} alt={profile.title} className="mr-2 w-5 h-5" />
                     <span className="text-[0.8rem]">{profile.title}</span>
                   </Link>

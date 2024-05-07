@@ -1,5 +1,9 @@
 import { useState } from "react"
-function Post({ onPostSubmit }) {
+import { PUBLICITY_OPTIONS, ATTACHMENT_GIF, ATTACHMENT_IMAGE, ATTACHMENT_VIDEO } from "../utils/Constants";
+import TextareaAutosize from '../../node_modules/react-textarea-autosize';
+import ReactPlayer from 'react-player'
+import SelectGif from '../SelectGif/SelectGif';
+function CreatePost({ onPostSubmit }) {
 
   const [content, setContent] = useState('');
   const handleContentChange = (e) => {
@@ -38,4 +42,4 @@ function Post({ onPostSubmit }) {
   )
 }
 
-export default Post
+export default CreatePost

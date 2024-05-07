@@ -12,12 +12,12 @@
 // };
 // export const GIPHY_API_KEY = "ZTwrsVxPy6dmwBCIZyUKLTlbAm8dXwpm";
 
-// export const PUBLICITY_OPTIONS = [
-//   {title: "Everyone", image: "/images/globe.svg", desc: "Anyone on or off Camgirl"},
-//   {title: "Friends", image: "/images/friends.svg", desc: "Your friends on Camgirl"}, 
-//   {title: "Friends except", image: "/images/friends-except.svg", desc: "Only specific friends"}, 
-//   {title: "Only me", image: "/images/padlock.svg", desc: ""}
-// ];
+export const PUBLICITY_OPTIONS = [
+  {title: "Everyone", image: "/images/globe.svg", desc: "Anyone on or off Camgirl"},
+  {title: "Friends", image: "/images/friends.svg", desc: "Your friends on Camgirl"}, 
+  {title: "Friends except", image: "/images/friends-except.svg", desc: "Only specific friends"}, 
+  {title: "Only me", image: "/images/padlock.svg", desc: ""}
+];
 
 export const ATTACHMENT_GIF = "gif";
 export const ATTACHMENT_IMAGE = "image";
