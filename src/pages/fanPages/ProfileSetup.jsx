@@ -44,7 +44,7 @@ function ProfileSetup() {
         ...prev,
         picture: dataUrl
       }));
-      localStorage.setItem("creatorprofileimg", dataUrl);
+      localStorage.setItem("fanprofileimg", dataUrl);
     };
     reader.readAsDataURL(file);
   };
@@ -93,7 +93,8 @@ function ProfileSetup() {
     const isValid = validateForm();
 
     if (isValid) {
-      localStorage.setItem("fanprofileData", JSON.stringify(formInput));
+      localStorage.setItem("fanProfileData", JSON.stringify(formInput));
+      setCurrentUser("fan", formInput);
       navigate("/fanhome")
     } else {
       alert("Please fill in all the required fields.");

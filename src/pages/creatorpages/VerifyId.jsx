@@ -98,7 +98,7 @@ function VerifyId() {
     const isValid = validateForm();
 
     if (isValid) {
-      localStorage.setItem('verifyId', JSON.stringify(formInput));
+      localStorage.setItem('creatorVerifyId', JSON.stringify(formInput));
       setFormInput(prevState => ({
         ...prevState,
         picture: null

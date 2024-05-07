@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
-import ProfileSuggestion from './ProfileSuggestion'
+import ProfileSuggestion from './ProfileSuggestion';
 import { fauxUsers } from '.';
-function RightBar() {
-  // Group fauxUsers into arrays of 4 users each
+import Carousel from './Carousel';
+import { liveUsers } from '.';
+import LiveUser from './LiveUser';
+
+function RightBar({ className }) {
   const groupedUsers = fauxUsers.reduce((acc, user, index) => {
     const groupIndex = Math.floor(index / 4);
     if (!acc[groupIndex]) {
@@ -12,123 +14,79 @@ function RightBar() {
     return acc;
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [cardWidth, setCardWidth] = useState(0);
-  useEffect(() => {
-    const card = document.querySelector('.carousel .suggestion-card');
-    if (card) {
-      setCardWidth(card.offsetWidth);
+  const groupedLiveUsers = liveUsers.reduce((acc, liveUser, index) => {
+    const liveGroupIndex = Math.floor(index / 3);
+    if (!acc[liveGroupIndex]) {
+      acc[liveGroupIndex] = [];
     }
+    acc[liveGroupIndex].push(liveUser);
+    return acc;
   }, []);
-  const handleSlide = (direction) => {
-    const slider = document.getElementsByClassName('carousel')[0];
-    const newPage = direction === 'left' ? currentPage - 1 : currentPage + 1;
-    const scrollPosition = -(newPage * cardWidth);
-    slider.scrollTo(scrollPosition, 0);
-  };
 
-  const leftClick = () => {
-    if (currentPage > 0) {
-      handleSlide('left');
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const rightClick = () => {
-    const totalPages = Math.ceil(groupedUsers.length / 4) - 1;
-    if (currentPage < totalPages) {
-      handleSlide('right');
-      setCurrentPage(currentPage + 1);
-    }
-  };
   return (
-
-
-
-    <div className=' hidden md:flex flex-col md:w-[40%] sticky  overflow-x-scroll right-bar pt-28 rounded'>
-      <div className=' bg-color-white w-full max-w-[1100px] px-3 py-4'>
-        <div className='flex justify-between items-center '>
-          <p className='font-semibold text-[0.8rem]'>Suggestion</p>
-          <div className='flex items-center bg-color-lighterGrey rounded-full  w-90 px-2 py-1.5'>
-            <button onClick={leftClick} >
-              <img src="../src/assets/icons/arrow-left.png" alt="left click" className='w-5 h-5' />
-            </button>
-            <button onClick={rightClick}  className='pl-2'>
-              <img src="../src/assets/icons/arrow-right.png" alt="right click" className='w-5 h-5' />
-            </button>
-
-          </div>
-        </div>
-        <div className='overflow-x-auto scroll-smooth flex carousel max:w-[100%] snap-x-mandatory'>
-          {groupedUsers.map((group, index) => (
-            <div key={index} className='w-full flex flex-col '>
-             
-                {group.map((user, userIndex) => (
-                  <ProfileSuggestion
-                    key={userIndex}
-                    username={user.username}
-                    isCertified={user.isCertified}
-                    subscriptionStatus={user.subscriptionStatus}
-                    className="suggestion-card" 
-                    style={{ minWidth: `${cardWidth}px` }}
-                  />
-                ))}
+    <div
+      className={
+        className &&
+        ` pt-[20px] md:sticky mt-[5.7rem]  rounded-xl overflow-y-auto messages-chat-list space-y-4 hidden md:flex md:flex-col h-[220%]`
+      }
+      style={{
+       
+        maxHeight: 'calc(100vh - 31%)', // Adjusted to fill remaining viewport height below top 20%
         
-         </div>
-         ))}
-      
-     </div>
-         {/* Pagination */}
-         <div className="flex justify-center mt-4">
-          {groupedUsers.map((_, index) => (
-            <span
-              key={index}
-              onClick={() => setCurrentPage(index)}
-              className={`pagination-dot ${currentPage === index ? 'active' : ''}`}
-            ></span>
-          ))}
-        </div>
-      </div>
-      <div>
-        <div>
-          <p>Join Live</p>
-          <div>
-            <a onClick={leftClick} href="#">
-              <img src="../src/assets/icons/arrow-left.png" alt="left click" />
-            </a>
-            <a onClick={rightClick} href="#">
-              <img src="../src/assets/icons/arrow-right.png" alt="right click" />
-            </a>
-
+      }}
+    >
+      <Carousel className="p-4" text="suggestion">
+        {groupedUsers.map((group, index) => (
+          <div key={index} className="w-full flex flex-col space-y-4">
+            {group.map((user, userIndex) => (
+              <ProfileSuggestion
+                key={userIndex}
+                username={user.username}
+                isCertified={user.isCertified}
+                subscriptionStatus={user.subscriptionStatus}
+              />
+            ))}
           </div>
-        </div>
-        <div>
-          {/* mapping will occur here cause we need to get the details */}
-          <div>
-            <div
-              className='relative'> <img src="../src/assets/profileImg.png" alt="" /></div>
+        ))}
+      </Carousel>
 
-
-            {/* dynamic */}
-            <span className='absolute bottom-3'>Live</span>
+      <Carousel className="mt-4" text="Join Live">
+        {groupedLiveUsers.map((group, index) => (
+          <div key={index} className="w-full flex flex-col space-y-4 ">
+            <div className="flex justify-center">
+              <div>
+                {' '}
+                {group.map((user) => (
+                  <LiveUser key={user.id} username={user.username} avatar={user.avatar} />
+                ))}
+              </div>
+              <div>
+                {' '}
+                {group.map((user) => (
+                  <LiveUser key={user.id} username={user.username} avatar={user.avatar} />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-        {/* pagination */}
-        <div>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-      <ul>
-        <li>Contact us</li>
-        <li>Terms of Services</li>
-        <li>Privacy</li>
+        ))}
+      </Carousel>
+
+      <ul className="flex text-[0.7rem] text-color-grey justify-between list-disc ">
+        <li>
+          {' '}
+          <a href="#">Contact us</a>
+        </li>
+        <li>
+          {' '}
+          <a href="#">Terms of Services</a>
+        </li>
+        <li>
+          {' '}
+          <a href="#">Privacy</a>
+        </li>
       </ul>
     </div>
-  )
+  );
 }
 
-export default RightBar
+export default RightBar;

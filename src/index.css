@@ -87,17 +87,44 @@
   scrollbar-width: 0;
 }
 
-.pagination-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #ccc;
-  margin: 0 5px;
-  cursor: pointer;
+
+
+ /* Custom CSS to change dot color */
+
+.slick-dots li.slick-active button:before{
+  color: #F94F64 !important;
 }
 
-.pagination-dot.active {
-  background-color: #F94F64;
+
+.messages-chat-list::-webkit-scrollbar {
+  width: 0.0rem; /* Set the width of the scrollbar to a very small value */
 }
- 
+
+/* Remove scrollbar track on hover (optional) */
+.messages-chat-list::-webkit-scrollbar:hover {
+width: 0.0rem;
+}
+
+.messages-convo-list2::-webkit-scrollbar {
+  width: 0.0rem; /* Set the width of the scrollbar to a very small value */
+}
+
+/* Remove scrollbar track on hover (optional) */
+.messages-convo-list2::-webkit-scrollbar:hover {
+width: 0.0rem;
+}
+
+.feed-item-input {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  border: none;       
+  outline: none;       
+  box-shadow: none;   
+  padding-left: 15px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: black;
+  font-weight: 400;
+  width: 100%;
+}
