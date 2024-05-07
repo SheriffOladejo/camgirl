@@ -4,7 +4,7 @@ import Slider from "react-slick";
 // import ProfileSuggestion from './ProfileSuggestion'
 // import { fauxUsers } from '.';
 import React, { useRef } from "react";
-function Carousel({text, children}) {
+function Carousel({text, children, className}) {
 
   const sliderRef = useRef();
 
@@ -29,7 +29,7 @@ function Carousel({text, children}) {
 
 
     <>
-      <div className=' bg-color-white w-full max-w-[1100px] px-3 pt-4 pb-8 space-y-2'>
+      <div className={className && ` bg-color-white w-full shadow  max-w-[1100px] p-3 pt-4 pb-8 space-y-2 rounded-lg`}>
         <div className='flex justify-between items-center '>
           <p className='font-semibold text-[0.8rem]'>{text}</p>
           <div className='flex items-center bg-color-lighterGrey rounded-full  w-90 px-2 py-1.5'>

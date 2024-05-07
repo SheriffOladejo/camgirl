@@ -4,7 +4,7 @@ function ProfileSuggestion({ username, handle, isCertified, subscriptionStatus, 
   return (
       <div className={` ${ className && 'px-2 py-2'}`} >
     {/* mapping will occur here cause we need to get the details */}
-    <div className='profileStyle flex w-full justify-between items-center rounded p-3 h-16'>
+    <div className='profileStyle flex space-x-2 w-full justify-between items-center rounded p-3 h-16'>
     
         <img src="../src/assets/profileImg.png" alt="profile image" className='w-12 h-12 p-[0.1rem] bg-gradient-to-t from-color-pink via-color-3 to-color-pink rounded-full' loading='lazy' />
       

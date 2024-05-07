@@ -33,7 +33,7 @@ function MobileHeader() {
               {profilePic && <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full"/>}
             </div>
           
-        
+           
       <Logo />
           <div className={` relative bg-color-lightGrey rounded-xl cursor-pointer w-8 h-2 items-center transition-all duration-200 ease-in-out ${userType === 'creator' ? 'justify-start' : 'justify-end'}`} onClick={toggleMode}>
             <div className={`absolute transform ${userType === 'creator'  ? 'left-0' : 'right-0'}`}>

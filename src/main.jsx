@@ -14,10 +14,11 @@ import Layout from './services/Layout';
 import VerifyId from './pages/creatorpages/VerifyId';
 import AlmostDone from './pages/creatorpages/AlmostDone';
 import Home from './pages/creatorpages/Home';
-import PostContent from './pages/PostContent';
+import MobileCreatePost from './pages/MobileCreatePost';
 import { AuthContext, AuthContextProvider } from './context/authContext';
 import { LiveUsersProvider } from './context/liveUserContext';
-
+import Messages from './pages/Messages';
+import PostComment from './pages/PostComment'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
@@ -29,7 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 );
 
 function App() {
-  const { isAuthenticated, isLoading } = useContext(AuthContext);
+  // const { isAuthenticated, isLoading } = useContext(AuthContext);
 
   // if (isLoading) {
   //   return <div>Loading...</div>;
@@ -41,11 +42,13 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/messages" element={<Messages />} />
         <Route path="/profile-setup" element={<ProfileSetup />} />
         <Route path="/setup-profile" element={<SetupProfile />} />
         <Route path="/verify-id" element={<VerifyId />} />
         <Route path="/almost-done" element={<AlmostDone />} />
-        <Route path="/post" element={<PostContent />} />
+        <Route path="/create-post" element={<MobileCreatePost />} />
+        <Route path="/post-comment" element={<PostComment />} />
 
         {/* Protected routes */}
         {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}

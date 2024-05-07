@@ -93,7 +93,7 @@ function ProfileSetup() {
     const isValid = validateForm();
 
     if (isValid) {
-      localStorage.setItem("fanprofileData", JSON.stringify(formInput));
+      localStorage.setItem("fanProfileData", JSON.stringify(formInput));
       setCurrentUser("fan", formInput);
       navigate("/fanhome")
     } else {
