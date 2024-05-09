@@ -105,7 +105,7 @@ function getDataFromLocalStorage(key) {
   if (data) {
     return JSON.parse(data);
   } else {
-    return ("no data");
+    return (null);
   }
 }
 

@@ -1,4 +1,4 @@
-// import Post from '../models/Post';
+import Post from '../models/Post';
 // // import Constants from '../utils/Constants';
 // import axios from 'axios';
 import AppUser from '../models/AppUser';
@@ -118,7 +118,7 @@ class DbHelper  {
 
             let response = null;
             if (addDataIntoCache("createPost") !== null) {
-                response = JSON.parse(addDataIntoCache("createPost"), data);
+                response = (addDataIntoCache("createPost"), data);
             } 
            
             return response;
@@ -255,113 +255,36 @@ class DbHelper  {
         return count || 0; 
     }
 
-    async getPostsByUserID(user_id) {
+    async  getPostsByUserID(user_id) {
         const list = [];
         try {
-            const data = { "user_id": user_id };
-            const storedData = getDataFromLocalStorage("posts");
-            // Check if data is available in local storage
-        if (storedData !== null) {
-            const response = JSON.parse(storedData);
-            response.sort((a, b) => b.creation_date - a.creation_date);
-           
-                for (let i = 0; i < response.length; i++) {
-                    
-                    const id = response[i]["id"];
-                    const user_id = response[i]["user_id"];
-                    const caption = response[i]["caption"];
-                    const post_link = response[i]["post_link"];
-                    const post_link_title = response[i]["post_link_title"];
-                    const post_link_image = response[i]["post_link_image"];
-                    const attachment_file = response[i]["attachment_file"];
-                    const attachment_file_name = response[i]["attachment_file_name"];
-                    const attachment_type = response[i]["attachment_type"];
-                    const post_share = response[i]["post_share"];
-                    const post_privacy = response[i]["post_privacy"];
-                    const post_type = response[i]["post_type"];
-                    const creation_date = response[i]["creation_date"];
-                    const comments_privacy = response[i]["comments_privacy"];
-                    const comments = response[i]["comments"];
-                    const reactions = response[i]["reactions"];
-                    const likes = response[i]["likes"];
-
-                    const post = new Post(
-                        id,
-                        user_id,
-                        caption,
-                        post_link,
-                        post_link_title,
-                        post_link_image,
-                        attachment_file,
-                        attachment_file_name,
-                        attachment_type,
-                        post_share,
-                        post_privacy,
-                        post_type,
-                        creation_date,
-                        comments_privacy,
-                        comments,
-                        reactions,
-                        likes
-                    );
-                    list.push(post);
-                }
+          const storedData = getDataFromLocalStorage("posts");
+          // Check if data is available in local storage
+          if (storedData !== null) {
+            storedData.sort((a, b) => b.creation_date - a.creation_date);
+            for (let post of storedData) {
+              const {
+                id, user_id, caption, post_link, post_link_title, post_link_image, attachment_file, 
+                attachment_file_name, attachment_type, post_share, post_privacy, post_type, 
+                creation_date, comments_privacy, comments, reactions, likes
+              } = post;
+      
+              const newPost = new Post(
+                id, user_id, caption, post_link, post_link_title, post_link_image, 
+                attachment_file, attachment_file_name, attachment_type, post_share, 
+                post_privacy, post_type, creation_date, comments_privacy, comments, reactions, likes
+              );
+              list.push(newPost);
             }
-            else {
-                console.log("No data available in local storage for posts.");
-            }
-            // else {
-            //     response = await axios.get(`${Constants.BASE_API_URL}/getPostsByUserID`, { params: data });
-            //     getDataFromLocalStorage('getPostsByUserID', data);
-            //     response.data.sort((a, b) => b.creation_date - a.creation_date);
-            //     for (let i = 0; i < response.data.length; i++) {
-            //         const id = response.data[i]["id"];
-            //         const user_id = response.data[i]["user_id"];
-            //         const caption = response.data[i]["caption"];
-            //         const post_link = response.data[i]["post_link"];
-            //         const post_link_title = response.data[i]["post_link_title"];
-            //         const post_link_image = response.data[i]["post_link_image"];
-            //         const attachment_file = response.data[i]["attachment_file"];
-            //         const attachment_file_name = response.data[i]["attachment_file_name"];
-            //         const attachment_type = response.data[i]["attachment_type"];
-            //         const post_share = response.data[i]["post_share"];
-            //         const post_privacy = response.data[i]["post_privacy"];
-            //         const post_type = response.data[i]["post_type"];
-            //         const creation_date = response.data[i]["creation_date"];
-            //         const comments_privacy = response.data[i]["comments_privacy"];
-            //         const comments = response.data[i]["comments"];
-            //         const reactions = response.data[i]["reactions"];
-            //         const likes = response.data[i]["likes"];
-
-            //         const post = new Post(
-            //             id,
-            //             user_id,
-            //             caption,
-            //             post_link,
-            //             post_link_title,
-            //             post_link_image,
-            //             attachment_file,
-            //             attachment_file_name,
-            //             attachment_type,
-            //             post_share,
-            //             post_privacy,
-            //             post_type,
-            //             creation_date,
-            //             comments_privacy,
-            //             comments,
-            //             reactions,
-            //             likes
-            //         );
-            //         list.push(post);
-            //     }
-            // }
-        }
-        catch (error) {
-            console.log("getPostsByUserID error: " + error);
+          } else {
+            // console.log(null);
+          }
+        } catch (error) {
+          console.log("getPostsByUserID error: " + error);
         }
         return list;
-    }
-
+      }
+      
     async getPostByID(post_id) {
         var post = new Post();
         try {
