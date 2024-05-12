@@ -1,12 +1,15 @@
 import DbHelper from '../utils/DbHelper'
 import usePostDetails from '../hooks/usePostDetails';
-import AppUser from '../models/AppUser'
+
 import PostCommentModel from '../models/PostCommentModel'
+
 import TextareaAutosize from '../../node_modules/react-textarea-autosize';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import TipModal from '../pages/TipModal'
 import { useNavigate } from 'react-router-dom';
+import { getDataFromLocalStorage } from '../utils/Utils';
+import AppUser from '../models/AppUser';
 function EachPost({ post, postReaction }) {
 
   const dbHelper = new DbHelper();
@@ -14,15 +17,32 @@ function EachPost({ post, postReaction }) {
   const navigate = useNavigate();
   const textareaRef = useRef(null);
 
-  const { likesCount, commentsCount, likedByUser, updateLikes, setCommentsCount } = usePostDetails(post);
-  const [postOwner, setPostOwner] = useState(new AppUser());
-  const [user, setUser] = useState(new AppUser());
 
+  const { likesCount, commentsCount, likedByUser, updateLikes, setCommentsCount } = usePostDetails(post);
+  // const [postOwner, setPostOwner] = useState(dbHelper.getPostsByUserID);
+
+  const [postOwner, setPostOwner] = useState(null)
   const [comment, setComment] = useState('');
 
   const [showTipModal, setShowTipModal] = useState(false);
 
-console.log(showTipModal)
+
+  // const makeComment = useCallback(async () => {
+  //   const post_comment = new PostCommentModel({
+  //     userId: user.getUserId(),
+  //     text: comment,
+  //     timestamp: Date.now(),
+  //     postId: post.getId(),
+  //   });
+
+  //   try {
+  //     await dbHelper.createComment(post_comment);
+  //     setComment("");
+  //     setCommentsCount(prev => prev + 1);
+  //   } catch (error) {
+  //     console.error("Failed to post comment:", error);
+  //   }
+  // }, [comment, dbHelper, post, setCommentsCount]);
 
   const makeComment = async (e) => {
 
@@ -70,6 +90,25 @@ console.log(showTipModal)
       return `${count} Comments`;
     }
   };
+  useEffect(() => {
+    async function fetchPostOwner() {
+      try {
+        const user = await dbHelper.getAppUserByID(post.getUserId('123'));
+        setPostOwner(user);
+      } catch (error) {
+        console.error("Error fetching post owner:", error);
+      }
+    }
+
+    fetchPostOwner();
+  }, [post, dbHelper]);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && comment.trim()) {
+      event.preventDefault();
+      makeComment();
+    }
+  };
   // Function to close the tip modal
   const closeTipModal = () => {
     setShowTipModal(false);
@@ -79,75 +118,85 @@ console.log(showTipModal)
     setShowTipModal(true);
     document.body.style.overflow = "hidden";
   };
-  const renderPostContent = () => {
-    if (post.type === 'image') {
-      return (
-        <>
-          {post.getAttachmentFile() !== '' &&
-            <div className="media">
-              <img src={post.getAttachmentFile()} alt="Post Media" className="post-image" />
-            </div>
-          }
-          <p>{post.getCaption()}</p>
-        </>
-      );
-    } else if (post.type === 'video') {
-      return (
-        <>
-          {post.getAttachmentFile() !== '' &&
-            <div className="media">
-              <video controls src={post.videoUrl} className="post-video">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          }
+  const renderPostContent = (post) => {
+    if (!post || !post.getAttachmentType) {
+      return <div>No post content available.</div>;
+    }
 
-          <p>{post.getCaption()}</p>
-        </>
-      );
-    } else {
-      return (
-        <div className="post-text">
-          <p>{post.getCaption()}</p>
-        </div>
-      );
+    switch (post.getAttachmentType()) {
+      case 'image':
+        return (
+          <>
+            {post.getAttachmentFile() !== '' && (
+              <div className="media">
+                <img src={post.getAttachmentFile()} alt="Post Media" className="post-image" />
+              </div>
+            )}
+            <p>{post.getCaption()}</p>
+          </>
+        );
+      case 'video':
+        return (
+          <>
+            {post.getAttachmentFile() !== '' && (
+              <div className="media">
+                <video controls src={post.getAttachmentFile()} className="post-video">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            )}
+            <p>{post.getCaption()}</p>
+          </>
+        );
+      default:
+        return (
+          <div className="post-text">
+            <p>{post.getCaption()}</p>
+          </div>
+        );
     }
   };
+
+
   return (
     <div className='bg-color-white px-2 py-2 rounded-lg'>
-      <TipModal  isOpen={showTipModal} onClose={closeTipModal} currency={user.getCurrency()} currency_symbol={user.getCurrencySymbol} />
-      {/* User Profile Information */}
-      <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
-        <a href="#" className="flex-shrink-0 group block">
-          <div className="flex items-center ">
-            <div className='p-[1px] bg-color-pink rounded-full'>
-              {/* <img className="inline-block h-8 w-8 rounded-full" src={postOwner.getProfilePicture()} alt="{`${postOwner}'s profile picture`}" /> */}
-              <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
-            </div>
-            <div className="ml-3">
-              <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
-                Sonali Hirave
-                {/* {postOwner.getFirstName()} {postOwner.getLastName()} */}
-                {verified && <img src='../src/assets/icons/certified.png' className='w-4 h-4' alt='certified' />}
-                <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
-                  @ShonaDesign
-                  {/* {postOwner.getUserName()} */}
-                </span>
-              </p>
-              <p className='text-[10px]'>
-                {/* {timeAgo} */}
-                13h ago</p>
-            </div>
+      {postOwner && (
+        <>
+          <TipModal isOpen={showTipModal} onClose={closeTipModal} currency={user.getCurrency()} currency_symbol={user.getCurrencySymbol} />
+
+          <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
+            <a href="#" className="flex-shrink-0 group block">
+              <div className="flex items-center ">
+                <div className='p-[1px] bg-color-pink rounded-full'>
+                  {/* <img className="inline-block h-8 w-8 rounded-full" src={postOwner.getProfilePicture()} alt="{`${postOwner}'s profile picture`}" /> */}
+                  <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+                </div>
+                <div className="ml-3">
+                  <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
+                    Sonali Hirave
+                    {postOwner.getFirstName()} {postOwner.getLastName()}
+                    {verified && <img src='../src/assets/icons/certified.png' className='w-4 h-4' alt='certified' />}
+                    <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
+                      @ShonaDesign
+                      {/* {postOwner.getUserName()} */}
+                    </span>
+                  </p>
+                  <p className='text-[10px]'>
+                    {post.getCreationDate()}
+                    13h ago</p>
+                </div>
+              </div>
+            </a>
+            <a href="/menu">
+              <img src="../src/assets/icons/menu.png" alt="post-menu" className='w-3 h-3' />
+            </a>
           </div>
-        </a>
-        <a href="/menu">
-          <img src="../src/assets/icons/menu.png" alt="post-menu" className='w-3 h-3' />
-        </a>
-      </div>
+        </>
+      )}
       <div className="px-6 py-6">
 
         {/* Post Content */}
-        {renderPostContent()}
+        {renderPostContent(post)}
         <hr className="border-1 border-color-grey/40 my-[20px]" />
         <div className="flex  items-center">
           <div className="text-[14px]">😀</div>
@@ -239,6 +288,7 @@ console.log(showTipModal)
           </div>
         </div>
       </div>
+
     </div>
   )
 }

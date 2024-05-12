@@ -13,12 +13,12 @@ import LoadingSpinner from './LoadingSpinner'
 // import { ToastContainer, toast } from 'react-toastify';
 function CreatePost() {
   const dbHelper = new DbHelper()
-   
+
   const [postText, setPostText] = useState('');
   const textareaRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [selectedGif, setSelectedGif] = useState([]);
+  const [selectedGif, setSelectedGif] = useState(null);
   const [Loading, setLoading] = useState(false)
   const [user, setUser] = useState(new AppUser());
   const [attachmentType, setAttachmentType] = useState('');
@@ -77,11 +77,11 @@ function CreatePost() {
       const base64String = await fileToBase64(selectedImage || selectedVideo);
 
       // Store the Base64 string in localStorage
-    addDataIntoCache('attachmentFile', base64String);
+      addDataIntoCache('attachmentFile', base64String);
 
-      addDataIntoCache('gif',selectedGif)
+      addDataIntoCache('gif', selectedGif)
       // Update state or perform other actions as needed
-    
+
       console.log('Upload successful');
       setLoading(false);
     } catch (error) {
@@ -102,11 +102,11 @@ function CreatePost() {
   };
 
   // if the attachment file is not empty, create post
-  useEffect(() => {
-    if (attachmentFile !== '') {
-      createPost();
-    }
-  }, [attachmentFile]);
+  // useEffect(() => {
+  //   if (attachmentFile !== '') {
+  //     createPost();
+  //   }
+  // }, [attachmentFile]);
 
   // fetch user
   useEffect(() => {
@@ -172,47 +172,72 @@ function CreatePost() {
     setAttachmentType(ATTACHMENT_GIF);
     setShowGifs(false);
   };
-
+  // close gif
+  // Function to close GIF selector
+  const closeGifSelector = () => {
+    setShowGifs(false);
+  };
   // open file
   const openFileChooser = () => {
     attachmentRef.current.click();
   };
-   // open file
-   const openGifChooser = () => {
+  // open file
+  const openGifChooser = () => {
     gifRef.current.click();
   };
- 
+
   const createPost = async () => {
-    if (attachmentFile !== '' && attachmentFileName !== '') {
-    console.log('nothing')
-    }
-    else {
-      uploadAttachment();
-      setLoading(true);
+    console.log('postText:', postText);
+    console.log('selectedImage:', selectedImage);
+    console.log('selectedVideo:', selectedVideo);
+    console.log('selectedGif:', selectedGif);
+    console.log('User:', user); // Log the entire user object to see what it contains
+
+    setLoading(true);
+
+  
+
+    
+
+    try {
+      // if (!user) {
+      //   throw new Error("User object is null, cannot create post.");
+      // }
       const post = new Post();
-      const user = new AppUser();
-      post.setUserId(user.getUserId());
-      post.setCaption(postText === null ? "" : postText);
-      post.setAttachmentFile(attachmentFile);
-      post.setAttachmentFileName(attachmentFileName);
-      post.setAttachmentType(attachmentType);
-      post.setPostPrivacy(null);
-      post.setCreationDate(Date.now());
-      post.setCommentsPrivacy(null);
-      post.setLikes(null);
-      post.setTips(null);
-      dbHelper.createPost(post);
-      removeDialogs()
-      setAttachmentFile('');
-      setAttachmentFileName('');
-      setAttachmentType('');
-      setSelectedGif(null);
-      setSelectedImage(null);
-      setSelectedVideo(null);
-      setPostText('');
-      setLoading(false);
+        // const userId = user.getUserId();
+         const userId = '123';
+         // Retrieve the user ID
+        post.setUserId(userId);
+        post.setCaption(postText === '' ? "" : postText);
+        post.setAttachmentFile(attachmentFile);
+        post.setAttachmentFileName(attachmentFileName);
+        post.setAttachmentType(attachmentType);
+        post.setPostPrivacy(selectedPublicity);
+        post.setCreationDate(Date.now());
+        post.setCommentsPrivacy(null);
+        post.setLikes(null);
+        post.setTips(null);
+
+        await uploadAttachment(); // Ensure this is awaited if it's asynchronous
+        await dbHelper.createPost(post); // Ensure this is awaited if it's asynchronous
+
+          // Save to local storage
+    // const storedPosts = getDataFromLocalStorage('posts') || [];
+    const storedPosts = []
+    storedPosts.push(post);
+  addDataIntoCache('posts', storedPosts);
+    } catch (error) {
+        console.error("Failed to create post:", error);
+    } finally {
+        removeDialogs();
+        removeAttachment();
+        setPostText('');
+        setLoading(false);
     }
-  }
+};
+
+
+
   if (showEmojiPicker) {
     setShowEmojiPicker(true);
     setShowGifs(false);
@@ -234,7 +259,7 @@ function CreatePost() {
 
   return (
     <>
-    {!Loading  && <LoadingSpinner/>}
+      {!Loading && <LoadingSpinner />}
       <div className="hidden md:flex flex-col rounded-lg overflow-hidden bg-color-white space-y-4 px-4 pt-4">
 
 
@@ -273,7 +298,7 @@ function CreatePost() {
               />
             </div>
           )}
-         
+          {showGifs && <SelectGif onSelect={handleGifAttachment} onClose={closeGifSelector} />}
         </div>
         <div> <TextareaAutosize
           className="w-[80%] mt-4 text-[12px] ml-4 font-inter-serif text-left flex flex-col items-center justify-center resize-none pb-2 border-none outline-none shadow-none "
@@ -282,10 +307,10 @@ function CreatePost() {
           value={postText}
           onChange={(e) => setPostText(e.target.value)}
         /></div>
-       
+
         <div className="flex relative max-w-full max-h-[550px] ml-4 mr-12">
 
-          {( selectedImage) ?
+          {(selectedImage) ?
             <img className="w-32 h-32 rounded"
               src={URL.createObjectURL(selectedImage)} /> : null
           }
@@ -296,7 +321,7 @@ function CreatePost() {
               className="w-full max-h-auto"
             />
           }
-           {showGifs && <SelectGif onSelect={handleGifAttachment} />}
+
           {attachmentType !== '' &&
             <div className="flex items-center justify-center">
               <div onClick={removeAttachment} className="absolute right-0 top-0 mt-4 w-6 h-6 rounded-full bg-color-grey mr-5 flex items-center justify-center cursor-pointer">
@@ -319,19 +344,21 @@ function CreatePost() {
               <img className="w-4 h-4" src="../src/assets/icons/gif.png" alt="GIF" />
             </div>
             <div className="element">
-              <img className="w-5 h-5" src="../src/assets/icons/video.png" alt="Live Video" onClick={openFileChooser}/>
+              <img className="w-5 h-5" src="../src/assets/icons/video.png" alt="Live Video" onClick={openFileChooser} />
             </div>
 
           </div>
+          {/* disabled={postText === null || selectedImage === null || selectedVideo === null || selectedGif === null} */}
 
-          <button onClick={createPost} className="bg-color-pink text-color-white text-[0.9rem] font-semibold py-1 px-2 rounded " disabled={!postText && !selectedImage && !selectedVideo && !selectedGif}>Post</button>
+          <button onClick={createPost} className="bg-color-pink text-color-white text-[0.9rem] font-semibold py-1 px-2 rounded "  disabled={postText.trim() === '' && !selectedImage && !selectedVideo && !selectedGif}>Post</button>
+
           <input type="file" className="hidden" accept="image/gif, video/gif" ref={gifRef} onChange={handleGifAttachment} />
 
           <input type="file" style={{ display: 'none' }} accept="image/jpeg, image/png, video/mp4" ref={attachmentRef} onChange={handlePostAttachment} />
 
         </div>
       </div>
-     {/* <ToastContainer/> */}
+      {/* <ToastContainer/> */}
     </>
   )
 }

@@ -1,61 +1,69 @@
-import EachPost from "./EachPost"
-import { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import EachPost from "./EachPost";
+import LoadingSpinner from './LoadingSpinner';  // Assuming you'll use it
+import Header from './Header'  // Assuming Navbar is used here
 
-import Post from "../models/Post";
-import AppUser from '../models/AppUser'
 import DbHelper from "../utils/DbHelper";
-// import LoadingSpinner from './LoadingSpinner'
-function Posts() {
-const dbHelper = new DbHelper()
-  const post= new Post()
-  const user = new AppUser()
+
+function Posts({ user_id }) {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
-   
+  const [error, setError] = useState(null);
+  
   useEffect(() => {
-    const getPosts = async () => {
-      if (user !== null) {
-        
-        let user_id = user.user_id;
-        let posts = await dbHelper.getPostsByUserID(user_id);
-        setPosts(posts);
-      }
-      else {
 
+    async function getPosts() {
+      if (!user_id) {
+        // Optionally handle the case where user_id is absent
+        setError('User ID is required.');
+        return;
       }
-      setLoading(false);
+
+      try {
+        setLoading(true);
+        const posts = await new DbHelper().getPostsByUserID(user_id);
+        if (posts.length === 0) {
+          setError('No posts found.'); // Handling no posts found
+        } else {
+          setPosts(posts);
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setError('Failed to fetch posts.');
+      } finally {
+        setLoading(false);
+      }
     }
 
     getPosts();
+  }, [user_id]);
 
-  }, [user]);
-
+  if (error) {
+    return <div>Error: {error}</div>; // Display error message if there's an error
+  }
 
   if (loading) {
     return (
       <div>
-    <Navbar />
-    <div className="dialog-container">
-      <div className="profile-dialog">
-        <LoadingSpinner/>
+        <Header />
+        <div className="dialog-container">
+          <LoadingSpinner />
+        </div>
       </div>
-    </div> 
-  </div>
     );
   }
 
   return (
     <div className="flex flex-col overflow-y-auto gap-8 h-auto">
-     {posts.map((item, index) => (
-                <EachPost
-                  key={index}
-                  post={item}
-                />
-              ))}
-         
-    
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <EachPost key={post.user_id} post={post} />
+        ))
+      ) : (
+        <div>No posts available.</div> // Handling case where there are no posts
+      )}
     </div>
-  )
+  );
 }
 
-export default Posts
+export default Posts;

@@ -31,7 +31,7 @@ function Home() {
       <Filter />
 
       <hr className="border-1 border-color-grey/40 my-[20px]" />
-      <Posts />
+      <Posts user_id={'123'}/>
       {/*  bottom nav */}
       
       </div>

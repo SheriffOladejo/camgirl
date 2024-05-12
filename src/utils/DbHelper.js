@@ -99,6 +99,7 @@ class DbHelper  {
     async createPost(post) {
         const data = {
             "user_id": post.getUserId(),
+
             "caption": post.getCaption(),
             "attachment_file": post.getAttachmentFile(),
             "comments_privacy": post.getCommentsPrivacy(),
@@ -116,16 +117,25 @@ class DbHelper  {
 
         try {
 
-            let response = null;
-            if (addDataIntoCache("createPost") !== null) {
-                response = (addDataIntoCache("createPost"), data);
-            } 
-           
-            return response;
+            // Retrieve the existing posts from local storage or initialize an empty array if no posts exist
+        let existingPosts = getDataFromLocalStorage("posts");
+        if (!existingPosts) {
+            existingPosts = [];
+        }
+
+        // Add the new post to the array of existing posts
+        existingPosts.push(post);
+
+        // Save the updated array back to local storage
+        addDataIntoCache("posts", existingPosts);
+
+        // Return the updated list of posts
+        return existingPosts;
 
         }
         catch (error) {
             console.error("An error occurred: " + error);
+            return null;
         }
     }
 
@@ -256,6 +266,7 @@ class DbHelper  {
     }
 
     async  getPostsByUserID(user_id) {
+      
         const list = [];
         try {
           const storedData = getDataFromLocalStorage("posts");
@@ -411,252 +422,154 @@ class DbHelper  {
     
 
     async getAppUserByUsername(username) {
-
         try {
             const data = { "username": username };
-
-          
-              const  response = (getDataFromLocalStorage("getAppUserByUsername"), data);
-            
+            const response = getDataFromLocalStorage("getAppUserByUsername", data);
             
             if (response && response.data && response.data.length !== 0) {
-                const id = response.data[0]["id"];
-                const user_id = response.data[0]["user_id"];
-                const username = response.data[0]["username"];
-                const email = response.data[0]["email"];
-                const phone_number = response.data[0]["phone_number"];
-                const password = response.data[0]["password"];
-                const firstname = response.data[0]["firstname"];
-                const lastname = response.data[0]["lastname"];
-                const dob = response.data[0]["dob"];
-                const country = response.data[0]["country"];
-                const location = response.data[0]["location"];
-                const verification_doc = response.data[0]["verification_doc"];
-                const docs_verified = response.data[0]["docs_verified"];
-                const bio = response.data[0]["bio"];
-                const date_joined = response.data[0]["date_joined"];
-                const last_updated = response.data[0]["last_updated"];
-                const profile_picture = response.data[0]["profile_picture"];
-                const cover_picture = response.data[0]["cover_picture"];
-                const subscribers = response.data[0]["subscribers"];
-                const connections = response.data[0]["connections"];
-                const subscription_price = response.data[0]["subscription_price"];
-                const currency_symbol = response.data[0]["currency_symbol"];
-                const currency = response.data[0]["currency"];
-                const creator_mode = response.data[0]["creator_mode"];
-                const verified = response.data[0]["verified"];
-                const live_mode = response.data[0]["live_mode"];
-                const profile_setup = response.data[0]["profile_setup"];
-                const account_type = response.data[0]["account_type"];
-                const creator_mode_desc_dismissed = response.data[0]["creator_mode_desc_dismissed"];
-
+                // Process user data
+                const userData = response.data[0];
                 const user = new AppUser(
-                    id,
-                    user_id,
-                    username,
-                    email,
-                    phone_number,
-                    password,
-                    firstname,
-                    lastname,
-                    dob,
-                    country,
-                    location,
-                    verification_doc,
-                    docs_verified,
-                    bio,
-                    date_joined,
-                    last_updated,
-                    profile_picture,
-                    cover_picture,
-                    subscribers,
-                    connections,
-                    subscription_price,
-                    currency_symbol,
-                    currency,
-                    creator_mode,
-                    verified,
-                    live_mode,
-                    profile_setup,
-                    account_type,
-                    creator_mode_desc_dismissed
+                    userData.id,
+                    userData.user_id,
+                    userData.username,
+                    userData.email,
+                    userData.phone_number,
+                    userData.password,
+                    userData.firstname,
+                    userData.lastname,
+                    userData.dob,
+                    userData.country,
+                    userData.location,
+                    userData.verification_doc,
+                    userData.docs_verified,
+                    userData.bio,
+                    userData.date_joined,
+                    userData.last_updated,
+                    userData.profile_picture,
+                    userData.cover_picture,
+                    userData.subscribers,
+                    userData.connections,
+                    userData.subscription_price,
+                    userData.currency_symbol,
+                    userData.currency,
+                    userData.creator_mode,
+                    userData.verified,
+                    userData.live_mode,
+                    userData.profile_setup,
+                    userData.account_type,
+                    userData.creator_mode_desc_dismissed
                 );
                 return user;
             }
+        } catch (error) {
+            console.error("Error fetching user by username:", error);
         }
-        catch (error) {
-            console.log("getAppUserByUserName error: " + error);
-        }
-
         return null;
     }
-
+    
     async getAppUserByID(user_id) {
         try {
             const data = { "user_id": user_id };
-
-            if (getDataFromLocalStorage("getAppUserByID") !== null) 
-            {
-                response = (getDataFromLocalStorage("getAppUserByID"), data);
-            } 
-            // else {
-            //     const axiosResponse = await axios.get(`${Constants.BASE_API_URL}/getAppUserByUsername`, data);;
-            //     response = { data: axiosResponse.data }; // Use the response from Axios
-            // }
-            if (response.data.length !== 0) {
-                const id = response.data[0]["id"];
-                const user_id = response.data[0]["user_id"];
-                const username = response.data[0]["username"];
-                const email = response.data[0]["email"];
-                const phone_number = response.data[0]["phone_number"];
-                const password = response.data[0]["password"];
-                const firstname = response.data[0]["firstname"];
-                const lastname = response.data[0]["lastname"];
-                const dob = response.data[0]["dob"];
-                const country = response.data[0]["country"];
-                const location = response.data[0]["location"];
-                const verification_doc = response.data[0]["verification_doc"];
-                const docs_verified = response.data[0]["docs_verified"];
-                const bio = response.data[0]["bio"];
-                const date_joined = response.data[0]["date_joined"];
-                const last_updated = response.data[0]["last_updated"];
-                const profile_picture = response.data[0]["profile_picture"];
-                const cover_picture = response.data[0]["cover_picture"];
-                const subscribers = response.data[0]["subscribers"];
-                const connections = response.data[0]["connections"];
-                const subscription_price = response.data[0]["subscription_price"];
-                const currency_symbol = response.data[0]["currency_symbol"];
-                const currency = response.data[0]["currency"];
-                const creator_mode = response.data[0]["creator_mode"];
-                const verified = response.data[0]["verified"];
-                const live_mode = response.data[0]["live_mode"];
-                const profile_setup = response.data[0]["profile_setup"];
-                const account_type = response.data[0]["account_type"];
-                const creator_mode_desc_dismissed = response.data[0]["creator_mode_desc_dismissed"];
-
+            let response = null;
+    
+            if (getDataFromLocalStorage("getAppUserByID", data) !== null) {
+                response = getDataFromLocalStorage("getAppUserByID", data);
+            }
+    
+            if (response && response.data && response.data.length !== 0) {
+                // Process user data
+                const userData = response.data[0];
                 const user = new AppUser(
-                    id,
-                    user_id,
-                    username,
-                    email,
-                    phone_number,
-                    password,
-                    firstname,
-                    lastname,
-                    dob,
-                    country,
-                    location,
-                    verification_doc,
-                    docs_verified,
-                    bio,
-                    date_joined,
-                    last_updated,
-                    profile_picture,
-                    cover_picture,
-                    subscribers,
-                    connections,
-                    subscription_price,
-                    currency_symbol,
-                    currency,
-                    creator_mode,
-                    verified,
-                    live_mode,
-                    profile_setup,
-                    account_type,
-                    creator_mode_desc_dismissed
+                    userData.id,
+                    userData.user_id,
+                    userData.username,
+                    userData.email,
+                    userData.phone_number,
+                    userData.password,
+                    userData.firstname,
+                    userData.lastname,
+                    userData.dob,
+                    userData.country,
+                    userData.location,
+                    userData.verification_doc,
+                    userData.docs_verified,
+                    userData.bio,
+                    userData.date_joined,
+                    userData.last_updated,
+                    userData.profile_picture,
+                    userData.cover_picture,
+                    userData.subscribers,
+                    userData.connections,
+                    userData.subscription_price,
+                    userData.currency_symbol,
+                    userData.currency,
+                    userData.creator_mode,
+                    userData.verified,
+                    userData.live_mode,
+                    userData.profile_setup,
+                    userData.account_type,
+                    userData.creator_mode_desc_dismissed
                 );
                 return user;
             }
+        } catch (error) {
+            console.error("Error fetching user by ID:", error);
         }
-        catch (error) {
-            console.log("getAppUserByID error: " + error);
-        }
-
         return null;
     }
-
+    
     async getAppUserByEmail(email) {
         try {
-            
             const data = { "email": email };
-
-            if (getDataFromLocalStorage("getAppUserByEmail") !== null) {
-                response = (addDataIntoCache("getAppUserByID"));
-            } 
-            // else {
-            //     const axiosResponse = await axios.get(`${Constants.BASE_API_URL}/getAppUserByEmail`, data);;
-            //     response = { data: axiosResponse.data }; // Use the response from Axios
-            // }
-            if (response.data.length !== 0) {
-                const id = response.data[0]["id"];
-                const user_id = response.data[0]["user_id"];
-                const username = response.data[0]["username"];
-                const email = response.data[0]["email"];
-                const phone_number = response.data[0]["phone_number"];
-                const password = response.data[0]["password"];
-                const firstname = response.data[0]["firstname"];
-                const lastname = response.data[0]["lastname"];
-                const dob = response.data[0]["dob"];
-                const country = response.data[0]["country"];
-                const location = response.data[0]["location"];
-                const verification_doc = response.data[0]["verification_doc"];
-                const docs_verified = response.data[0]["docs_verified"];
-                const bio = response.data[0]["bio"];
-                const date_joined = response.data[0]["date_joined"];
-                const last_updated = response.data[0]["last_updated"];
-                const profile_picture = response.data[0]["profile_picture"];
-                const cover_picture = response.data[0]["cover_picture"];
-                const subscribers = response.data[0]["subscribers"];
-                const connections = response.data[0]["connections"];
-                const subscription_price = response.data[0]["subscription_price"];
-                const currency_symbol = response.data[0]["currency_symbol"];
-                const currency = response.data[0]["currency"];
-                const creator_mode = response.data[0]["creator_mode"];
-                const verified = response.data[0]["verified"];
-                const live_mode = response.data[0]["live_mode"];
-                const profile_setup = response.data[0]["profile_setup"];
-                const account_type = response.data[0]["account_type"];
-                const creator_mode_desc_dismissed = response.data[0]["creator_mode_desc_dismissed"];
-
+            let response = null;
+    
+            if (getDataFromLocalStorage("getAppUserByEmail", data) !== null) {
+                response = getDataFromLocalStorage("getAppUserByEmail", data);
+            }
+    
+            if (response && response.data && response.data.length !== 0) {
+                // Process user data
+                const userData = response.data[0];
                 const user = new AppUser(
-                    id,
-                    user_id,
-                    username,
-                    email,
-                    phone_number,
-                    password,
-                    firstname,
-                    lastname,
-                    dob,
-                    country,
-                    location,
-                    verification_doc,
-                    docs_verified,
-                    bio,
-                    date_joined,
-                    last_updated,
-                    profile_picture,
-                    cover_picture,
-                    subscribers,
-                    connections,
-                    subscription_price,
-                    currency_symbol,
-                    currency,
-                    creator_mode,
-                    verified,
-                    live_mode,
-                    profile_setup,
-                    account_type,
-                    creator_mode_desc_dismissed
+                    userData.id,
+                    userData.user_id,
+                    userData.username,
+                    userData.email,
+                    userData.phone_number,
+                    userData.password,
+                    userData.firstname,
+                    userData.lastname,
+                    userData.dob,
+                    userData.country,
+                    userData.location,
+                    userData.verification_doc,
+                    userData.docs_verified,
+                    userData.bio,
+                    userData.date_joined,
+                    userData.last_updated,
+                    userData.profile_picture,
+                    userData.cover_picture,
+                    userData.subscribers,
+                    userData.connections,
+                    userData.subscription_price,
+                    userData.currency_symbol,
+                    userData.currency,
+                    userData.creator_mode,
+                    userData.verified,
+                    userData.live_mode,
+                    userData.profile_setup,
+                    userData.account_type,
+                    userData.creator_mode_desc_dismissed
                 );
                 return user;
             }
-        }
-        catch (error) {
-            console.log("getAppUserByEmail error: " + error);
+        } catch (error) {
+            console.error("Error fetching user by email:", error);
         }
         return null;
     }
+    
 
     async updateUser(user) {
      
