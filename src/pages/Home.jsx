@@ -23,6 +23,7 @@ function Home() {
     
   }
   return (
+    <>
     <section onClick={removeDialogs} className='w-full '>
        { loading && <LoadingSpinner/> }
        { !loading && ( <div>
@@ -37,6 +38,7 @@ function Home() {
       </div>
         )}
     </section>
+    </>
   )
 }
 

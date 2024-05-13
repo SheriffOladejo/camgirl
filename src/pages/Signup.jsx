@@ -1,110 +1,162 @@
 
 import Logo from "../components/Logo"
 import FormInput from "../components/FormInput"
-
-import { useState } from "react"
+import AppUser from "../models/AppUser";
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import DbHelper from '../utils/DbHelper'
+import LoadingSpinner from "../components/LoadingSpinner";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { addDataIntoCache } from "../utils/Utils";
 // check if the user has a profile
 // send the form data to a database
- {/* check if username is available */}
+{/* check if username is available */ }
 function Signup() {
   const navigate = useNavigate();
   const dbHelper = new DbHelper()
+
   const [termsChecked, setTermsChecked] = useState(false);
+  const [lastUserId, setLastUserId] = useState(0);
+  // signup type toggle
+  const [creatorMode, setCreatorMode] = useState('fan')
+  const [usernameAvailable, setUsernameAvailable] = useState(true); // State to track username availability
+  const [loading, setLoading] = useState(false)
 
   const handleCheckboxChange = () => {
     setTermsChecked(!termsChecked);
   };
- 
+  useEffect(() => {
+    // Fetch the last assigned userId from the database or any other persistent storage
+
+    // For demonstration purposes, initializing with 0
+    // Replace this with your actual logic to fetch the last assigned userId
+    setLastUserId(0);
+  }, []);
+
   const [formInput, setFormInput] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    username: "nafisa",
+    email: "nens@gmail.com",
+    password: "faruna",
+    confirmPassword: "faruna",
+    creatorMode,
+    user_Id: 0 // Initialize with a default value
   });
-  const [formErrors, setFormErrors] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+
 
   const handleInputChange = (name, value) => {
     setFormInput(prev => ({ ...prev, [name]: value }));
     validateInput(name, value);
   }
   const validateInput = (name, value) => {
-    let errorMsg = '';
+
     if (name === "email") {
       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-        errorMsg = "Invalid email address";
+        toast.error("Invalid email address");
       }
     } else if (name === "password" && value.length < 6) {
-      errorMsg = "Password must be at least 6 characters long";
+      toast.error("Password must be at least 6 characters long");
     } else if (name === "confirmPassword" && value !== formInput.password) {
-      errorMsg = "Passwords do not match";
+      toast.error("Passwords do not match");
     }
-    setFormErrors(prev => ({ ...prev, [name]: errorMsg }));
+
   };
-   // signup type toggle
-   const [signUpType, setSignUpType] = useState('fan')
 
-   const handleSignupFan = () => setSignUpType('fan')
- 
-   const handleSignupCreator = () => setSignUpType('creator')
-   
-  const handleSubmit = (e) => {
+
+  const handleSignupFan = () => {
+
+    setCreatorMode('fan')
+  }
+
+  const handleSignupCreator = () => {
+    setCreatorMode('creator')
+    setCreatorMode('creator')
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-     
+    setLoading(true)
 
 
-    let errors = {};
 
-    if (!formInput.email) {
-      errors.email = 'Email is required';
-    }
-    if (!formInput.username) {
-      errors.username = 'Username is required';
-    }
-    if (!formInput.password) {
-      errors.password = 'Password is required';
+    if (!formInput.email || !formInput.username || !formInput.password || formInput.confirmPassword !== formInput.password) {
+      toast.error('Please fill out all required fields correctly');
+      setLoading(false);
+      return;
     }
     if (formInput.confirmPassword !== formInput.password) {
-      errors.confirmPassword = 'Passwords do not match';
+      toast.error('Passwords do not match');
     }
 
-    // Update form errors
-    setFormErrors(errors);
- // Check if the checkbox is checked  
- if (!termsChecked) {
-  alert("Please accept the terms and conditions to create an account.");
-  return;
-}
- // If there are no errors, submit the form
- if (Object.keys(errors).length === 0) {
-  console.log('Form submitted:', formInput);
-  
-  // Set user type based on signup type
-  localStorage.setItem("userType", JSON.stringify(signUpType));
-   // Store form data in local storage based on signup type
-   if (signUpType === 'fan') {
-    dbHelper.updateUser('userData', formInput)
-    localStorage.setItem('fanProfileData', JSON.stringify(formInput));
-  } else if (signUpType === 'creator') {
-    localStorage.setItem('creatorProfileData', JSON.stringify(formInput));
-  }
- // Redirect to different profile setup pages based on signup type
-if (signUpType === 'fan') {
-  navigate('/profile-setup');
-} else if (signUpType === 'creator') {
-  navigate('/setup-profile');
-}
-  
-}
+    // Check if the checkbox is checked  
+    if (!termsChecked) {
+      toast.error("Please accept the terms and conditions to create an account.");
+      return;
+    }
 
-};
-   
+    try {
+      // Check if the username is available
+      const usernameResponse = await dbHelper.checkForUsername(formInput.username);
+      const emailResponse = await dbHelper.checkForEmail(formInput.email);
+      if (usernameResponse?.data?.length > 0) {
+        toast.error("This username is already taken");
+
+        setLoading(false);
+        return
+      }
+      if (emailResponse?.data?.length > 0) {
+        toast.error("This email is already registered");
+        setLoading(false);
+        return
+
+      }
+
+      const account_type = "manual";
+      const user_Id = lastUserId + 1;
+      const data = {
+        username: formInput.username,
+        email: formInput.email,
+        password: formInput.password,
+        creator_mode: creatorMode,
+        user_id: user_Id,
+        date_joined: Date.now(),
+        account_type: account_type,
+        id: null, phone_number: null, firstname: null, lastname: null,
+        dob: null, country: null, location: null, verification_doc: null, docs_verified: null, bio: null, date_joined: null,
+        last_updated: null, profile_picture: null, cover_picture: null, subscribers: null, connections: null,
+        subscription_price: null, currency_symbol: null, currency: null, verified: null,
+        live_mode: null, profile_setup: null, account_type: null, creator_mode_desc_dismissed: null
+      };
+
+
+      console.log(data)
+      const user = new AppUser(
+        data.id, data.user_id, data.username, data.email, data.phone_number, data.password, data.account_typefirstname, data.lastname,
+        data.dob, data.country, data.location, data.verification_doc, data.docs_verified, data.bio, data.date_joined,
+        data.last_updated, data.profile_picture, data.cover_picture, data.subscribers, data.connections,
+        data.subscription_price, data.currency_symbol, data.currency, data.creator_mode, data.verified,
+        data.live_mode, data.profile_setup, data.account_type, data.creator_mode_desc_dismissed
+
+      )
+      
+      try {
+        const result = await dbHelper.updateUser(user);
+        console.log("Update result:", result);
+      } catch (error) {
+        console.error("Error updating user:", error);
+      }
+      // Construct the data object for navigation state
+      navigate(creatorMode === 'fan' ? '/profile-setup' : '/setup-profile', { state: data });
+    } catch (error) {
+      toast.error("An error occurred while signing up.");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+
+
+  };
+
   // password visibility toggle
 
   const [showPassword, setShowPassword] = useState(false)
@@ -112,8 +164,8 @@ if (signUpType === 'fan') {
     setShowPassword((prev) => !prev)
   }
 
- 
-  
+
+
 
   return (
     <section className="w-full h-[105vh] flex ">
@@ -128,7 +180,8 @@ if (signUpType === 'fan') {
           <p className="text-[1rem] text-color-white">Join and support your favorite creators today.</p>
         </div>
       </div>
-      <div className="px-6 pt-6 md:px-20 md:pt-0 w-full md:w-[50%]">
+      <div className="px-6 pt-6  lg:px-20 md:pt-0 w-full md:w-[50%]">
+        {loading === true && <LoadingSpinner />}
         <Logo className="text-[1.5rem] md:hidden" />
         <div className="w-full py-8 md:py-13  items-center justify-center md:flex-col md:flex md:text-left ">
 
@@ -139,7 +192,7 @@ if (signUpType === 'fan') {
             </p>
 
             <div className=" flex pt-4" >
-              <button className={`${signUpType === 'fan' ? 'bg-color-pink text-color-white ' : 'bg-color-lightGrey text-color-grey'} flex px-8 py-2 rounded justify-center items-center space-x-2`}
+              <button className={`${creatorMode === 'fan' ? 'bg-color-pink text-color-white ' : 'bg-color-lightGrey text-color-grey'} flex px-8 py-2 rounded justify-center items-center space-x-2`}
                 onClick={handleSignupFan}
               >
                 <img className="w-4 h-4" src="../src/assets/icons/people.png" alt="fan profile" />
@@ -147,7 +200,7 @@ if (signUpType === 'fan') {
                   fan
                 </p>
               </button>
-              <button className={`${signUpType === 'creator' ? 'bg-color-pink  text-color-white' : 'bg-color-lightGrey text-color-grey'} flex px-8 py-2 rounded justify-center items-center space-x-2`}
+              <button className={`${creatorMode === 'creator' ? 'bg-color-pink  text-color-white' : 'bg-color-lightGrey text-color-grey'} flex px-8 py-2 rounded justify-center items-center space-x-2`}
                 onClick={handleSignupCreator}>
                 <img className="w-4 h-4" src="../src/assets/icons/profile-white.png" alt="fan profile" />
                 <p className="text-[0.8rem]">
@@ -158,19 +211,19 @@ if (signUpType === 'fan') {
 
             </div>
 
-       
+
 
             <form action="/fanprofilesetup" onSubmit={handleSubmit} method="post" className="space-y-4 pr-4 pt-4" >
               {/* check if username is available */}
               <FormInput name="username" type="text" placeholder="Enter Username"
                 value={formInput.username}
                 onChange={handleInputChange}
-                error={formErrors.username}
+
               />
               <FormInput name="email" type="text" placeholder="Email address or phone number"
                 value={formInput.email}
                 onChange={handleInputChange}
-                error={formErrors.email}
+
               />
 
               <div className="relative"> <FormInput
@@ -181,12 +234,12 @@ if (signUpType === 'fan') {
                 placeholder=" Password"
                 value={formInput.password}
                 onChange={handleInputChange}
-                error={formErrors.password}
+
               />
 
 
                 <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0  flex items-center px-2">
-                  {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/openPass.png" alt="show-password"
+                  {showPassword ? <img className="h-4 w-4" src="../src/assets/icons/password.png" alt="show-password"
 
                   /> : <img className="h-3 w-3" src="../src/assets/icons/closePass.png" alt="close-password"
 
@@ -198,7 +251,7 @@ if (signUpType === 'fan') {
                 type={showPassword ? 'text' : 'password'} placeholder="Confirm Password"
                 value={formInput.confirmPassword}
                 onChange={handleInputChange}
-                error={formErrors.confirmPassword}
+
               />
 
 
@@ -233,6 +286,7 @@ if (signUpType === 'fan') {
             </form>
 
           </div>
+          <ToastContainer />
         </div>
       </div>
 

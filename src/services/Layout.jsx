@@ -5,6 +5,8 @@ import { Outlet } from 'react-router-dom'
 import RightBar from '../components/RightBar'
 import MobileHeader from '../components/MobileHeader'
 import { useMediaQuery } from 'react-responsive';
+import MobileFooterNav from '../components/MobileFooterNav'
+import FloatingButton from '../components/FloatingButton'
 
 function Layout() {
   const isMobile = useMediaQuery({ maxWidth: 768 }); 
@@ -20,6 +22,8 @@ function Layout() {
        
         <RightBar className={` md:2/5`}/>
       </div>
+      {isMobile && <FloatingButton /> }
+      {isMobile && <MobileFooterNav /> }
     </section>
   )
 }

@@ -572,7 +572,7 @@ class DbHelper  {
     
 
     async updateUser(user) {
-     
+       
         const data = {
             "user_id": user.getUserId() === undefined ? "" : user.getUserId(),
             "username": user.getUserName() === undefined ? "" : user.getUserName(),
@@ -591,7 +591,7 @@ class DbHelper  {
             "subscribers": user.getSubscribers() === undefined ? 0 : user.getSubscribers(),
             "connections": user.getConnections() === undefined ? 0 : user.getConnections(),
             "subscription_price": user.getSubscriptionPrice() === undefined ? 0 : user.getSubscriptionPrice(),
-            "currency": user.getCurrencyy() === undefined ? "" : user.getCurrency(),
+            "currency": user.getCurrency() === undefined ? "" : user.getCurrency(),
             "currency_symbol": user.getCurrencySymbol() === undefined ? "" : user.getCurrencySymbol(),
             "verified": user.getVerified() === undefined ? "" : user.getVerified(),
             "live_mode": user.getLiveMode() === undefined ? "" : user.getLiveMode(),
@@ -600,11 +600,9 @@ class DbHelper  {
             "creator_mode_desc_dismissed": user.getCreatorModeDescDismissed() === undefined ? "" : user.getCreatorModeDescDismissed(),
         };
         try {
-            // const response = await axios.post(`${Constants.BASE_API_URL}/updateUser`, data);
-            // Update local storage with the updated user data
-            const response=  addDataIntoCache('userData', data);
-
-            return response;
+        
+        addDataIntoCache('userData', data);
+        return { success: true, message: 'User data saved successfully' };
         }
         catch (error) {
             console.error("An error occurred: " + error);

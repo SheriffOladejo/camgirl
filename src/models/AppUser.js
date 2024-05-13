@@ -35,6 +35,7 @@ class AppUser {
       this.profile_setup = profile_setup;
       this.account_type = account_type;
       this.creator_mode_desc_dismissed = creator_mode_desc_dismissed;
+     
     }
 
     toString() {
