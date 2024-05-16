@@ -210,37 +210,115 @@ export const liveUsers = [
   { id: 5, username: 'user5', avatar: '../src/assets/profileImg.png' },
   // Add more users as needed
 ];
-export const Post = [
+export const posts = [
   {
-    id: "0",
-    name: "Discover Hidden Gems: Cascade Caverns",
-    img: "../src/assets/images/cascade-caverns.png",
-    description: "Embark on an unforgettable adventure with a visit to the spectacular Cascade Caverns."
+    user_id: "0",
+    image: "../src/assets/images/cascade-caverns.jpg",
+    caption: "Embark on an unforgettable adventure with a visit to the spectacular Cascade Caverns."
   },
   {
-    id: "1",
-    name: "Culinary Delights: Explore Local Eats",
-    img: "../src/assets/images/local-eats.png",
-    description: "Dive into the world of culinary wonders and discover the best local foods that tantalize your taste buds."
+    user_id: "1",
+    image: "../src/assets/images/local-eats.jpg",
+    caption: "Dive into the world of culinary wonders and discover the best local foods that tantalize your taste buds."
   },
   {
-    id: "2",
-    name: "Wildlife Wonders: Safari Adventures",
-    img: "../src/assets/images/safari-adventure.png",
-    description: "Get close to nature and experience wildlife like never before on a thrilling safari adventure."
+    user_id: "2",
+   
+    video:"../src/assets/videos/city-landscapes.mp4" ,
+    caption: "Get close to nature and experience wildlife like never before on a thrilling safari adventure."
   },
   {
-    id: "3",
-    name: "Urban Exploration: City Landscapes",
-    img: "../src/assets/images/city-landscapes.png",
-    description: "Join us as we uncover the secrets and sights of the world's most fascinating urban landscapes."
+    user_id: "3",
+   
+    image: "../src/assets/images/safari-adventure.jpg",
+    caption: "Join us as we uncover the secrets and sights of the world's most fascinating urban landscapes."
   },
   {
-    id: "4",
-    name: "Beach Escapes: Tropical Paradise",
-    img: "../src/assets/images/tropical-paradise.png",
-    description: "Soak up the sun and enjoy the serene beauty of our handpicked tropical paradise beaches."
+    user_id: "4",
+   
+    video:  "../src/assets/videos/mahogany.mp4",
+    caption: "Soak up the sun and enjoy the serene beauty of our handpicked tropical paradise beaches."
+  },
+  {
+    user_id: "5",
+   
+    video:  "../src/assets/videos/Happy Penis.mp4",
+    caption: "Soak up the sun and enjoy the serene beauty of our handpicked tropical paradise beaches."
   }
 ];
 
 
+export const creatorGallery =  [
+  {
+    
+     width: 40,
+     height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+    
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+    
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+  
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+  
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+  
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+  
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+    
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+    
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+   
+     width: 40,
+     height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+   
+    width: 40,
+    height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  },
+  {
+    
+     width: 40,
+     height:  40,
+    src: "../src/assets/images/safari-adventure.jpg",
+  }
+]

@@ -5,17 +5,17 @@ import AppUser from '../models/AppUser';
 // import PostCommentModel from '../models/PostCommentModel';
 import { getDataFromLocalStorage, addDataIntoCache, getAppUser } from './Utils';
 
-class DbHelper  {
-    
+class DbHelper {
+
     constructor() { }
- 
+
     // async deletePost(post) {
     //     const data = {
     //         "post_id": post.getPostId()
     //     };
-      
+
     //     try {
-            
+
     //         let response = null;
     //         if (addDataIntoCache("deletePost") !== null) {
     //             response = JSON.parse(addDataIntoCache("deletePost"), data);
@@ -25,7 +25,7 @@ class DbHelper  {
     //         //     response = { data: axiosResponse.data }; // Use the response from Axios
     //         // }
     //         return response;
-    
+
     // }
     //     catch (error) {
     //         console.error("An error occurred: " + error);
@@ -55,7 +55,7 @@ class DbHelper  {
             let response = null;
             if (addDataIntoCache("updatePost") !== null) {
                 response = JSON.parse(addDataIntoCache("updatePost"), data);
-            } 
+            }
             // else {
             //     const axiosResponse = await axios.post(`${Constants.BASE_API_URL}/updatePost`, { params: data });
             //     response = { data: axiosResponse.data }; // Use the response from Axios
@@ -86,8 +86,8 @@ class DbHelper  {
             let response = null;
             if (addDataIntoCache("createComment") !== null) {
                 response = JSON.parse(addDataIntoCache("createComment"), data);
-            } 
-           
+            }
+
             return response;
 
         }
@@ -118,19 +118,19 @@ class DbHelper  {
         try {
 
             // Retrieve the existing posts from local storage or initialize an empty array if no posts exist
-        let existingPosts = getDataFromLocalStorage("posts");
-        if (!existingPosts) {
-            existingPosts = [];
-        }
+            let existingPosts = getDataFromLocalStorage("posts");
+            if (!existingPosts) {
+                existingPosts = [];
+            }
 
-        // Add the new post to the array of existing posts
-        existingPosts.push(post);
+            // Add the new post to the array of existing posts
+            existingPosts.push(data);
 
-        // Save the updated array back to local storage
-        addDataIntoCache("posts", existingPosts);
+            // Save the updated array back to local storage
+            addDataIntoCache("posts", existingPosts);
 
-        // Return the updated list of posts
-        return existingPosts;
+            // Return the updated list of posts
+            return existingPosts;
 
         }
         catch (error) {
@@ -156,7 +156,7 @@ class DbHelper  {
             let response = null;
             if (addDataIntoCache("updateComment") !== null) {
                 response = JSON.parse(addDataIntoCache("updateComment"), data);
-            } 
+            }
             // else {
             //     const axiosResponse = await axios.post(`${Constants.BASE_API_URL}/updateComment`, { params: data });
             //     response = { data: axiosResponse.data }; // Use the response from Axios
@@ -221,7 +221,7 @@ class DbHelper  {
             if (getDataFromLocalStorage("getCommentsByPostID") !== null) {
                 response = (getDataFromLocalStorage("getCommentsByPostID"), data);
             }
-           
+
             response.data.sort((a, b) => b.creation_date - a.creation_date);
             for (let i = 0; i < response.data.length; i++) {
                 const id = response.data[i]["id"];
@@ -258,44 +258,46 @@ class DbHelper  {
     async getCommentCountByPostID(post_id) {
         const data = { "post_id": `${post_id}` };
         let response = getDataFromLocalStorage("getCommentCountByPostID");
-      
+
         let count = response && response.data && response.data[0] && response.data[0]["count"];
 
 
-        return count || 0; 
+        return count || 0;
     }
 
-    async  getPostsByUserID(user_id) {
-      
+    async getPostsByUserID(user_id) {
+
         const list = [];
         try {
-          const storedData = getDataFromLocalStorage("posts");
-          // Check if data is available in local storage
-          if (storedData !== null) {
-            storedData.sort((a, b) => b.creation_date - a.creation_date);
-            for (let post of storedData) {
-              const {
-                id, user_id, caption, post_link, post_link_title, post_link_image, attachment_file, 
-                attachment_file_name, attachment_type, post_share, post_privacy, post_type, 
-                creation_date, comments_privacy, comments, reactions, likes
-              } = post;
-      
-              const newPost = new Post(
-                id, user_id, caption, post_link, post_link_title, post_link_image, 
-                attachment_file, attachment_file_name, attachment_type, post_share, 
-                post_privacy, post_type, creation_date, comments_privacy, comments, reactions, likes
-              );
-              list.push(newPost);
+            const storedData = getDataFromLocalStorage("posts");
+            // Check if data is available in local storage
+            if (storedData !== null) {
+                storedData.sort((a, b) => b.creation_date - a.creation_date);
+                for (let post of storedData) {
+                    if (post.user_id === user_id) {
+                        const {
+                            id, user_id, caption, post_link, post_link_title, post_link_image, attachment_file,
+                            attachment_file_name, attachment_type, post_share, post_privacy, post_type,
+                            creation_date, comments_privacy, comments, reactions, likes
+                        } = post;
+
+                        const newPost = new Post(
+                            id, user_id, caption, post_link, post_link_title, post_link_image,
+                            attachment_file, attachment_file_name, attachment_type, post_share,
+                            post_privacy, post_type, creation_date, comments_privacy, comments, reactions, likes
+                        );
+                        list.push(newPost);
+                    }
+                }
+            } else {
+                // console.log(null);
             }
-          } else {
-            // console.log(null);
-          }
         } catch (error) {
-          console.log("getPostsByUserID error: " + error);
+            console.log("getPostsByUserID error: " + error);
         }
         return list;
-      }
-      
+    }
+
     async getPostByID(post_id) {
         var post = new Post();
         try {
@@ -303,7 +305,7 @@ class DbHelper  {
             let response = null;
             if (getDataFromLocalStorage("getPostByID") !== null) {
                 response = (getDataFromLocalStorage("getPostByID"), data);
-            } 
+            }
             // else {
             //     const axiosResponse = await axios.get(`${Constants.BASE_API_URL}/getCommentCountByPostID`, { params: data });
             //     response = { data: axiosResponse.data }; // Use the response from Axios
@@ -379,7 +381,7 @@ class DbHelper  {
 
             if (addDataIntoCache("updatePost") !== null) {
                 response = (addDataIntoCache("updatePost"), data);
-            } 
+            }
             // else {
             //     const axiosResponse = await axios.post(`${Constants.BASE_API_URL}/updatePost`, data);;
             //     response = { data: axiosResponse.data }; // Use the response from Axios
@@ -391,10 +393,10 @@ class DbHelper  {
         }
     }
 
-    async  checkForUsername(username) {
+    async checkForUsername(username) {
         try {
             const storedData = getDataFromLocalStorage("username"); // Assuming "usernames" is the key for the stored data
-            
+
             if (storedData !== null) {
                 // Check if the provided username exists in the stored data
                 const isUsernameTaken = storedData.includes(username);
@@ -404,12 +406,12 @@ class DbHelper  {
             console.error("An error occurred while checking for username:", error);
         }
     }
-    
 
-    async  checkForEmail(email) {
+
+    async checkForEmail(email) {
         try {
             const storedEmails = getDataFromLocalStorage("email"); // Assuming "emails" is the key for the stored data
-            
+
             if (storedEmails !== null) {
                 // Check if the provided email exists in the stored data
                 const isEmailRegistered = storedEmails.includes(email);
@@ -419,13 +421,13 @@ class DbHelper  {
             console.error("An error occurred while checking for email:", error);
         }
     }
-    
+
 
     async getAppUserByUsername(username) {
         try {
             const data = { "username": username };
             const response = getDataFromLocalStorage("getAppUserByUsername", data);
-            
+
             if (response && response.data && response.data.length !== 0) {
                 // Process user data
                 const userData = response.data[0];
@@ -467,16 +469,16 @@ class DbHelper  {
         }
         return null;
     }
-    
+
     async getAppUserByID(user_id) {
         try {
             const data = { "user_id": user_id };
             let response = null;
-    
-            if (getDataFromLocalStorage("getAppUserByID", data) !== null) {
-                response = getDataFromLocalStorage("getAppUserByID", data);
+
+            if (getDataFromLocalStorage("userData", data) !== null) {
+                response = getDataFromLocalStorage("userData", data);
             }
-    
+
             if (response && response.data && response.data.length !== 0) {
                 // Process user data
                 const userData = response.data[0];
@@ -512,22 +514,23 @@ class DbHelper  {
                     userData.creator_mode_desc_dismissed
                 );
                 return user;
+                console.log(user)
             }
         } catch (error) {
             console.error("Error fetching user by ID:", error);
         }
         return null;
     }
-    
+
     async getAppUserByEmail(email) {
         try {
             const data = { "email": email };
             let response = null;
-    
+
             if (getDataFromLocalStorage("getAppUserByEmail", data) !== null) {
                 response = getDataFromLocalStorage("getAppUserByEmail", data);
             }
-    
+
             if (response && response.data && response.data.length !== 0) {
                 // Process user data
                 const userData = response.data[0];
@@ -569,10 +572,10 @@ class DbHelper  {
         }
         return null;
     }
-    
+
 
     async updateUser(user) {
-       
+
         const data = {
             "user_id": user.getUserId() === undefined ? "" : user.getUserId(),
             "username": user.getUserName() === undefined ? "" : user.getUserName(),
@@ -600,9 +603,9 @@ class DbHelper  {
             "creator_mode_desc_dismissed": user.getCreatorModeDescDismissed() === undefined ? "" : user.getCreatorModeDescDismissed(),
         };
         try {
-        
-        addDataIntoCache('userData', data);
-        return { success: true, message: 'User data saved successfully' };
+
+            addDataIntoCache('userData', data);
+            return { success: true, message: 'User data saved successfully' };
         }
         catch (error) {
             console.error("An error occurred: " + error);

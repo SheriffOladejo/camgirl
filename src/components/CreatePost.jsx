@@ -19,7 +19,7 @@ function CreatePost() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedGif, setSelectedGif] = useState(null);
-  const [Loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [user, setUser] = useState(new AppUser());
   const [attachmentType, setAttachmentType] = useState('');
   const [attachmentFileName, setAttachmentFileName] = useState('');
@@ -101,12 +101,7 @@ function CreatePost() {
     });
   };
 
-  // if the attachment file is not empty, create post
-  // useEffect(() => {
-  //   if (attachmentFile !== '') {
-  //     createPost();
-  //   }
-  // }, [attachmentFile]);
+  
 
   // fetch user
   useEffect(() => {
@@ -200,12 +195,10 @@ function CreatePost() {
     
 
     try {
-      // if (!user) {
-      //   throw new Error("User object is null, cannot create post.");
-      // }
+    
       const post = new Post();
-        // const userId = user.getUserId();
-         const userId = '123';
+      const userId = user.getUserId();
+        
          // Retrieve the user ID
         post.setUserId(userId);
         post.setCaption(postText === '' ? "" : postText);
@@ -218,11 +211,10 @@ function CreatePost() {
         post.setLikes(null);
         post.setTips(null);
 
-        await uploadAttachment(); // Ensure this is awaited if it's asynchronous
-        await dbHelper.createPost(post); // Ensure this is awaited if it's asynchronous
+        await uploadAttachment(); 
+        await dbHelper.createPost(post); 
 
           // Save to local storage
-    // const storedPosts = getDataFromLocalStorage('posts') || [];
     const storedPosts = []
     storedPosts.push(post);
   addDataIntoCache('posts', storedPosts);
@@ -239,7 +231,7 @@ function CreatePost() {
 
 
   if (showEmojiPicker) {
-    setShowEmojiPicker(true);
+  
     setShowGifs(false);
   }
   const removeDialogs = async () => {
@@ -259,7 +251,7 @@ function CreatePost() {
 
   return (
     <>
-      {!Loading && <LoadingSpinner />}
+      {!loading && <LoadingSpinner />}
       <div className="hidden md:flex flex-col rounded-lg overflow-hidden bg-color-white space-y-4 px-4 pt-4">
 
 
@@ -291,15 +283,9 @@ function CreatePost() {
             </div>
           )}
 
-          {showEmojiPicker && (
-            <div className="home-emoji-picker">
-              <EmojiPicker
-                onEmojiClick={handleEmojiSelect}
-              />
-            </div>
-          )}
-          {showGifs && <SelectGif onSelect={handleGifAttachment} onClose={closeGifSelector} />}
+         
         </div>
+
         <div> <TextareaAutosize
           className="w-[80%] mt-4 text-[12px] ml-4 font-inter-serif text-left flex flex-col items-center justify-center resize-none pb-2 border-none outline-none shadow-none "
           placeholder="What's happening!?"
@@ -307,7 +293,14 @@ function CreatePost() {
           value={postText}
           onChange={(e) => setPostText(e.target.value)}
         /></div>
-
+ {showEmojiPicker ? (
+            <div className="home-emoji-picker">
+              <EmojiPicker
+                onEmojiClick={handleEmojiSelect}
+              />
+            </div>
+          ) : null}
+          {showGifs ? <SelectGif onSelect={handleGifAttachment} onClose={closeGifSelector} />: null}
         <div className="flex relative max-w-full max-h-[550px] ml-4 mr-12">
 
           {(selectedImage) ?
@@ -334,7 +327,7 @@ function CreatePost() {
         <hr className="border-1 border-color-lightGrey w-[90%] mx-auto" />
         <div className="flex justify-between py-3">
           <div className="flex justify-between space-x-2 items-center">
-            <div className="element" onClick={() => setShowEmojiPicker((prev) => !prev)}>
+            <div className="element" onClick={ ()=> setShowEmojiPicker(true)}>
               <img className="w-4 h-4" src="../src/assets/icons/emoji.png" alt="emoji" />
             </div>
             <div className="element" onClick={openFileChooser}>

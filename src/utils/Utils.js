@@ -30,6 +30,7 @@ function isUserSignedIn() {
 
 async function getAppUser() {
   let dbHelper = new DbHelper();
+  const userId = dbHelper.getAppUserByID()
   const signinData = isUserSignedIn();
 
   const username = signinData["username"];
@@ -41,8 +42,9 @@ async function getAppUser() {
   else {
     user = await dbHelper.getAppUserByEmail(email);
   }
+  return user && userId;
 
-  return user;
+ 
 }
 
 async function sha256(message) {

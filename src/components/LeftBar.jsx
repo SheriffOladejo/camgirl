@@ -16,14 +16,13 @@ function LeftBar({className}) {
   useEffect(() => {
     // Find the index of the navigation item whose URL matches the current pathname
     const index = navigation.findIndex((item) => item.url === location.pathname);
-    if (index !== -1) {
-      setActiveIndex(index);
-    }
-  }, [location.pathname]); // Re-run the effect whenever the pathname changes
+    setActiveIndex(index !== -1 ? index : -1);
+  }, [location.pathname]); 
+  // Re-run the effect whenever the pathname changes
 
 
   return (
-    <div  className={className && `hidden md:sticky top-[20%] z-10  md:flex flex-col rounded-xl  bg-color-white h-[350px] pt-[30px] pr-4 pb-4  ${className} shadow`}>
+    <div  className={className && `hidden md:sticky top-[20%] z-10  md:flex flex-col rounded-xl  bg-color-white h-[350px] pt-[30px]  pr-4 pb-4  ${className} shadow`}>
 
       <nav >
         {/* profile */}
@@ -39,7 +38,7 @@ function LeftBar({className}) {
           <Link
             to={item.url}
             key={id}
-            className={`flex items-center justify-start p-2 ${id === activeIndex ? 'bg-color-pink  rounded-r-lg text-color-white ' : 'text-color-grey '}`}
+            className={`flex items-center justify-start px-4 py-2 ${id === activeIndex ? 'bg-color-pink  rounded-r-lg text-color-white  ' : 'text-color-grey '}`}
 
           >
             {id === activeIndex && (

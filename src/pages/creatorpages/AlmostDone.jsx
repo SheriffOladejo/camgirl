@@ -1,13 +1,15 @@
 
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext,  } from "react";
 import Logo from "../../components/Logo";
 import DragAndDrop from "../../components/DragAndDrop";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/authContext";
-
+import { useNavigate, useLocation } from "react-router-dom";
+import AppUser from "../../models/AppUser";
+import DbHelper from "../../utils/DbHelper";
 function AlmostDone() {
   const navigate = useNavigate()
-  const {  setCurrentUser } = useContext(AuthContext);
+  const location = useLocation();
+  const user = location.state; // Assuming user data is passed as state
+
   const [formInput, setFormInput] = useState({
     message: "",
     picture: null
@@ -52,12 +54,7 @@ function AlmostDone() {
     console.log("File selected:", file); // Log the selected file
     updateImageInState(file);
   };
-  // useEffect(() => {
-  //   const storedImageDataUrl = localStorage.getItem("creatorprofileimg");
-  //   if (storedImageDataUrl && !formInput.picture) {
-  //     setImageDataUrl(storedImageDataUrl);
-  //   }
-  // }, []);
+
   
   const [errors, setErrors] = useState({
     picture: "",
@@ -86,14 +83,34 @@ function AlmostDone() {
     return isValid;
   };
 
-  const submitProfile = (e) => {
+  const submitProfile = async (e) => {
     e.preventDefault();
+    const dbHelper = new DbHelper()
     const isValid = validateForm();
-
+     
     if (isValid) {
-      console.log(formInput)
-      localStorage.setItem("creatorProfileData", JSON.stringify(formInput));      
-      // localStorage.removeItem("creatorprofileimg");
+      
+      const data = {
+        bio: formInput.message,
+        profile_picture: formInput.picture
+      }
+      console.log(data)
+      // Create an AppUser instance with updated data
+      const updatedUser = new AppUser({
+       
+        ...user,
+         bio:data.bio, 
+         profile_picture:data.profile_picture
+        
+        
+      });
+      console.log(updatedUser)
+      try {
+        const result = await dbHelper.updateUser(updatedUser);
+        console.log("Update result:", result);
+      } catch (error) {
+        console.error("Error updating user:", error);
+      }      
      
       alert("Account created successfully!");
       navigate('/home')

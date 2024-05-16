@@ -19,11 +19,13 @@ import { AuthContext, AuthContextProvider } from './context/authContext';
 import { LiveUsersProvider } from './context/liveUserContext';
 import Messages from './pages/Messages';
 import PostComment from './pages/PostComment'
+import CreatorProfile from './pages/creatorpages/CreatorProfile';
+import Settings from './pages/Settings';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
       <LiveUsersProvider>
-      <App />
+        <App />
       </LiveUsersProvider>
     </AuthContextProvider>
   </React.StrictMode>
@@ -49,17 +51,19 @@ function App() {
         <Route path="/almost-done" element={<AlmostDone />} />
         <Route path="/create-post" element={<MobileCreatePost />} />
         <Route path="/post-comment" element={<PostComment />} />
+        <Route path='/settings' element={<Settings/>}/> 
 
         {/* Protected routes */}
         {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}
-        
-          <Route element={<Layout />}>
 
-     
-            <Route path="/home" element={<Home />} />
-      
-          </Route>
-          
+        <Route element={<Layout />}>
+
+
+          <Route path="/home" element={<Home />} />
+          <Route path='/profile' element={<CreatorProfile />} />
+
+        </Route>
+
         {/* </Route> */}
 
         {/* Redirect root to login if not authenticated */}

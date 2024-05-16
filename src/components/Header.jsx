@@ -18,15 +18,20 @@ function Header({ placeholder }) {
     navigate(homePageRoute);
   };
 
+   const [profileClicked, setProfileClicked] = useState(false)
+  
   const [searchItem, setSearchItem] = useState("");
 
+
+  const toggleProfileMenu = () => setProfileClicked(!profileClicked);
+  const closeProfileMenu = () => setProfileClicked(false);
   const handleChange = (e) => setSearchItem(e.target.value);
 
   return (
     <header className="text-[16px] px-10 pt-8 pb-6   md:flex md:justify-between md:items-center sticky top-0 z-20 bg-color-white md:shadow-md">
       <Logo color={"text-color-0"} />
-      <div className="flex items-center justify-between space-x-2">
-        <div className="relative">
+      <div className={`flex items-center justify-between space-x-2 ${profileClicked === true && 'transition -translate-x-20 duration-300 ease-in-out '} md:relative  md:space-x-0 md:w-auto`} >
+        <div className="mr-[10px] relative">
           <img className="w-4 h-4 cursor-text absolute top-2 left-2" src="../src/assets/icons/search-normal.png" alt="search" />
           <input className="placeholder:text-color-pink text-[12px] outline-none border border-color-pink rounded pl-8 pr-4 py-2 " type="search"
             value={searchItem}
@@ -55,7 +60,7 @@ function Header({ placeholder }) {
          
          
            <div>
-            <ProfileMenu profilePic={profilePic} username={username} handle={handle} />
+            <ProfileMenu profilePic={profilePic} username={username} handle={handle} profileClicked={profileClicked } toggleProfileMenu={toggleProfileMenu}  closeProfileMenu={closeProfileMenu}/>
           </div>
         </div>
       </div>

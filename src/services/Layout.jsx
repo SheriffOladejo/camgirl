@@ -7,20 +7,25 @@ import MobileHeader from '../components/MobileHeader'
 import { useMediaQuery } from 'react-responsive';
 import MobileFooterNav from '../components/MobileFooterNav'
 import FloatingButton from '../components/FloatingButton'
-
+import { scrollToTop } from '../utils/Utils';
 function Layout() {
+  
   const isMobile = useMediaQuery({ maxWidth: 768 }); 
   // Define the breakpoint for mobile screens
   return (
     <section className="md:bg-color-lightGrey ">
       {isMobile ? <MobileHeader /> : <Header />}
-      <div className="flex md:px-16  bg-color-lightGrey  ">
+      <div className="flex md:px-16  md:bg-color-lightGrey  ">
+        {/* <div className={` md:2/5`}> */}
         <LeftBar className={` md:w-[80%]`}/>
-        <div className='md:w-3/5 px-[20px] pt-6 h-auto overflow-x-hidden md:overflow-x-visible '>
+        {/* </div> */}
+       
+        <div className='md:w-3/5 md:px-[20px] md:pt-6 h-auto overflow-x-hidden md:overflow-x-visible w-full 
+        '>
         <Outlet />
         </div>
        
-        <RightBar className={` md:2/5`}/>
+        <RightBar className={` md:2/5`} showGallery={window.location.pathname === '/profile'} />
       </div>
       {isMobile && <FloatingButton /> }
       {isMobile && <MobileFooterNav /> }

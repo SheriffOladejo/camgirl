@@ -11,7 +11,7 @@ function Filter() {
 
 
   return (
-    <div className="flex justify-end space-x-2 items-center md:pt-4">
+    <div className="flex justify-end space-x-2 items-center mr-10 md:pt-4">
       <img src="../src/assets/icons/filter.png" alt="filter" className="w-4 h-4" />
       <p className="text-[0.8rem]">Filter post:</p>
           {/* Filter dropdown menu */}

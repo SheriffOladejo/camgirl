@@ -5,8 +5,7 @@ import CreatePost from '../components/CreatePost'
 import Filter from '../components/Filter'
 import Posts from '../components/Posts'
 import LoadingSpinner from '../components/LoadingSpinner';
-import { scrollToTop } from '../utils/Utils';
-import MobileFooterNav from '../components/MobileFooterNav'
+
 
 function Home() {
   const [loading, setLoading] = useState(false);
@@ -24,7 +23,7 @@ function Home() {
   }
   return (
     <>
-    <section onClick={removeDialogs} className='w-full '>
+    <section onClick={removeDialogs} className='w-full h-full pt-4'>
        { loading && <LoadingSpinner/> }
        { !loading && ( <div>
       <Stories />

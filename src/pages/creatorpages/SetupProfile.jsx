@@ -1,21 +1,25 @@
 import FormInput from "../../components/FormInput";
-import { useState} from "react";
+import { useState } from "react";
 import Logo from "../../components/Logo";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
+import DbHelper from "../../utils/DbHelper";
+import AppUser from "../../models/AppUser";
 function SetupProfile() {
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const user = location.state
   const [formInput, setFormInput] = useState({
-    firstname: "",
-   lastname: "",
-    username: "",
-    DOB: ""
+    firstname: "aisha",
+    lastname: "sani",
+    username: "sanee",
+    dob: "24/06/1998"
   });
   const [errors, setErrors] = useState({
     firstname: "",
     lastname: "",
     username: "",
-    DOB: ""
+    dob: ""
   });
 
   const calculateAge = (dob) => {
@@ -56,16 +60,16 @@ function SetupProfile() {
     }
 
     // Validate Date of Birth for age restriction
-    if (!formInput.DOB) {
-      errorsCopy.DOB = "Please enter your date of birth.";
+    if (!formInput.dob) {
+      errorsCopy.dob = "Please enter your date of birth.";
       isValid = false;
     } else {
-      const age = calculateAge(formInput.DOB);
+      const age = calculateAge(formInput.dob);
       if (age < 18) {
-        errorsCopy.DOB = "You must be at least 18 years old to continue.";
+        errorsCopy.dob = "You must be at least 18 years old to continue.";
         isValid = false;
       } else {
-        errorsCopy.DOB = "";
+        errorsCopy.dob = "";
       }
     }
 
@@ -82,54 +86,67 @@ function SetupProfile() {
 
 
 
-  const submitProfile = (event) => {
+  const submitProfile = async (event) => {
     event.preventDefault();
     const isValid = validateForm();
-
+    const dbHelper = new DbHelper()
     if (isValid) {
-      localStorage.setItem("creatorSetupData", JSON.stringify(formInput));
-      
-      alert("Profile setup completed successfully!");
-      navigate('/verify-id')
-    } else {
-      alert("Please fill in all the required fields.");
+      const data = {
+        firstname: formInput.firstname,
+        lastname: formInput.lastname,
+        dob: formInput.dob
+      }
+      const updatedUser ={ 
+        ...user,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        dob: data.dob
+      };
+      try {
+        const result = await dbHelper.updateUser(updatedUser);
+        console.log("Update result:", result);
+        navigate('/verify-id', { state: user })
+
+      } catch (error) {
+        console.error("Error updating user:", error);
+      }
     }
   };
   return (
     <section className="py-8 px-6 md:py-10 md:px-10 bg-offwhite">
       <Logo />
       <div className="max-w-lg mx-auto p-6 md:p-20 md:shadow-xl">
-       
-         <progress value="35" max="100" className="progress-bar w-full h-4 "/>
-      
+
+        <progress value="35" max="100" className="progress-bar w-full h-4 " />
+
         <h1 className="font-bold text-[1.7rem] text-center">Set up your profile</h1>
-       
+
         <form action="/verify-id" onSubmit={submitProfile} method="post" className="space-y-5 pr-4 pt-4">
           <div className="flex justify-between flex-col md:flex-row md:space-x-4 ">
-          <div>
-            <label htmlFor="firstname" className="font-medium text-[0.8rem]">First name</label>
-            <FormInput
-              name="firstname"
-              type="text"
-              id="firstname"
-              placeholder="Enter first name"
-              value={formInput.firstname}
-              onChange={handleInputChange}
-            />
-             {errors.firstname && <p className="text-color-red text-[0.7rem]">{errors.firstname}</p>}
-          </div>
-          <div>
-            <label htmlFor="lastname" className="font-medium text-[0.8rem]">Last name</label>
-            <FormInput
-              name="lastname"
-              type="text"
-              id="lastname"
-              placeholder="Enter last name"
-              value={formInput.lastname}
-              onChange={handleInputChange}
-            />
-             {errors.lastname && <p className="text-color-red text-[0.7rem]">{errors.lastname}</p>}
-          </div>
+            <div>
+              <label htmlFor="firstname" className="font-medium text-[0.8rem]">First name</label>
+              <FormInput
+                name="firstname"
+                type="text"
+                id="firstname"
+                placeholder="Enter first name"
+                value={formInput.firstname}
+                onChange={handleInputChange}
+              />
+              {errors.firstname && <p className="text-color-red text-[0.7rem]">{errors.firstname}</p>}
+            </div>
+            <div>
+              <label htmlFor="lastname" className="font-medium text-[0.8rem]">Last name</label>
+              <FormInput
+                name="lastname"
+                type="text"
+                id="lastname"
+                placeholder="Enter last name"
+                value={formInput.lastname}
+                onChange={handleInputChange}
+              />
+              {errors.lastname && <p className="text-color-red text-[0.7rem]">{errors.lastname}</p>}
+            </div>
           </div>
           <div>
             <label htmlFor="username" className="font-medium text-[0.8rem]">Display name</label>
@@ -141,19 +158,19 @@ function SetupProfile() {
               value={formInput.username}
               onChange={handleInputChange}
             />
-             {errors.username && <p className="text-color-red text-[0.7rem]">{errors.username}</p>}
+            {errors.username && <p className="text-color-red text-[0.7rem]">{errors.username}</p>}
           </div>
           <div>
-            <label htmlFor="dateofbirth" className="font-medium text-[0.8rem]">First name</label>
+            <label htmlFor="dob" className="font-medium text-[0.8rem]">First name</label>
             <FormInput
-              name="DOB"
+              name="dob"
               type="date"
-              id="dateofbirth"
-              
+              id="dob"
+
               value={formInput.DOB}
               onChange={handleInputChange}
             />
-             {errors.DOB && <p className="text-color-red text-[0.7rem]">{errors.DOB}</p>}
+            {errors.DOB && <p className="text-color-red text-[0.7rem]">{errors.DOB}</p>}
           </div>
           <div className="flex justify-between">
             <div className="flex cursor-pointer space-x-2 items-center" onClick={() => window.history.back()}>

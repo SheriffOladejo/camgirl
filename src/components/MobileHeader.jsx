@@ -30,7 +30,7 @@ function MobileHeader() {
          {/* profile : clicking on the menu would drop down and show links to other parts of the website, and the profile picture is dynamic*/}
          
          <div className="p-[1px] bg-color-pink rounded-full">
-              {profilePic && <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full"/>}
+              {profilePic ? <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full"/> : <img src='../src/assets/profileImg.png' alt="Profile Pic" className="w-6 h-6 rounded-full"/>}
             </div>
           
            

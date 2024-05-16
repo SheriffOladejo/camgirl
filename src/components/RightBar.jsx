@@ -3,8 +3,9 @@ import { fauxUsers } from '.';
 import Carousel from './Carousel';
 import { liveUsers } from '.';
 import LiveUser from './LiveUser';
+import ImgGallery from './ImgGallery';
 
-function RightBar({ className }) {
+function RightBar({ className, showGallery }) {
   const groupedUsers = fauxUsers.reduce((acc, user, index) => {
     const groupIndex = Math.floor(index / 4);
     if (!acc[groupIndex]) {
@@ -24,6 +25,7 @@ function RightBar({ className }) {
   }, []);
 
   return (
+
     <div
       className={
         className &&
@@ -35,6 +37,7 @@ function RightBar({ className }) {
         
       }}
     >
+      {showGallery && <ImgGallery/>}
       <Carousel className="p-4" text="suggestion">
         {groupedUsers.map((group, index) => (
           <div key={index} className="w-full flex flex-col space-y-4">

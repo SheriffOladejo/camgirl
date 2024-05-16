@@ -2,12 +2,17 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { profileMenu } from '.'
 
-function ProfileMenu({ profilePic, username, handle }) {
+function ProfileMenu({ profilePic, username, handle, profileClicked, toggleProfileMenu, closeProfileMenu }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    toggleProfileMenu()
 
+  };
+  const handleCloseMenu = () => {
+    setIsOpen(false);
+    closeProfileMenu()
   };
   const [activeIndex, setActiveIndex] = useState(0);
   return (
@@ -15,7 +20,7 @@ function ProfileMenu({ profilePic, username, handle }) {
       {/* profile */}
       <div onClick={toggleMenu} className="flex justify-between items-center space-x-1 cursor-pointer">
         <div className="p-[1px] bg-color-pink rounded-full">
-          {profilePic && <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full" />}
+          {profilePic ? <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full" /> : <img src='../src/assets/profileImg.png' alt="Profile Pic" className="w-6 h-6 rounded-full" />}
         </div>
         <img src="../src/assets/icons/angle-down.png" alt="" className="w-3 h-3" />
       </div>
@@ -29,13 +34,13 @@ function ProfileMenu({ profilePic, username, handle }) {
       </div> */}
       {isOpen && (
         <>
-          <div className='transition-all duration-300 top-10  w-[50%]'>
-            <div className="absolute  top-0  flex justify-between items-center space-x-1 bg-color-white ">
+          <div className='transition-all duration-300 top-10  w-[50%] '>
+            <div className="absolute  top-0  flex justify-between items-center space-x-4 bg-color-white ">
               {/* profile img */}
-              <div className="p-[1px] bg-color-pink rounded-full w-8 h-7 ">
-                {profilePic && <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full z-[99999] " />}
+              <div className="p-[1px] bg-color-pink rounded-full w-8 h-7 flex items-center justify-center">
+                {profilePic ? <img src={profilePic} alt="Profile Pic" className="w-6 h-6 rounded-full" /> : <img src='../src/assets/profileImg.png' alt="Profile Pic" className="w-6 h-6 rounded-full" />}
               </div>
-              <div>{username && <h4 alt="username" className="font-semibold ">{username}</h4>}
+              <div>{username ? <h4 alt="username" className="font-semibold ">{username}</h4> : <h5 alt="username" className="font-semibold text-[10px] text-nowrap">Sarah White</h5>}
                 {handle && <p alt="username" className="font-semibold ">{username} @casper</p>}
               </div>
 
@@ -47,8 +52,13 @@ function ProfileMenu({ profilePic, username, handle }) {
                   <Link
                     to={profile.url}
                     key={index}
+
                     className={`flex px-4 py-2 text-sm text-color-grey transition-all hover:bg-color-pink ${index === activeIndex ? 'bg-color-pink/70  rounded-r-lg text-color-white ' : 'text-color-grey'}`}
-                    onClick={() => setActiveIndex(index)}
+                    onClick={() => {
+                      setActiveIndex(index);
+                      handleCloseMenu();
+                    
+                    }}
 
                   >
 

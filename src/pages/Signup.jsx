@@ -146,7 +146,7 @@ function Signup() {
         console.error("Error updating user:", error);
       }
       // Construct the data object for navigation state
-      navigate(creatorMode === 'fan' ? '/profile-setup' : '/setup-profile', { state: data });
+      navigate(creatorMode === 'fan' ? '/profile-setup' : '/setup-profile', { state: user });
     } catch (error) {
       toast.error("An error occurred while signing up.");
       console.log(error);
