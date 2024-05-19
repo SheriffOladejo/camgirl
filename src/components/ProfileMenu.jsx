@@ -24,14 +24,7 @@ function ProfileMenu({ profilePic, username, handle, profileClicked, toggleProfi
         </div>
         <img src="../src/assets/icons/angle-down.png" alt="" className="w-3 h-3" />
       </div>
-      {/* <div  className="flex items-center cursor-pointer">
-        <div className="w-8 h-8 rounded-full overflow-hidden">
-          <img src={profilePic} alt="Profile Pic" className="w-full h-full" />
-        </div>
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </div> */}
+      
       {isOpen && (
         <>
           <div className='transition-all duration-300 top-10  w-[50%] '>

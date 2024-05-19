@@ -37,11 +37,39 @@ export const navigation = [
   },
   
 ];
+export const settings = [
+  {
+    id: "0",
+    title: "Profile",
+    url: "#profile-setting",
+    
+  },
+  {
+    id: "1",
+    title: "Account",
+    url: "#account-settings",
+    
+  },
+  {
+    id: "2",
+    title: "Privacy & Safety",
+    url: "#privacy",
+    
+  },
+  {
+    id: "3",
+    title: "Notifications",
+    url: "#notifications",
+   
+  },
+  
+  
+];
 export const mobileNav = [
   {
     // id: "0",
     title: "Home",
-    url: "",
+    url: "/home",
     img: "../src/assets/icons/home.png"
   },
   {

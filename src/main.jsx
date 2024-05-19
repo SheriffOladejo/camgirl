@@ -20,6 +20,10 @@ import { LiveUsersProvider } from './context/liveUserContext';
 import Messages from './pages/Messages';
 import PostComment from './pages/PostComment'
 import CreatorProfile from './pages/creatorpages/CreatorProfile';
+import ProfileSettings from './components/ProfileSettings';
+import NotificationSettings from './components/NotificationSettings';
+import PrivacySetting from './components/PrivacySetting';
+import AccountSettings from './components/AccountSettings';
 import Settings from './pages/Settings';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -51,7 +55,11 @@ function App() {
         <Route path="/almost-done" element={<AlmostDone />} />
         <Route path="/create-post" element={<MobileCreatePost />} />
         <Route path="/post-comment" element={<PostComment />} />
-        <Route path='/settings' element={<Settings/>}/> 
+        <Route path='/settings' element={<Settings />} />
+        <Route path="/settings/profile" element={<ProfileSettings />} />
+        <Route path="/settings/account" element={<AccountSettings />} />
+        <Route path="/settings/privacy" element={<PrivacySetting />} />
+        <Route path="/settings/notifications" element={<NotificationSettings />} />
 
         {/* Protected routes */}
         {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}
