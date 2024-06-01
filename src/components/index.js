@@ -13,8 +13,8 @@ export const navigation = [
   },
   {
     id: "2",
-    title: "Wallet",
-    url: "/wallet",
+    title: "Dashboard",
+    url: "/dashboard",
     img: "../src/assets/icons/wallet.png"
   },
   {
@@ -152,7 +152,7 @@ export const fauxUsers = [
   { username: "user17", isCertified: false, subscriptionStatus: "Free" },
   { username: "user18", isCertified: true, subscriptionStatus: "Premium" },
   { username: "user19", isCertified: false, subscriptionStatus: "Premium" },
-  { username: "user20", isCertified: true, subscriptionStatus: "Free" }
+  { username: "user10", isCertified: true, subscriptionStatus: "Free" }
 ];
 
 export const stories = [
@@ -277,76 +277,77 @@ export const posts = [
 
 
 export const creatorGallery =  [
+ 
   {
     
-     width: 40,
-     height:  40,
+     width: 10,
+     height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
     
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
     
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
   
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
   
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
   
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
   
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
     
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
     
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
    
-     width: 40,
-     height:  40,
+     width: 10,
+     height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
    
-    width: 40,
-    height:  40,
+    width: 10,
+    height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   },
   {
     
-     width: 40,
-     height:  40,
+     width: 10,
+     height:  10,
     src: "../src/assets/images/safari-adventure.jpg",
   }
 ]

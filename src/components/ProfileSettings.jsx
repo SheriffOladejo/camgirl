@@ -25,10 +25,10 @@ function ProfileSettings() {
     <>
     <div
 
-      className="flex flex-col h-[135vh] bg-color-white messages-convo-list md:h-full md:sticky md:top-[20%] rounded shadow pb-6 md:pb-4   md:mt-7 w-full"
+      className="flex flex-col right-bar overflow-y-scroll h-[135vh] bg-color-white  md:h-full md:sticky rounded shadow pb-6 md:pb-4 md:mt-7 w-full"
     >
       <div className='flex py-3  ml-4 justify-start items-center space-x-2'>
-        <img src="../src/assets/icons/back-arrow.png" alt="go back" className='w-4 h-4' onClick={() => window.history.back()} />
+        <img src="../src/assets/icons/back-arrow.png" alt="go back" className='w-4 h-4' onClick={() => navigate("/settings")} />
         <h4 className='font-bold'>Profile Settings</h4>
       </div>
       <div className="w-full h-64">

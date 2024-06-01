@@ -29,13 +29,9 @@ function RightBar({ className, showGallery }) {
     <div
       className={
         className &&
-        ` pt-[20px] md:sticky mt-[5.7rem]  rounded-xl overflow-y-auto messages-chat-list space-y-4 hidden md:flex md:flex-col h-[220%]`
+        `w-[25%] pt-[20px] md:sticky   rounded-xl  messages-chat-list space-y-4 hidden md:flex md:flex-col h-full overflow-y-auto  ${className}`
       }
-      style={{
-       
-        maxHeight: 'calc(100vh - 31%)', // Adjusted to fill remaining viewport height below top 20%
-        
-      }}
+      
     >
       {showGallery && <ImgGallery/>}
       <Carousel className="p-4" text="suggestion">

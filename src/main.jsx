@@ -25,6 +25,9 @@ import NotificationSettings from './components/NotificationSettings';
 import PrivacySetting from './components/PrivacySetting';
 import AccountSettings from './components/AccountSettings';
 import Settings from './pages/Settings';
+import Explore from './pages/Explore';
+import Dashboard from './pages/Dashboard';
+import Stories from './pages/Stories';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
@@ -60,7 +63,10 @@ function App() {
         <Route path="/settings/account" element={<AccountSettings />} />
         <Route path="/settings/privacy" element={<PrivacySetting />} />
         <Route path="/settings/notifications" element={<NotificationSettings />} />
-
+        <Route path="/discover" element={<Explore />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/stories" element={<Stories />} />
+        <Route path='/profile' element={<CreatorProfile />} />
         {/* Protected routes */}
         {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}
 
@@ -68,7 +74,7 @@ function App() {
 
 
           <Route path="/home" element={<Home />} />
-          <Route path='/profile' element={<CreatorProfile />} />
+          
 
         </Route>
 

@@ -6,7 +6,7 @@ function MobileFooterNav({ active }) {
 
 
   return (
-    <div className='flex justify-between items-center fixed bottom-0 w-full px-10 backdrop-blur-2xl bg-color-lightGrey'>
+    <div className='flex justify-between items-center fixed bottom-0 w-full px-10 backdrop-blur-2xl bg-color-lightGrey pb-4'>
       {mobileNav.map((nav, index) => (
 
         <div key={index}>

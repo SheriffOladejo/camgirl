@@ -16,16 +16,16 @@ function Layout() {
     <section className="md:bg-color-lightGrey ">
       {isMobile ? <MobileHeader /> : <Header />}
       <div className="flex md:px-16  md:bg-color-lightGrey  ">
-        {/* <div className={` md:2/5`}> */}
-        <LeftBar className={` md:w-[80%]`}/>
-        {/* </div> */}
+        <div className={` md:w-[35%]`}>
+        <LeftBar className={` md:w-[100%] pr-10`}/>
+        </div>
        
-        <div className='md:w-3/5 md:px-[20px] md:pt-6 h-auto overflow-x-hidden md:overflow-x-visible w-full 
+        <div className='md:w-[55%] md:px-[20px] md:pt-6 h-auto overflow-x-hidden md:overflow-x-visible w-full 
         '>
         <Outlet />
         </div>
        
-        <RightBar className={` md:2/5`} showGallery={window.location.pathname === '/profile'} />
+        <RightBar className={` md:[25%] mt-[5.7rem]`} />
       </div>
       {isMobile && <FloatingButton /> }
       {isMobile && <MobileFooterNav /> }

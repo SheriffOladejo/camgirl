@@ -128,3 +128,50 @@ width: 0.0rem;
   font-weight: 400;
   width: 100%;
 }
+
+/* Ensure this CSS is applied in your project, possibly in a global CSS file or within a CSS module */
+.swiper-slide {
+  transition:  transform 0.3s ease, height 0.3s ease, width 0.3s ease;
+  transform:  translate(97.1px) scale(0.4);
+  height: 60%;
+  /* width: 252px; */
+}
+
+.active-slide {
+  transform: scale(1.2); /* Adjust the scale as needed */
+  z-index: 10; /* Ensure the active slide is above others */
+  backdrop-filter: blur(5px);
+}
+
+.swiper {
+  overflow: visible; 
+  /* Ensure slides can overflow to show scaling effect */
+}
+.custom-button-prev, .custom-button-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1000; /* Ensure buttons are above Swiper */
+}
+
+.custom-button-prev {
+  left: 10px;
+}
+
+.custom-button-next {
+  right: 10px;
+}
+
+/* Example styles for your custom buttons */
+.custom-button-prev img, .custom-button-next img {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+}
+/* 
+{
+  --swiper-navigation-size: 44px;
+  --swiper-navigation-top-offset: 50%;
+  --swiper-navigation-sides-offset: 10px;
+  --swiper-navigation-color: var(--swiper-theme-color);
+} */

@@ -5,10 +5,10 @@ function ImgGallery() {
  const openGallery = (index, image) => {}
 
   return (
-    <div>
-      <h2>Gallery</h2>
+    <div >
+      <h2 className="font-bold text-[14px]">Gallery</h2>
       <div>
-       <Gallery images={creatorGallery} enableImageSelection rowHeight={100} maxRows={3} maxCols={4} onClick={openGallery} isSelect/>
+       <Gallery images={creatorGallery} enableImageSelection rowHeight={100} maxRows={4} maxCols={3} onClick={openGallery} isSelect/>
       </div>
     </div>
   )

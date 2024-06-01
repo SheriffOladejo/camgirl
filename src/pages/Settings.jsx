@@ -30,15 +30,16 @@ function Settings() {
 
   return (
     <>
-      <section className="w-[100%] h-auto ">
+      <section className="w-[100%]  ">
         {isMobile ? '' : <Header />}
-        <div className="grid gap-x-4 md:grid-cols-2 lg:grid-cols-3 md:px-16 h-auto bg-color-lightGrey ">
+        <div className="grid gap-x-4 md:grid-cols-2 lg:grid-cols-3 md:px-16 overflow-y-visible bg-color-lightGrey md:h-[135vh]">
           <LeftBar className={`col-span-1 w-[80%]`} />
-          <SettingsComponent className={`col-span-1`} setActiveUrl={setActiveUrl} />
-          <div className={`col-span-1 overflow-y-hidden hidden md:flex`}>{renderComponent()}</div>
+          <SettingsComponent className={`col-span-1 `} setActiveUrl={setActiveUrl} />
+          <div className={`col-span-1 overflow-y-hidden  hidden md:flex`}>{renderComponent()}</div>
         </div>
       </section>
-      {isMobile && <MobileFooterNav />}
+      {isMobile && 
+      <MobileFooterNav />}
     </>
   );
 }
