@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Lato';
+  /* src: url('../src/assets/fonts/Lato/Lato-Regular.woff');
+  src: url('../src/assets/fonts/Lato/Lato-Regular.woff2');
+  src: url('./assets/fonts/Lato/Lato-Black.woff');
+  src: url('./assets/fonts/Lato/Lato-Black.woff2'); */
+  src: url('./assets/fonts/Lato/Lato-Bold.woff');
+  src: url('./assets/fonts/Lato/Lato-Bold.woff2');
+}
+
+/* img {
+  src: url(../src/assets/icons/home.png);
+} */
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* h1,h2,h3,h4,h5,h6,p{
+  font-family: 'inter';
+} */
+.login{
+  background: #000 url(../src/assets/background/image\ 8.png) no-repeat fixed center;
+  background-size: cover;
+  
+}
+.signup{
+  background: #000 url(../src/assets/background/image\ 9.png) no-repeat fixed center;
+  background-size: cover;
+}
+
+.checkbox-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #ccc;
+  border-radius: 50%; /* Rounded shape for the checkbox */
+  cursor: pointer;
+  outline: none;
+  margin-top: 3px; /* Adjust vertical alignment */
+}
+
+.checkbox-input:checked {
+  background-color: #007bff;
+  border-color: #636363;
+}
+
+
+.profileStyle {
+  background: #000 url(../src/assets/background/bgimg.jpg) no-repeat fixed center;
+  background-size: cover;
+};
+
+.progress-bar{
+  appearance: none;
+
+}
+
+.progress-bar::-webkit-progress-bar{
+  background-color: #D9D9D9;
+  height: 4px;
+}
+.progress-bar::-webkit-progress-value{
+  background-color: #F94F64;
+ 
+}
+
+.right-bar::-webkit-scrollbar{
+  display: none;
+}
+
+.carousel-body::-webkit-scrollbar{
+  display: none;
+}
+.carousel::-webkit-scrollbar{
+  display: none;
+}
+.carousel{
+
+  scrollbar-width: 0;
+}
+
+
+
+ /* Custom CSS to change dot color */
+
+.slick-dots li.slick-active button:before{
+  color: #F94F64 !important;
+}
+
+
+.messages-chat-list::-webkit-scrollbar {
+  width: 0.0rem; /* Set the width of the scrollbar to a very small value */
+}
+
+/* Remove scrollbar track on hover (optional) */
+.messages-chat-list::-webkit-scrollbar:hover {
+width: 0.0rem;
+}
+
+.messages-convo-list2::-webkit-scrollbar {
+  width: 0.0rem; /* Set the width of the scrollbar to a very small value */
+}
+
+/* Remove scrollbar track on hover (optional) */
+.messages-convo-list2::-webkit-scrollbar:hover {
+width: 0.0rem;
+}
+
+.feed-item-input {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  border: none;       
+  outline: none;       
+  box-shadow: none;   
+  padding-left: 15px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: black;
+  font-weight: 400;
+  width: 100%;
+}
+
+/* Ensure this CSS is applied in your project, possibly in a global CSS file or within a CSS module */
+.swiper-slide {
+  transition:  transform 0.3s ease, height 0.3s ease, width 0.3s ease;
+  transform:  translate(97.1px) scale(0.4);
+  height: 60%;
+  /* width: 252px; */
+}
+
+.active-slide {
+  transform: scale(1.2); /* Adjust the scale as needed */
+  z-index: 10; /* Ensure the active slide is above others */
+  backdrop-filter: blur(5px);
+}
+
+.swiper {
+  overflow: visible; 
+  /* Ensure slides can overflow to show scaling effect */
+}
+.custom-button-prev, .custom-button-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1000; /* Ensure buttons are above Swiper */
+}
+
+.custom-button-prev {
+  left: 10px;
+}
+
+.custom-button-next {
+  right: 10px;
+}
+
+/* Example styles for your custom buttons */
+.custom-button-prev img, .custom-button-next img {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+}
+/* 
+{
+  --swiper-navigation-size: 44px;
+  --swiper-navigation-top-offset: 50%;
+  --swiper-navigation-sides-offset: 10px;
+  --swiper-navigation-color: var(--swiper-theme-color);
+} */
