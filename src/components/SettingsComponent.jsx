@@ -3,7 +3,7 @@ import { settings } from ".";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 
-function SettingsComponent({ setActiveUrl }) {
+function SettingsComponent({ setActiveUrl, className }) {
   const [searchSettings, setSearchSettings] = useState("");
   const [activeIndex, setActiveIndex] = useState(null);
   const handleChange = (e) => setSearchSettings(e.target.value);
@@ -40,7 +40,7 @@ function SettingsComponent({ setActiveUrl }) {
       .map((setting, index) => (
         <div
           key={index}
-          className={`flex justify-between items-center py-1 text-lg font-semibold transition-all ${activeIndex === setting.id ? 'bg-color-lightGrey border-r-4 border-r-color-pink' : ''}`}
+          className={`${className} flex justify-between items-center py-1 text-lg font-semibold transition-all ${activeIndex === setting.id ? 'bg-color-lightGrey border-r-4 border-r-color-pink' : ''}`}
           onClick={() => handleSettingSelect(setting.id)}
         >
           <span className="md:text-[0.8rem] text-[1rem] pl-3">{setting.title}</span>
@@ -76,9 +76,7 @@ function SettingsComponent({ setActiveUrl }) {
               placeholder="Search Settings"
             />
           </div>
-          <div className="space-y-6 cursor-pointer">
-            {renderSettingsLinks()}
-          </div>
+          <div className={`col-span-1 overflow-y-hidden  hidden md:flex`}>{renderComponent()}</div>
         </div>
       </div>
     </>

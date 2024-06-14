@@ -25,7 +25,7 @@ function Layout() {
         <Outlet />
         </div>
        
-        <RightBar className={` md:[25%] mt-[5.7rem]`} />
+        <RightBar className={` md:[25%] mt-[1.5rem]`} />
       </div>
       {isMobile && <FloatingButton /> }
       {isMobile && <MobileFooterNav /> }

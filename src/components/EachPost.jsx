@@ -4,9 +4,9 @@ import usePostDetails from '../hooks/usePostDetails';
 import PostCommentModel from '../models/PostCommentModel'
 
 import TextareaAutosize from '../../node_modules/react-textarea-autosize';
-
+import Menu from './Menu'
 import { useRef, useState, useEffect } from 'react';
-import TipModal from '../pages/TipModal'
+import TipModal from './TipModal'
 import { useNavigate } from 'react-router-dom';
 import { getAppUser, getDataFromLocalStorage } from '../utils/Utils';
 import AppUser from '../models/AppUser';
@@ -27,8 +27,18 @@ function EachPost({ post, postReaction }) {
   const [comment, setComment] = useState('');
 
   const [showTipModal, setShowTipModal] = useState(false);
+  const [showMenu , setShowMenu] = useState(false)
+ 
 
-
+    // Function to close the menu
+    const closeMenu = () => {
+      setShowMenu(false);
+  
+    };
+    const openMenu = () => {
+      setShowMenu(true);
+  
+    };
   const makeComment = async (e) => {
 
     let user_ids = JSON.stringify([]);
@@ -174,6 +184,7 @@ function EachPost({ post, postReaction }) {
     <div className='bg-color-white p-4 rounded-lg  flex flex-col space-y-4 relative  w-[100%]'>
       {showTipModal === true && <TipModal isOpen={showTipModal} cancel={closeTipModal} currency={user.currency} currency_symbol={user.currencySymbol} />}
 
+
       {postOwner ? (
         <>
 
@@ -233,9 +244,13 @@ function EachPost({ post, postReaction }) {
                 </div>
               </div>
             </a>
-            <a href="/menu">
+            <div className='relative'>
+            <a  onClick={openMenu} className='cursor-pointer '>
               <img src="../src/assets/icons/menu.png" alt="post-menu" className='w-3 h-3' />
             </a>
+            {showMenu === true && <Menu isOpen={showMenu} cancel={closeMenu} />}
+            </div>
+           
           </div>
         </>}
       {/* Post Content */}

@@ -65,6 +65,43 @@ export const settings = [
   
   
 ];
+let username = 'Abbot'
+export const menuModals = [
+
+  { id: "0", heading: 'Subscribe', pinkBtn: 'Subscribe ₦3,000.00/month', text: 'Support your favorite creators for bonus content and extra perks.', whiteBtn: 'Cancel' },
+  {id: "2", heading: 'Hide comment', pinkBtn: 'Hide comment', text: `To give you more control over the conversations you start, post authors can hide replies to their posts.`, whiteBtn: 'Cancel' },
+  {id: "3", heading: `Block ${username}`, pinkBtn: 'pinkBtn 3', text: `They won't have the ability to track your account or access your posts, and you won't receive posts or notifications from ${username}`, whiteBtn: 'modal3' , username: true},
+ 
+];
+export const menu = [
+  {
+    // id: "0",
+    alt: "subscribe",
+ text: 'Subscribe to ',
+    img: "../src/assets/icons/profile-tick.png"
+  },
+  {
+    // id: "1",
+    alt: "insight",
+    text: 'View Insight',
+    img: "../src/assets/icons/chart.png"
+  },
+  {
+    // id: "2",
+    alt: "block",
+    text: 'Block ',
+    img: "../src/assets/icons/slash.svg"
+  },
+  {
+    // id: "3",
+    alt: "Report",
+    text: 'Report ',
+    img: "../src/assets/icons/flag.png"
+  },
+  
+ 
+  
+];
 export const mobileNav = [
   {
     // id: "0",
@@ -209,6 +246,60 @@ export const stories = [
   
   name: "Adventure Time",
   img: "../src/assets/background/bgimg.jpg"
+},
+{
+      
+  name: "Adventure Time",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+      name: "Lost in Space",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+  name: "Mystery Island",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+ 
+  name: "The Forest",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+ 
+  name: "Underwater Quest",
+  img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+name: "Adventure Time",
+img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+name: "Lost in Space",
+img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+name: "Mystery Island",
+img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+name: "The Forest",
+img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+name: "Underwater Quest",
+img: "../src/assets/background/bgimg.jpg"
+},
+{
+
+name: "Adventure Time",
+img: "../src/assets/background/bgimg.jpg"
 },
 {
   name: "Lost in Space",
