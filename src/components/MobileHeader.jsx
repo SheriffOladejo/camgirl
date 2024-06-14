@@ -26,7 +26,7 @@ function MobileHeader() {
   //   }
   // }, [setCurrentUserType]);
   return (
-    <header className=" px-10 py-5  flex justify-between items-center sticky top-0 z-20 bg-color-white shadow-md">
+    <header className=" px-5 py-5  flex justify-between items-center sticky top-0 z-20 bg-color-white shadow-md">
          {/* profile : clicking on the menu would drop down and show links to other parts of the website, and the profile picture is dynamic*/}
          
          <div className="p-[1px] bg-color-pink rounded-full">

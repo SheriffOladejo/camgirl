@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react"
 import { navigation } from "."
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-function LeftBar({className}) {
+function LeftBar({ className }) {
 
   const { currentUser } = useContext(AuthContext);
   const { userType } = currentUser;
@@ -10,35 +10,36 @@ function LeftBar({className}) {
   const username = (currentUser[userType]?.username) || null;
 
   const [activeIndex, setActiveIndex] = useState(0);
-   // Function to handle click event on link and set active index
-   const location = useLocation();
+  // Function to handle click event on link and set active index
+  const location = useLocation();
 
   useEffect(() => {
     // Find the index of the navigation item whose URL matches the current pathname
     const index = navigation.findIndex((item) => item.url === location.pathname);
     setActiveIndex(index !== -1 ? index : -1);
-  }, [location.pathname]); 
+  }, [location.pathname]);
   // Re-run the effect whenever the pathname changes
 
 
   return (
-    <div  className={className && `hidden md:sticky top-[20%] z-10  md:flex flex-col rounded-xl  bg-color-white h-[350px] pt-[30px]  pr-4 pb-4  ${className} shadow`}>
+    <div className={ `hidden md:sticky top-[23%] z-10  md:flex flex-col rounded-xl  bg-color-white h-[350px] pt-[30px]  pr-4 pb-4  $${className} shadow`}>
 
-      <nav >
+      <nav className="">
         {/* profile */}
-        <div className=" flex space-x-4 p-2">
-        <div className="p-[1px] rounded-full bg-color-4">{profilePic && <img src={profilePic} alt="Profile Pic"  className="w-8 h-8 rounded-full"/>}</div>
-        <p>{username}</p>
+        <div className=" flex space-x-2 p-2 items-center">
+          <div className="p-[1px] rounded-full bg-color-4">{profilePic ? <img src={profilePic} alt="Profile Pic" className="w-8 h-8 rounded-full" /> : <img src='../src/assets/profileImg.png' alt="Profile Pic" className="w-8 h-8 rounded-full" />}
+          </div>
+         {username ?  <p>@{username}</p> : <p className="text-[12px] text-color-grey">@Susan</p>}
         </div>
-        
+
         {/* nav */}
 
         {navigation.map((item, id) => (
-          
+
           <Link
             to={item.url}
             key={id}
-            className={`flex items-center justify-start px-4 py-2 ${id === activeIndex ? 'bg-color-pink  rounded-r-lg text-color-white  ' : 'text-color-grey '}`}
+            className={`flex items-center justify-start px-6 py-2 ${id === activeIndex ? 'bg-color-pink  rounded-r-lg text-color-white  ' : 'text-color-grey '}`}
 
           >
             {id === activeIndex && (
