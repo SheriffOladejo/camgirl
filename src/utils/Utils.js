@@ -96,19 +96,16 @@ function calculateTimeAgo(timestamp) {
   return result;
 }
 
-function addDataIntoCache(key, data) {
-  console.log(data);
-  localStorage.setItem(key, JSON.stringify(data));
+function addDataIntoCache(key, newData) {
+  let existingData = getDataFromLocalStorage(key) || []; // Retrieve existing data or initialize as empty array
+  existingData.push(newData); // Add new data to the array
+  localStorage.setItem(key, JSON.stringify(existingData)); // Store updated array in localStorage
   console.log("Data Added into localStorage!");
 }
 
 function getDataFromLocalStorage(key) {
   const data = localStorage.getItem(key);
-  if (data) {
-    return JSON.parse(data);
-  } else {
-    return null;
-  }
+  return data ? JSON.parse(data) : null;
 }
 
 

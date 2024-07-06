@@ -17,7 +17,7 @@ function FormInput({ name, type, placeholder, value, onChange, error, className 
         type={type}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(name, e.target.value)}
+        onChange={(e) => onChange(e)}
         className={ className || `text-color-black     border-2 border-color-lightGrey text-[0.8rem] w-[100%] outline-none rounded px-4 py-1`}
       required/>
       {error && <p className="text-color-red text-[0.7rem]">{error}</p>}

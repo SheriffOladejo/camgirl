@@ -11,8 +11,7 @@ import ProfileSetup from './pages/fanPages/ProfileSetup';
 import SetupProfile from './pages/creatorpages/SetupProfile';
 import Layout from './services/Layout';
 
-import VerifyId from './pages/creatorpages/VerifyId';
-import AlmostDone from './pages/creatorpages/AlmostDone';
+
 import Home from './pages/Home';
 import MobileCreatePost from './pages/MobileCreatePost';
 import { AuthContext, AuthContextProvider } from './context/authContext';
@@ -28,12 +27,18 @@ import Settings from './pages/Settings';
 import Explore from './pages/Explore';
 import Dashboard from './pages/Dashboard';
 import Stories from './pages/Stories';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GOOGLE_CLIENT_ID } from './utils/Constants';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
-      <LiveUsersProvider>
-        <App />
-      </LiveUsersProvider>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+
+        <LiveUsersProvider>
+          <App />
+        </LiveUsersProvider>
+
+      </GoogleOAuthProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );
@@ -54,8 +59,7 @@ function App() {
         <Route path="/messages" element={<Messages />} />
         <Route path="/profile-setup" element={<ProfileSetup />} />
         <Route path="/setup-profile" element={<SetupProfile />} />
-        <Route path="/verify-id" element={<VerifyId />} />
-        <Route path="/almost-done" element={<AlmostDone />} />
+
         <Route path="/create-post" element={<MobileCreatePost />} />
         <Route path="/post-comment" element={<PostComment />} />
         <Route path='/settings' element={<Settings />} />
@@ -74,7 +78,7 @@ function App() {
 
 
           <Route path="/home" element={<Home />} />
-          
+
 
         </Route>
 

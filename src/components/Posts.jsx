@@ -1,47 +1,90 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import EachPost from "./EachPost";
-import LoadingSpinner from './LoadingSpinner';  // Assuming you'll use it
-import Header from './Header'  // Assuming Navbar is used here
-import { posts } from '.';
+import LoadingSpinner from './LoadingSpinner'; 
+import Header from './Header';  
+import { placeholderPosts } from '.'; 
 import DbHelper from "../utils/DbHelper";
+import { getDataFromLocalStorage } from '../utils/Utils';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function Posts({ user_id }) {
   const [loading, setLoading] = useState(false);
-  // const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [visiblePosts, setVisiblePosts] = useState([]);
   const [error, setError] = useState(null);
-  
-  // useEffect(() => {
+  const containerRef = useRef(null);
 
-  //   async function getPosts() {
-  //     if (!user_id) {
-  //       // Optionally handle the case where user_id is absent
-  //       setError('User ID is required.');
-  //       return;
-  //     }
+  useEffect(() => {
+    async function getPosts() {
+      if (!user_id) {
+        setError('User ID is required.');
+        return;
+      }
 
-  //     try {
-  //       setLoading(true);
-  //       const posts = await new DbHelper().getPostsByUserID(user_id);
-  //       if (posts.length === 0) {
-  //         setError('No posts found.');
-           
-  //         // Handling no posts found
-  //       } else {
-  //         setPosts(posts);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching posts:", error);
-  //       setError('Failed to fetch posts.');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
+      try {
+        setLoading(true);
+        const fetchedPosts = await new DbHelper().getPostsByUserID(user_id);
+        const storedPosts = getDataFromLocalStorage('posts') || [];
 
-  //   getPosts();
-  // }, [user_id]);
-  //  setPosts(posts)
+        // Combine and sort posts by creation date, assuming posts have a `createdAt` field
+        const combinedPosts = [...storedPosts, ...fetchedPosts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        if (combinedPosts.length === 0) {
+          setPosts(placeholderPosts);
+        } else {
+          setPosts(combinedPosts);
+          setVisiblePosts(combinedPosts.slice(0, 4)); // Show the first 4 posts initially
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setError('Failed to fetch posts.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getPosts();
+  }, [user_id]);
+
+  useEffect(() => {
+    const loadMorePosts = () => {
+      if (loading) return;
+
+      const totalVisible = visiblePosts.length;
+      const morePosts = posts.slice(totalVisible, totalVisible + 4);
+
+      if (morePosts.length > 0) {
+        setVisiblePosts((prevPosts) => [...prevPosts, ...morePosts]);
+      }
+    };
+
+    const handleScroll = () => {
+      if (containerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+        if (scrollTop + clientHeight >= scrollHeight - 5) {
+          loadMorePosts();
+        }
+      }
+    };
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "bottom bottom",
+        onEnter: handleScroll,
+      }
+    });
+
+    return () => {
+      tl.kill();
+    };
+  }, [visiblePosts, posts, loading]);
+
   if (error) {
-    return <div>Error: {error}</div>; // Display error message if there's an error
+    return <div>Error: {error}</div>; 
   }
 
   if (loading) {
@@ -56,13 +99,13 @@ function Posts({ user_id }) {
   }
 
   return (
-    <div className="flex flex-col overflow-y-auto gap-8 h-auto">
-      {posts.length > 0 ? (
-        posts.map((post) => (
-          <EachPost key={post.user_id} post={post} />
+    <div ref={containerRef} className="flex flex-col overflow-y-auto gap-8 h-auto" >
+      {visiblePosts.length > 0 ? (
+        visiblePosts.map((post) => (
+          <EachPost key={post.id} post={post} />
         ))
       ) : (
-        <div>No posts available.</div> // Handling case where there are no posts
+        <div>No posts available.</div>
       )}
     </div>
   );

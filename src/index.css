@@ -25,12 +25,12 @@
   font-family: 'inter';
 } */
 .login{
-  background: #000 url(../src/assets/background/image\ 8.png) no-repeat fixed center;
+  background: #000 url(../public/background/image\ 8.png) no-repeat fixed center;
   background-size: cover;
   
 }
 .signup{
-  background: #000 url(../src/assets/background/image\ 9.png) no-repeat fixed center;
+  background: #000 url(../public/background/image\ 9.png) no-repeat fixed center;
   background-size: cover;
 }
 
@@ -54,7 +54,7 @@
 
 
 .profileStyle {
-  background: #000 url(../src/assets/background/bgimg.jpg) no-repeat fixed center;
+  background: #000 url(../public/background/bgimg.jpg) no-repeat fixed center;
   background-size: cover;
 };
 

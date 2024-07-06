@@ -17,8 +17,7 @@ function ProtectedRoutes() {
   
   // Redirect users to different home pages based on user type
   switch (userType) {
-    case "fan":
-      return <Navigate to="/fanhome"  />;
+ 
     case "creator":
       return <Navigate to="/home" />;
     default:

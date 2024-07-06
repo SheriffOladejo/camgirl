@@ -1,38 +1,56 @@
 import { createContext, useEffect, useState } from "react";
+import DbHelper from "../utils/DbHelper";
+import { addDataIntoCache, getDataFromLocalStorage } from "../utils/Utils";
 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(() => {
-    return {
-      creator: {
-        picture: JSON.parse(localStorage.getItem("creatorProfileData"))?.picture || null,
-        username: JSON.parse(localStorage.getItem("creatorSetupData"))?.username || null
-      },
-      fan: {
-        picture: JSON.parse(localStorage.getItem("fanProfileData"))?.picture || null,
-        username: JSON.parse(localStorage.getItem("fanProfileData"))?.username || null
-      },
-      userType: localStorage.getItem("userType") || "fan", // Default to "fan" if not set
-    };
-  });
+  const dbHelper = new DbHelper();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserType , setCurrentUserType] = useState('')
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem("creatorProfileData", JSON.stringify(currentUser.creator));
-    localStorage.setItem("creatorSetupData", JSON.stringify(currentUser.creator));
-    localStorage.setItem("fanProfileData", JSON.stringify(currentUser.fan));
-    localStorage.setItem("userType", currentUser.userType); // Update user type in local storage
-  }, [currentUser]);
+    const loadCurrentUser = async () => {
+      const storedUser = getDataFromLocalStorage("userData");
+      if (storedUser) {
+        const userId = storedUser[0].user_id;
+        console.log(userId)
+        const user = await dbHelper.getAppUserByID(userId);
+        setCurrentUserType(user.creator_mode)
+        setCurrentUser(user);
+      }
+    };
 
-  const setCurrentUserType = (userType) => {
-    setCurrentUser((prevUser) => ({
-      ...prevUser,
-      userType: userType,
-    }));
+    loadCurrentUser();
+  }, []);
+
+  const loginUser = async () => {
+    const storedUser = getDataFromLocalStorage("userData"); // Retrieve userData again
+    if (storedUser) {
+      const user = await dbHelper.getAppUserByID(storedUser.user_id);
+      if (user) {
+        addDataIntoCache("userData", user);
+        setCurrentUser(user);
+      }
+    }
+  };
+
+  const logoutUser = () => {
+    localStorage.removeItem("userData");
+    setCurrentUser(null);
+  };
+
+  const updateCurrentUser = async (user) => {
+    const response = await dbHelper.updateUser(user);
+    if (response.success) {
+      setCurrentUser(user);
+    }
+    return response;
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUserType }}>
+    <AuthContext.Provider value={{ currentUser,currentUserType, loginUser, logoutUser, updateCurrentUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

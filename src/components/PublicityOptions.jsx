@@ -7,7 +7,7 @@ function PublicityOptions({ title, desc, image, handlePublicityOptionClick }) {
   };
 
   return (
-    <div className='flex items-center h-auto w-auto m-0 p-0 space-y-4 space-x-2 z-40 bg-color-white' onClick={ handleClick}>
+    <div className='flex items-center h-auto w-auto m-0 p-0 space-y-4 space-x-2 z-40 bg-color-white cursor-pointer' onClick={ handleClick}>
       <div className='w-[30px] h-[30px] rounded-full bg-color-5 flex items-center justify-center mt-4'>
         <img src={image} alt={title}/>
       </div>

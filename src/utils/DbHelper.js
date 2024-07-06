@@ -4,6 +4,7 @@ import Post from '../models/Post';
 import AppUser from '../models/AppUser';
 // import PostCommentModel from '../models/PostCommentModel';
 import { getDataFromLocalStorage, addDataIntoCache, getAppUser } from './Utils';
+import axiosInstance from '../api/axiosInstance';
 
 class DbHelper {
 
@@ -32,42 +33,56 @@ class DbHelper {
     //     }
     // }
 
-    async updatePost(post) {
-        const data = {
-            "post_id": post.getPostId(),
-            "user_id": post.getUserId(),
-            "caption": post.getCaption(),
-            "attachment_file": post.getAttachmentFile(),
-            "comments_privacy": post.getCommentsPrivacy(),
-            "comments": post.getComments(),
-            "attachment_file_name": post.getAttachmentFileName(),
-            "attachment_type": post.getAttachmentType(),
-            "post_privacy": post.getPostPrivacy(),
-            "post_type": post.getPostType(),
-            "creation_date": post.getCreationDate(),
-            "reactions": post.getReactions(),
-            "likes": post.getLikes(),
-            "tips": post.getTips(),
-        };
+    // async updatePost(post) {
+    //     const data = {
+    //         "post_id": post.getPostId(),
+    //         "user_id": post.getUserId(),
+    //         "caption": post.getCaption(),
+    //         "attachment_file": post.getAttachmentFile(),
+    //         "comments_privacy": post.getCommentsPrivacy(),
+    //         "comments": post.getComments(),
+    //         "attachment_file_name": post.getAttachmentFileName(),
+    //         "attachment_type": post.getAttachmentType(),
+    //         "post_privacy": post.getPostPrivacy(),
+    //         "post_type": post.getPostType(),
+    //         "creation_date": post.getCreationDate(),
+    //         "reactions": post.getReactions(),
+    //         "likes": post.getLikes(),
+    //         "tips": post.getTips(),
+    //     };
 
+    //     try {
+
+    //         let response = null;
+    //         if (addDataIntoCache("updatePost") !== null) {
+    //             response = JSON.parse(addDataIntoCache("updatePost"), data);
+    //         }
+    //         // else {
+    //         //     const axiosResponse = await axios.post(`${Constants.BASE_API_URL}/updatePost`, { params: data });
+    //         //     response = { data: axiosResponse.data }; // Use the response from Axios
+    //         // }
+    //         return response;
+
+    //     }
+    //     catch (error) {
+    //         console.error("An error occurred: " + error);
+    //     }
+    // }
+
+    async getUserId() {
         try {
-
-            let response = null;
-            if (addDataIntoCache("updatePost") !== null) {
-                response = JSON.parse(addDataIntoCache("updatePost"), data);
-            }
-            // else {
-            //     const axiosResponse = await axios.post(`${Constants.BASE_API_URL}/updatePost`, { params: data });
-            //     response = { data: axiosResponse.data }; // Use the response from Axios
-            // }
-            return response;
-
+          const userData = getDataFromLocalStorage("userData");
+          if (userData) {
+            return userData.user_id; // Return the user_id from the stored data
+          } else {
+            console.error("User data not found in local storage");
+            return null;
+          }
+        } catch (error) {
+          console.error("Error fetching user ID:", error);
+          return null;
         }
-        catch (error) {
-            console.error("An error occurred: " + error);
-        }
-    }
-
+      }
     async createComment(comment) {
         const data = {
             "user_id": comment.getUserId(),
@@ -472,139 +487,206 @@ class DbHelper {
 
     async getAppUserByID(user_id) {
         try {
-            const data = { "user_id": user_id };
-            let response = null;
-
-            if (getDataFromLocalStorage("userData", data) !== null) {
-                response = getDataFromLocalStorage("userData", data);
+          // Attempt to retrieve user data from local storage
+          const storedUser = getDataFromLocalStorage("userData");
+          console.log(storedUser)
+          if (storedUser) {
+            // Find the user with matching user_id
+            console.log(user_id)
+            const user = storedUser.find(u => u.user_id === user_id);
+            console.log(user);
+            if (user) {
+              // Return the found user as an AppUser instance
+              return new AppUser(
+                user.id,
+                user.user_id,
+                user.username,
+                user.email,
+                user.phone_number,
+                user.password,
+                user.firstname,
+                user.lastname,
+                user.dob,
+                user.country,
+                user.location,
+                user.verification_doc,
+                user.docs_verified,
+                user.bio,
+                user.date_joined,
+                user.last_updated,
+                user.profile_picture,
+                user.cover_picture,
+                user.subscribers,
+                user.connections,
+                user.subscription_price,
+                user.currency_symbol,
+                user.currency,
+                user.creator_mode,
+                user.verified,
+                user.live_mode,
+                user.profile_setup,
+                user.account_type,
+                user.creator_mode_desc_dismissed
+              );
+             
             }
-
-            if (response && response.data && response.data.length !== 0) {
-                // Process user data
-                const userData = response.data[0];
-                const user = new AppUser(
-                    userData.id,
-                    userData.user_id,
-                    userData.username,
-                    userData.email,
-                    userData.phone_number,
-                    userData.password,
-                    userData.firstname,
-                    userData.lastname,
-                    userData.dob,
-                    userData.country,
-                    userData.location,
-                    userData.verification_doc,
-                    userData.docs_verified,
-                    userData.bio,
-                    userData.date_joined,
-                    userData.last_updated,
-                    userData.profile_picture,
-                    userData.cover_picture,
-                    userData.subscribers,
-                    userData.connections,
-                    userData.subscription_price,
-                    userData.currency_symbol,
-                    userData.currency,
-                    userData.creator_mode,
-                    userData.verified,
-                    userData.live_mode,
-                    userData.profile_setup,
-                    userData.account_type,
-                    userData.creator_mode_desc_dismissed
-                );
-                return user;
-                console.log(user)
-            }
+          }
+         
+          return user;
         } catch (error) {
-            console.error("Error fetching user by ID:", error);
+          console.error("Error fetching user by ID:", error);
+          return null;
         }
-        return null;
+      }
+      
+
+    // async getAppUserByID(user_id) {
+    //     try {
+    //         const data = { "user_id": user_id };
+    //         let response = null;
+
+    //         if (getDataFromLocalStorage("userData", data) !== null) {
+    //             response = getDataFromLocalStorage("userData", data);
+    //         }
+
+    //         if (response && response.data && response.data.length !== 0) {
+    //             // Process user data
+    //             const userData = response.data[0];
+    //             const user = new AppUser(
+    //                 userData.id,
+    //                 userData.user_id,
+    //                 userData.username,
+    //                 userData.email,
+    //                 userData.phone_number,
+    //                 userData.password,
+    //                 userData.firstname,
+    //                 userData.lastname,
+    //                 userData.dob,
+    //                 userData.country,
+    //                 userData.location,
+    //                 userData.verification_doc,
+    //                 userData.docs_verified,
+    //                 userData.bio,
+    //                 userData.date_joined,
+    //                 userData.last_updated,
+    //                 userData.profile_picture,
+    //                 userData.cover_picture,
+    //                 userData.subscribers,
+    //                 userData.connections,
+    //                 userData.subscription_price,
+    //                 userData.currency_symbol,
+    //                 userData.currency,
+    //                 userData.creator_mode,
+    //                 userData.verified,
+    //                 userData.live_mode,
+    //                 userData.profile_setup,
+    //                 userData.account_type,
+    //                 userData.creator_mode_desc_dismissed
+    //             );
+    //             return user;
+    //             console.log(user)
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching user by ID:", error);
+    //     }
+    //     return null;
+    // }
+
+   async getAppUserByEmail(email) {
+  try {
+    const key = "userData"; // Assuming userData is the key for stored user data
+    console.log('Fetching user with email:', email); // Debugging statement
+
+    const response = getDataFromLocalStorage(key);
+    console.log('Data retrieved from localStorage:', response); // Debugging statement
+
+    // Check if response is an object and has the email key
+    if (response && response.email === email) {
+      const userData = response; // Assuming response directly contains user data
+      console.log('Matching user data:', userData); // Debugging statement
+
+      const user = new AppUser(
+        userData.id,
+        userData.user_id,
+        userData.username,
+        userData.email,
+        userData.phone_number,
+        userData.password,
+        userData.firstname,
+        userData.lastname,
+        userData.dob,
+        userData.country,
+        userData.location,
+        userData.verification_doc,
+        userData.docs_verified,
+        userData.bio,
+        userData.date_joined,
+        userData.last_updated,
+        userData.profile_picture,
+        userData.cover_picture,
+        userData.subscribers,
+        userData.connections,
+        userData.subscription_price,
+        userData.currency_symbol,
+        userData.currency,
+        userData.creator_mode,
+        userData.verified,
+        userData.live_mode,
+        userData.profile_setup,
+        userData.account_type,
+        userData.creator_mode_desc_dismissed
+      );
+      console.log('User found:', user); // Log the user object
+      return user;
     }
 
-    async getAppUserByEmail(email) {
-        try {
-            const data = { "email": email };
-            let response = null;
+    console.log('User not found for email:', email); // Log when user is not found
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+  }
+  return null;
+}
 
-            if (getDataFromLocalStorage("getAppUserByEmail", data) !== null) {
-                response = getDataFromLocalStorage("getAppUserByEmail", data);
-            }
-
-            if (response && response.data && response.data.length !== 0) {
-                // Process user data
-                const userData = response.data[0];
-                const user = new AppUser(
-                    userData.id,
-                    userData.user_id,
-                    userData.username,
-                    userData.email,
-                    userData.phone_number,
-                    userData.password,
-                    userData.firstname,
-                    userData.lastname,
-                    userData.dob,
-                    userData.country,
-                    userData.location,
-                    userData.verification_doc,
-                    userData.docs_verified,
-                    userData.bio,
-                    userData.date_joined,
-                    userData.last_updated,
-                    userData.profile_picture,
-                    userData.cover_picture,
-                    userData.subscribers,
-                    userData.connections,
-                    userData.subscription_price,
-                    userData.currency_symbol,
-                    userData.currency,
-                    userData.creator_mode,
-                    userData.verified,
-                    userData.live_mode,
-                    userData.profile_setup,
-                    userData.account_type,
-                    userData.creator_mode_desc_dismissed
-                );
-                return user;
-            }
-        } catch (error) {
-            console.error("Error fetching user by email:", error);
-        }
-        return null;
-    }
-
+    
 
     async updateUser(user) {
 
         const data = {
+            "id": user.getId() === undefined ? "" : user.getId(),
             "user_id": user.getUserId() === undefined ? "" : user.getUserId(),
             "username": user.getUserName() === undefined ? "" : user.getUserName(),
+            "email": user.getEmail() === undefined ? "" : user.getEmail(),
+            "phone_number": user.getPhoneNumber() === undefined ? "" : user.getPhoneNumber(),
+            "password": user.getPassword() === undefined ? "" : user.getPassword(),
             "firstname": user.getFirstName() === undefined ? "" : user.getFirstName(),
             "lastname": user.getLastName() === undefined ? "" : user.getLastName(),
-            "password": user.getPassword() === undefined ? "" : user.getPassword(),
-            "creator_mode": user.getCreatorMode() === undefined ? "" : user.getCreatorMode(),
-            "phone_number": user.getPhoneNumber() === undefined ? "" : user.getPhoneNumber(),
+            "dob": user.getDOB() === undefined ? "" : user.getDOB(),  
             "country": user.getCountry() === undefined ? "" : user.getCountry(),
             "location": user.getLocation() === undefined ? "" : user.getLocation(),
             "verification_doc": user.getVerificationDoc() === undefined ? "" : user.getVerificationDoc(),
             "docs_verified": user.getDocsVerified() === undefined ? "" : user.getDocsVerified(),
             "bio": user.getBio() === undefined ? "" : user.getBio(),
+            "date_joined": user.getDateJoined() === undefined ? "" : user.getDateJoined(),
+            "last_updated": user. getLastUpdated() === undefined ? "" : user. getLastUpdated(),
             "profile_picture": user.getProfilePicture() === undefined ? "" : user.getProfilePicture(),
             "cover_picture": user.getCoverPicture() === undefined ? "" : user.getCoverPicture(),
             "subscribers": user.getSubscribers() === undefined ? 0 : user.getSubscribers(),
             "connections": user.getConnections() === undefined ? 0 : user.getConnections(),
             "subscription_price": user.getSubscriptionPrice() === undefined ? 0 : user.getSubscriptionPrice(),
-            "currency": user.getCurrency() === undefined ? "" : user.getCurrency(),
             "currency_symbol": user.getCurrencySymbol() === undefined ? "" : user.getCurrencySymbol(),
+            "currency": user.getCurrency() === undefined ? "" : user.getCurrency(),
+           
+            "creator_mode": user.getCreatorMode() === undefined ? "" : user.getCreatorMode(),
             "verified": user.getVerified() === undefined ? "" : user.getVerified(),
             "live_mode": user.getLiveMode() === undefined ? "" : user.getLiveMode(),
             "profile_setup": user.getProfileSetup() === undefined ? "" : user.getProfileSetup(),
-            "dob": user.getDOB() === undefined ? "" : user.getDOB(),
+            "account_type": user.getAccountType() === undefined ? "" : user.getAccountType(),
             "creator_mode_desc_dismissed": user.getCreatorModeDescDismissed() === undefined ? "" : user.getCreatorModeDescDismissed(),
         };
         try {
-
+     
             addDataIntoCache('userData', data);
+            addDataIntoCache('userDatas', [data]);
             return { success: true, message: 'User data saved successfully' };
         }
         catch (error) {
