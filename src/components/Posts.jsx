@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EachPost from "./EachPost";
-import LoadingSpinner from './LoadingSpinner'; 
-import Header from './Header';  
-import { placeholderPosts } from '.'; 
+import LoadingSpinner from './LoadingSpinner';
+import Header from './Header';
+import { placeholderPosts } from '.';
 import DbHelper from "../utils/DbHelper";
 import { getDataFromLocalStorage } from '../utils/Utils';
 import { gsap } from "gsap";
@@ -10,7 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function Posts({ user_id }) {
+function Posts() {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const [visiblePosts, setVisiblePosts] = useState([]);
@@ -19,14 +19,11 @@ function Posts({ user_id }) {
 
   useEffect(() => {
     async function getPosts() {
-      if (!user_id) {
-        setError('User ID is required.');
-        return;
-      }
+    
 
       try {
         setLoading(true);
-        const fetchedPosts = await new DbHelper().getPostsByUserID(user_id);
+        const fetchedPosts = await new DbHelper().getPosts();
         const storedPosts = getDataFromLocalStorage('posts') || [];
 
         // Combine and sort posts by creation date, assuming posts have a `createdAt` field
@@ -47,7 +44,7 @@ function Posts({ user_id }) {
     }
 
     getPosts();
-  }, [user_id]);
+  }, []);
 
   useEffect(() => {
     const loadMorePosts = () => {
@@ -84,7 +81,7 @@ function Posts({ user_id }) {
   }, [visiblePosts, posts, loading]);
 
   if (error) {
-    return <div>Error: {error}</div>; 
+    return <div>Error: {error}</div>;
   }
 
   if (loading) {

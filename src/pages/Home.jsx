@@ -32,7 +32,7 @@ function Home() {
       <Filter />
 
       <hr className="border-1 border-color-grey/40 my-[20px]" />
-      <Posts user_id={dbHelper.getAppUserByID()}/>
+      <Posts />
       {/*  bottom nav */}
       
       </div>

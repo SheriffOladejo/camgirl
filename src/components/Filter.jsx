@@ -12,7 +12,7 @@ function Filter() {
 
   return (
     <div className="flex justify-end space-x-2 items-center mr-10 md:pt-4">
-      <img src="../src/assets/icons/filter.png" alt="filter" className="w-4 h-4" />
+      <img src="../icons/filter.png" alt="filter" className="w-4 h-4" />
       <p className="text-[0.8rem]">Filter post:</p>
           {/* Filter dropdown menu */}
           <select value={filter} onChange={handleFilterChange} className=" bg-color-lightGrey rounded-full text-[0.8rem] outline-none px-1">

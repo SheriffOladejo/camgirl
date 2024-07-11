@@ -20,7 +20,7 @@ function AccountSettings() {
     <>
       <div className="flex flex-col h-[100vh]  bg-color-white messages-convo-list rounded w-full shadow pb-6 md:h-[80vh] md:sticky      md:mt-7 ">
         <div className='flex py-3  ml-4 justify-start items-center space-x-2'>
-          <img src="../src/assets/icons/back-arrow.png" alt="go back" className='w-4 h-4' onClick={() => navigate('/settings')} />
+          <img src="../icons/back-arrow.png" alt="go back" className='w-4 h-4' onClick={() => navigate('/settings')} />
           <h4 className='font-bold'>Account Settings</h4>
         </div>
         <form action="#" method="POST" className="pt-6 px-3 ">
@@ -34,7 +34,7 @@ function AccountSettings() {
                 placeholder="Casecert@onlyfans.com"
                 value={formInput.email}
                 onChange={handleInputChange} className={`text-color-black     border-2 border-color-lightGrey text-[0.8rem] w-[100%] outline-none rounded px-4 py-2 mt-1`} />
-              <img src="../src/assets/icons/pencil.png" alt="" className="absolute top-4 right-4"/>
+              <img src="../icons/pencil.png" alt="" className="absolute top-4 right-4"/>
             </div>
           </div>
           <div className="mt-4">
@@ -46,7 +46,7 @@ function AccountSettings() {
                 placeholder="Casecert@onlyfans.com"
                 value={formInput.recovery_email}
                 onChange={handleInputChange} className={`text-color-black     border-2 border-color-lightGrey text-[0.8rem] w-[100%] outline-none rounded px-4 py-2 mt-1`} />
-              <img src="../src/assets/icons/pencil.png" alt="" className="absolute top-4 right-4"/>
+              <img src="../icons/pencil.png" alt="" className="absolute top-4 right-4"/>
             </div>
           </div>
         </form>

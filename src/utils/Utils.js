@@ -28,24 +28,24 @@ function isUserSignedIn() {
   };
 }
 
-async function getAppUser() {
-  let dbHelper = new DbHelper();
-  const userId = dbHelper.getAppUserByID()
-  const signinData = isUserSignedIn();
+// async function getAppUser() {
+//   let dbHelper = new DbHelper();
+//   const userId = dbHelper.getAppUserByID()
+//   const signinData = isUserSignedIn();
 
-  const username = signinData["username"];
-  const email = signinData["email"];
-  var user = null;
-  if (email === null || email === undefined) {
-    user = await dbHelper.getAppUserByUsername(username);
-  }
-  else {
-    user = await dbHelper.getAppUserByEmail(email);
-  }
-  return user && userId;
+//   const username = signinData["username"];
+//   const email = signinData["email"];
+//   var user = null;
+//   if (email === null || email === undefined) {
+//     user = await dbHelper.getAppUserByUsername(username);
+//   }
+//   else {
+//     user = await dbHelper.getAppUserByEmail(email);
+//   }
+//   return user && userId;
 
  
-}
+// }
 
 async function sha256(message) {
   const buffer = await crypto.subtle.digest("SHA-256", message);
@@ -118,6 +118,6 @@ export {
   stringToUint8Array,
   sha256,
   isUserSignedIn,
-  getAppUser,
+  // getAppUser,
   scrollToTop,
 };

@@ -95,7 +95,7 @@ function Login() {
         username: userObject.name,
         // other user details from the response as needed
       };
-      await dbHelper.updateUser(userData);
+      await dbHelper.createUser(userData);
     }
 
     loginUser(userData.id);

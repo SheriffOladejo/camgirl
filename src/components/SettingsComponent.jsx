@@ -45,7 +45,7 @@ function SettingsComponent({ setActiveUrl, className }) {
         >
           <span className="md:text-[0.8rem] text-[1rem] pl-3">{setting.title}</span>
           <img
-            src="../src/assets/icons/active-black.png"
+            src="../icons/active-black.png"
             alt="Active"
             className="w-3 h-3 mr-4"
           />
@@ -63,7 +63,7 @@ function SettingsComponent({ setActiveUrl, className }) {
           <div className="relative messages-chat-search-container px-2 mb-4">
             <img
               className="w-4 h-4 cursor-text absolute top-2.5 left-4"
-              src="../src/assets/icons/search-normal.png"
+              src="../icons/search-normal.png"
               alt="search"
             />
             <input

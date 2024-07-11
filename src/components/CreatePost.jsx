@@ -7,7 +7,7 @@ import AppUser from '../models/AppUser';
 import SelectGif from "./SelectGif";
 import DbHelper from '../utils/DbHelper';
 import Post from "../models/Post";
-import { getAppUser, addDataIntoCache } from '../utils/Utils';
+import {  addDataIntoCache } from '../utils/Utils';
 import EmojiPicker from "emoji-picker-react";
 import LoadingSpinner from './LoadingSpinner';
 
@@ -80,14 +80,14 @@ function CreatePost({ addPost }) {
     });
   };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      setLoading(true);
-      var _u = await getAppUser();
-      setUser(_u);
-    };
-    fetchUser();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     setLoading(true);
+  //     var _u = await getAppUser();
+  //     setUser(_u);
+  //   };
+  //   fetchUser();
+  // }, []);
 
   const removeAttachment = () => {
     setSelectedVideo(null);
@@ -190,11 +190,11 @@ function CreatePost({ addPost }) {
       {loading && <LoadingSpinner />}
       <div className="hidden md:flex flex-col rounded-lg overflow-hidden bg-color-white space-y-4 px-4 pt-4">
         <div className="flex items-center ">
-          {user ? <img src={user.getProfilePicture()} alt="" /> : <img src='../src/assets/profileImg.png' className="w-8 h-8 p-[1px] bg-color-5 rounded-full" alt="" />}
+          {user ? <img src={user.getProfilePicture()} alt="" /> : <img src='../profileImg.png' className="w-8 h-8 p-[1px] bg-color-5 rounded-full" alt="" />}
           <div className="flex gap-4  ml-[15px] px-[15px] w-max h-6 rounded border border-color-lightGrey items-center cursor-pointer" onClick={togglePublicityDropdown}>
             <img className="w-4 h-4 relative right-1" src={selectedPublicityImg} alt="Image" />
             <p className="text-color-black font-Lato text-sm font-medium items-center">{selectedPublicity}</p>
-            <img className="w-3 h-3 relative mt-1 left-0" src="../src/assets/icons/chevron-down.png" alt="Image" />
+            <img className="w-3 h-3 relative mt-1 left-0" src="../icons/chevron-down.png" alt="Image" />
           </div>
           {isPublicityDropdownOpen && (
             <div className='w-56 md:w-72 h-auto border border-color-lightGrey bg-color-white rounded m-4 p-4 absolute top-[14%] shadow '>
@@ -238,7 +238,7 @@ function CreatePost({ addPost }) {
           {attachmentType !== '' && (
             <div className="flex items-center justify-center">
               <div onClick={removeAttachment} className="absolute right-0 top-0 mt-4 w-6 h-6 rounded-full bg-color-grey mr-5 flex items-center justify-center cursor-pointer">
-                <img className="w-2 h-2 " src="../src/assets/icons/close.png" alt="remove attachment and close" />
+                <img className="w-2 h-2 " src="../icons/close.png" alt="remove attachment and close" />
               </div>
               {(selectedImage || selectedVideo) && (
                 <div className="mt-4 cursor-pointer absolute top-0 right-7 w-auto px-2 h-7 rounded-lg bg-color-grey mr-7 flex items-center justify-center">
@@ -252,16 +252,16 @@ function CreatePost({ addPost }) {
         <div className="flex justify-between py-3">
           <div className="flex justify-between space-x-2 items-center">
             <div className="element" onClick={() => setShowEmojiPicker(true)}>
-              <img className="w-4 h-4" src="../src/assets/icons/emoji.png" alt="emoji" />
+              <img className="w-4 h-4" src="../icons/emoji.png" alt="emoji" />
             </div>
             <div className="element" onClick={openFileChooser}>
-              <img className="w-4 h-4" src="../src/assets/icons/image.png" alt="image" />
+              <img className="w-4 h-4" src="../icons/image.png" alt="image" />
             </div>
             <div className="element" onClick={() => setShowGifs((prev) => !prev)}>
-              <img className="w-4 h-4" src="../src/assets/icons/gif.png" alt="GIF" />
+              <img className="w-4 h-4" src="../icons/gif.png" alt="GIF" />
             </div>
             <div className="element">
-              <img className="w-5 h-5" src="../src/assets/icons/video.png" alt="Live Video" onClick={openFileChooser} />
+              <img className="w-5 h-5" src="../icons/video.png" alt="Live Video" onClick={openFileChooser} />
             </div>
           </div>
           <button onClick={createPost} className="bg-color-pink text-color-white text-[0.9rem] font-semibold py-1 px-2 rounded " disabled={postText.trim() === '' && !selectedImage && !selectedVideo && !selectedGif}>Post</button>

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import MobileFooterNav from '../../components/MobileFooterNav';
 import { useMediaQuery } from 'react-responsive';
 import LeftBar from '../../components/LeftBar';
 import RightBar from '../../components/RightBar';
 import Header from '../../components/Header';
 import Posts from '../../components/Posts';
+import { AuthContext } from "../../context/authContext";
 
 function CreatorProfile() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -13,6 +14,13 @@ function CreatorProfile() {
   const isOnline = true;
 
   const [activeTab, setActiveTab] = useState('Posts');
+
+  const { currentUser } = useContext(AuthContext);
+
+  const { profile_picture } = currentUser || {};
+
+  const profilePic = profile_picture || null;
+
 
   return (
     <>
@@ -27,13 +35,18 @@ function CreatorProfile() {
                 {headerImg ? (
                   <img src={headerImg} alt="Header" className="w-full h-full object-cover" />
                 ) : (
-                  <img src="../src/assets/background/bgimg.jpg" alt="Profile Pic" className="w-full h-[30vh]  object-cover" />
+                  <img src="../background/bgimg.jpg" alt="Profile Pic" className="w-full h-[30vh]  object-cover" />
                 )}
-                <img src="../src/assets/icons/settings-icon.png" alt="settings" className="w-4 h-4 absolute top-4 right-4" />
+                <img src="../icons/settings-icon.png" alt="settings" className="w-4 h-4 absolute top-4 right-4" />
               </div>
               <div>
                 {/* profile picture */}
-                <img src="../src/assets/images/safari-adventure.jpg" alt="profile picture" className="rounded-full w-20 h-20 absolute  left-4 transform -translate-y-1/2 border-2 border-color-pink" />
+
+                {profilePic ? (
+                  <img src={profilePic} alt="Profile Pic" className="rounded-full w-20 h-20 absolute  left-4 transform -translate-y-1/2 border-2 border-color-pink" />
+                ) : (
+                  <img src="../images/safari-adventure.jpg" alt="profile picture" className="rounded-full w-20 h-20 absolute  left-4 transform -translate-y-1/2 border-2 border-color-pink" />
+                )}
               </div>
             </div>
 
@@ -42,14 +55,14 @@ function CreatorProfile() {
               <div className="flex items-center px-4 justify-between ">
                 <div>
                   <h1 className="font-bold text-[16px] flex items-center">
-                    Case Cert {isVerified && <span><img src="../src/assets/icons/verifiied.png" alt="is verified" className="w-4 h-4 ml-2" /></span>}
+                    Case Cert {isVerified && <span><img src="../icons/verifiied.png" alt="is verified" className="w-4 h-4 ml-2" /></span>}
                   </h1>
                   <p className="font-thin text-[12px]">@handle {isOnline && <span>Online now</span>}</p>
                 </div>
                 <div className="flex justify-end items-center space-x-2  cursor-pointer z-100 bg-color-white">
                   {/* direct message */}
                   <a href="#" className="border px-2 border-color-pink cursor-pointer">
-                    <img src="../src/assets/icons/icon2.png" alt="direct message" className="w-8 h-8" />
+                    <img src="../icons/icon2.png" alt="direct message" className="w-8 h-8" />
                   </a>
                   {/* subscribe btn */}
                   <button className="shadow bg-color-pink py-2 px-4 rounded-md text-color-white text-[12px] cursor-pointer">Subscribe ₦3,000.00/month</button>

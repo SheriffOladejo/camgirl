@@ -2,14 +2,8 @@
 import {useState} from 'react';
 
 function FormInput({ name, type, placeholder, value, onChange, error, className }) {
-  // const [formInput, setFormInput] = useState("");
   const [formError, setFormError] = useState("");
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormInput(value);
-
-    
-  // };
+ 
   return (
     <div>
       <input

@@ -8,9 +8,9 @@ import SelectGif from "../components/SelectGif";
 import DbHelper from '../utils/DbHelper';
 import Post from "../models/Post";
 import { AuthContext } from '../context/authContext';
+import {  addDataIntoCache} from '../utils/Utils';
 
-
-import { getAppUser, addDataIntoCache, getDataFromLocalStorage } from '../utils/Utils';
+// import { getAppUser, addDataIntoCache, getDataFromLocalStorage } from '../utils/Utils';
 import EmojiPicker from "emoji-picker-react";
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useNavigate } from "react-router-dom";

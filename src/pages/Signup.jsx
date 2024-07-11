@@ -10,13 +10,14 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import AppUser from "../models/AppUser";
 import DbHelper from '../utils/DbHelper';
 import { GOOGLE_CLIENT_ID } from "../utils/Constants";
+import { v4 as uuidv4 } from 'uuid'; 
 
 function Signup() {
   const navigate = useNavigate();
   const dbHelper = new DbHelper();
 
   const [termsChecked, setTermsChecked] = useState(false);
-  const [lastUserId, setLastUserId] = useState(0);
+  // const [lastUserId, setLastUserId] = useState(0);
   const [creatorMode, setCreatorMode] = useState('fan');
   const [user, setUser] = useState(null); // Changed to null as initial state
   const [firstname, setFirstname] = useState('');
@@ -27,10 +28,10 @@ function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [isGoogleSignIn, setGoogleSignIn] = useState(false);
 
-  useEffect(() => {
-    setLastUserId(0);
-    // Fetch from database in a real scenario
-  }, []);
+  // useEffect(() => {
+  //   setLastUserId(0);
+  //   // Fetch from database in a real scenario
+  // }, []);
 
   useEffect(() => {
     createAccountGoogle();
@@ -48,7 +49,7 @@ function Signup() {
         "email": user.profileObj.email,
         "password": "",
         "creator_mode": creatorMode,
-        "user_id": email_hash,
+        "user_id": uuidv4(),
         "date_joined": Date.now(),
         "account_type": account_type,
         "username": ""
@@ -176,8 +177,8 @@ function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
-    creator_mode: null, // Initialize creator_mode as null
-    currency: null, // Initialize currency as null
+    creator_mode: null, 
+
   });
 
   const handleInputChange = (e) => {
@@ -215,61 +216,68 @@ function Signup() {
     setLoading(true);
 
     if (!formInput.email || !formInput.username || !formInput.password || formInput.confirmPassword !== formInput.password) {
-      toast.error('Please fill out all required fields correctly');
-      setLoading(false);
-      return;
+        toast.error('Please fill out all required fields correctly');
+        setLoading(false);
+        return;
     }
 
     if (!termsChecked) {
-      toast.error("Please accept the terms and conditions to create an account.");
-      setLoading(false);
-      return;
+        toast.error("Please accept the terms and conditions to create an account.");
+        setLoading(false);
+        return;
     }
 
     try {
-      const usernameResponse = await dbHelper.checkForUsername(formInput.username);
-      const emailResponse = await dbHelper.checkForEmail(formInput.email);
+        console.log('Checking username availability...');
+        const isUsernameTaken = await dbHelper.checkForUsername(formInput.username);
+        console.log('Username availability:', isUsernameTaken);
 
-      if (usernameResponse?.data?.length > 0) {
-        toast.error("This username is already taken");
-        setLoading(false);
-        return;
-      }
+        console.log('Checking email availability...');
+        const isEmailRegistered = await dbHelper.checkForEmail(formInput.email);
+        console.log('Email availability:', isEmailRegistered);
 
-      if (emailResponse?.data?.length > 0) {
-        toast.error("This email is already registered");
-        setLoading(false);
-        return;
-      }
+        if (isUsernameTaken) {
+            toast.error("This username is already taken");
+            setLoading(false);
+            return;
+        }
 
-      const account_type = "manual";
-      const user_Id = lastUserId + 1;
-      const data = {
-        ...formInput,
-        user_id: user_Id,
-        date_joined: Date.now(),
-        account_type: account_type,
-      };
+        if (isEmailRegistered) {
+            toast.error("This email is already registered");
+            setLoading(false);
+            return;
+        }
 
-      const user = new AppUser(
-        null, data.user_id, data.username, data.email, null, data.password, null, null,
-        null, null, null, null, null, null, data.date_joined,
-        null, null, null, null, null,
-        null, null, null, data.creator_mode, null,
-        null, null, data.account_type, null
-      );
+        const account_type = "manual";
+        const user_Id = uuidv4();
+        const data = {
+            ...formInput,
+            user_id: user_Id,
+            date_joined: Date.now(),
+            account_type: account_type,
+        };
 
-      const result = await dbHelper.updateUser(user);
+        const user = new AppUser(
+            null, data.user_id, data.username, data.email, null, data.password, null, null,
+            null, null, null, null, null, null, data.date_joined,
+            null, null, null, null, null,
+            null, null, null, data.creator_mode, null,
+            null, null, data.account_type, null
+        );
 
-      navigate(formInput.creator_mode === 'fan' ? '/profile-setup' : '/setup-profile', { state: { user, profile } });
+        console.log('Creating user:', user);
+        // const result = await dbHelper.createUser(user);
+
+        navigate(formInput.creator_mode === 'fan' ? '/profile-setup' : '/setup-profile', { state: { user, profile } });
 
     } catch (error) {
-      toast.error("An error occurred while signing up.");
-      console.error('Signup error:', error);
+        toast.error("An error occurred while signing up.");
+        console.error('Signup error:', error);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   const togglePassword = () => {
     setShowPassword((prev) => !prev);

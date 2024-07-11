@@ -7,6 +7,7 @@ import DbHelper from "../../utils/DbHelper";
 import { ToastContainer, toast } from "react-toastify";
 import AppUser from "../../models/AppUser";
 import { AuthContext } from "../../context/authContext";
+import { addDataIntoCache } from "../../utils/Utils";
 
 function SetupProfile() {
   const navigate = useNavigate();
@@ -256,7 +257,8 @@ function SetupProfile() {
     console.log("Updated user data:", user2);
 
     try {
-      const result = await dbHelper.updateUser(user2);
+
+      const result = await dbHelper.createUser(user2);
       console.log("Update result:", result);
       navigate("/home");
     } catch (error) {

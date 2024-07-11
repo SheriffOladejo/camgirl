@@ -6,7 +6,7 @@ import Menu from './Menu';
 import { useRef, useState, useEffect } from 'react';
 import TipModal from './TipModal';
 import { useNavigate } from 'react-router-dom';
-import { getAppUser, getDataFromLocalStorage } from '../utils/Utils';
+// import { getAppUser, getDataFromLocalStorage } from '../utils/Utils';
 import AppUser from '../models/AppUser';
 
 function EachPost({ post, postReaction, user_id }) {
@@ -22,21 +22,23 @@ function EachPost({ post, postReaction, user_id }) {
   const [showTipModal, setShowTipModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
-  useEffect(() => {
-    async function fetchPostOwner() {
-      try {
-        // console.log("Fetching post owner for post:", post);
-        const ownerData = await dbHelper.getAppUserByID(post.user_id);
-        // console.log("Fetched owner data:", ownerData);
-        const owner = new AppUser(ownerData);
-        setPostOwner(owner);
-      } catch (error) {
-        console.error("Error fetching post owner:", error);
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchPostOwner() {
+  //     try {
+  //       // console.log("Fetching post owner for post:", post);
 
-    fetchPostOwner();
-  }, [post, dbHelper]);
+  //       if (post.user_id == null) return
+  //       const ownerData = await dbHelper.getAppUserByID(post.user_id);
+  //       // console.log("Fetched owner data:", ownerData);
+  //       const owner = new AppUser(ownerData);
+  //       setPostOwner(owner);
+  //     } catch (error) {
+  //       console.error("Error fetching post owner:", error);
+  //     }
+  //   }
+
+  //   fetchPostOwner();
+  // }, [post, dbHelper]);
 
   const closeMenu = () => {
     setShowMenu(false);
@@ -189,7 +191,7 @@ function EachPost({ post, postReaction, user_id }) {
               <div className="ml-3">
                 <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
                   {postOwner.firstname} {postOwner.lastname}
-                  {verified && <img src='../public/icons/certified.png' className='w-4 h-4' alt='certified' />}
+                  {verified && <img src='../icons/Certified.png' className='w-4 h-4' alt='certified' />}
                   <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
                     {postOwner.getUserName()}
                   </span>
@@ -201,7 +203,7 @@ function EachPost({ post, postReaction, user_id }) {
             </div>
           </a>
           <a href="/menu">
-            <img src="../public/icons/menu.png" alt="post-menu" className='w-3 h-3' />
+            <img src="../icons/menu.png" alt="post-menu" className='w-3 h-3' />
           </a>
         </div>
       ) : (
@@ -214,7 +216,7 @@ function EachPost({ post, postReaction, user_id }) {
               <div className="ml-3">
                 <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
                   Sonali Hirave
-                  {verified && <img src='../public/icons/certified.png' className='w-4 h-4' alt='certified' />}
+                  {verified && <img src='../icons/Certified.png' className='w-4 h-4' alt='certified' />}
                   <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
                     @ShonaDesign
                   </span>
@@ -225,7 +227,7 @@ function EachPost({ post, postReaction, user_id }) {
           </a>
           <div className='relative'>
             <a onClick={openMenu} className='cursor-pointer'>
-              <img src="../public/icons/menu.png" alt="post-menu" className='w-3 h-3' />
+              <img src="../icons/menu.png" alt="post-menu" className='w-3 h-3' />
             </a>
             {showMenu === true && <Menu isOpen={showMenu} cancel={closeMenu} />}
           </div>
@@ -250,25 +252,25 @@ function EachPost({ post, postReaction, user_id }) {
             <div className="flex items-center justify-between">
               <div className="reaction" onClick={() => updateLikes(user)}>
                 <button className="flex items-center text-color-grey font-medium hover:text-color-pink">
-                  <img src={likedByUser ? '' : "../public/icons/like.png"} alt="Like" className="w-4 h-4 mr-1" />
+                  <img src={likedByUser ? '' : "../icons/like.png"} alt="Like" className="w-4 h-4 mr-1" />
                   <p className="text-[10px]">{likesCount} Like</p>
                 </button>
               </div>
               <div onClick={openComment} className="reaction">
                 <button className="flex items-center text-color-grey font-medium rounded-full hover:text-color-pink">
-                  <img src="../public/icons/comment.png" alt="comment" className="mr-1 w-4 h-4" />
+                  <img src="../icons/comment.png" alt="comment" className="mr-1 w-4 h-4" />
                   <p className="text-[10px]">{formatCommentCount(commentsCount)}</p>
                 </button>
               </div>
               <div onClick={openTipModal} className="reaction">
                 <button className="flex items-center text-color-grey font-medium rounded-full hover:text-color-pink">
-                  <img src="../public/icons/tip.png" alt="tip user" className="mr-1 w-4 h-4" />
+                  <img src="../icons/tip.png" alt="tip user" className="mr-1 w-4 h-4" />
                   <p className="text-[10px]">Tip</p>
                 </button>
               </div>
               <div>
                 <button href="#" className="flex items-center text-color-grey text-base leading-6 font-medium rounded-full hover:text-color-pink">
-                  <img src="../public/icons/post-bookmark.png" alt="bookmark post" className="mr-1 w-4 h-4" />
+                  <img src="../icons/post-bookmark.png" alt="bookmark post" className="mr-1 w-4 h-4" />
                   <p className="text-[10px]">Bookmark</p>
                 </button>
               </div>
@@ -284,7 +286,7 @@ function EachPost({ post, postReaction, user_id }) {
               {!user ? (
                 <img src={user.profile_picture} alt={user.firstname} />
               ) : (
-                <img src='../public/profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />
+                <img src='../profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />
               )}
             </div>
             <div className="w-full min-h-[40px] bg-color-white rounded-xl pl-[20px] flex flex-row m-[10px] justify-between items-center">
@@ -308,7 +310,7 @@ function EachPost({ post, postReaction, user_id }) {
                   makeComment(); // Call makeComment function
                 }
               }}>
-                <img src='../public/icons/send.png' alt="Send" />
+                <img src='../icons/send.png' alt="Send" />
               </button>
             </div>
           </div>

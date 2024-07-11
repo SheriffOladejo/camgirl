@@ -7,7 +7,7 @@ function LeftBar({ className }) {
   const { currentUser } = useContext(AuthContext);
   
   // Ensure currentUser is not null before accessing its properties
-  const profilePic = currentUser?.profile_picture || '../public/profileImg.png';
+  const profilePic = currentUser?.profile_picture || '../profileImg.png';
   const username = currentUser?.username || 'Susan';
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -37,7 +37,7 @@ function LeftBar({ className }) {
             className={`flex items-center justify-start px-6 py-2 ${id === activeIndex ? 'bg-color-pink rounded-r-lg text-color-white' : 'text-color-grey'}`}
           >
             {id === activeIndex && (
-              <img src="../public/icons/active.png" alt="Active" className="mr-2 w-1 h-2" />
+              <img src="../icons/active.png" alt="Active" className="mr-2 w-1 h-2" />
             )}
             <img src={item.img} alt={item.title} className="mr-2 w-5 h-5" />
             <span className="text-[0.8rem]">{item.title}</span>

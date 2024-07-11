@@ -34,10 +34,10 @@ function Carousel({text, children, className}) {
           <p className='font-semibold text-[0.8rem]'>{text}</p>
           <div className='flex items-center bg-color-lighterGrey rounded-full  w-90 px-2 py-1.5'>
             <button onClick={()=> handleSlide("left")} >
-              <img src="../src/assets/icons/arrow-left.png" alt="left click" className='w-5 h-5' />
+              <img src="../icons/arrow-left.png" alt="left click" className='w-5 h-5' />
             </button>
             <button onClick={()=> handleSlide("right")}  className='pl-2'>
-              <img src="../src/assets/icons/arrow-right.png" alt="right click" className='w-5 h-5' />
+              <img src="../icons/arrow-right.png" alt="right click" className='w-5 h-5' />
             </button>
 
           </div>

@@ -11,7 +11,7 @@ function NotificationSettings() {
     <div className="flex flex-col h-[100vh] bg-color-white messages-convo-list rounded w-full shadow pb-6 md:h-[71vh] md:sticky   md:pb-4 md:mt-7  ">
 
       <div className='flex py-3  ml-4 justify-start items-center space-x-2'>
-        <img src="../src/assets/icons/back-arrow.png" alt="go back" className='w-4 h-4' onClick={() => navigate('/settings')} />
+        <img src="../icons/back-arrow.png" alt="go back" className='w-4 h-4' onClick={() => navigate('/settings')} />
         <h4 className='font-bold'>Notifications</h4>
       </div>
       <div className='p-4 space-y-6'>
