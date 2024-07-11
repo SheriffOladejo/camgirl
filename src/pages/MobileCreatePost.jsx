@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useContext } from "react"
 import { PUBLICITY_OPTIONS, ATTACHMENT_GIF, ATTACHMENT_IMAGE, ATTACHMENT_VIDEO } from "../utils/Constants";
 import PublicityOptions from '../components/PublicityOptions';
 import TextareaAutosize from '../../node_modules/react-textarea-autosize';
@@ -7,12 +7,18 @@ import AppUser from '../models/AppUser';
 import SelectGif from "../components/SelectGif";
 import DbHelper from '../utils/DbHelper';
 import Post from "../models/Post";
-import { getAppUser, addDataIntoCache, getDataFromLocalStorage } from '../utils/Utils';
+import { AuthContext } from '../context/authContext';
+import {  addDataIntoCache} from '../utils/Utils';
+
+// import { getAppUser, addDataIntoCache, getDataFromLocalStorage } from '../utils/Utils';
 import EmojiPicker from "emoji-picker-react";
 import LoadingSpinner from '../components/LoadingSpinner'
+import { useNavigate } from "react-router-dom";
 
 function MobileCreatePost() {
   const dbHelper = new DbHelper()
+  const navigate = useNavigate();
+  const { currentUser: user } = useContext(AuthContext);
 
   const [postText, setPostText] = useState('');
   const textareaRef = useRef(null);
@@ -20,7 +26,6 @@ function MobileCreatePost() {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedGif, setSelectedGif] = useState(null);
   const [Loading, setLoading] = useState(false)
-  const [user, setUser] = useState(new AppUser());
   const [attachmentType, setAttachmentType] = useState('');
   const [attachmentFileName, setAttachmentFileName] = useState('');
   const [attachmentFile, setAttachmentFile] = useState('');
@@ -29,6 +34,7 @@ function MobileCreatePost() {
   const [selectedPublicity, setSelectedPublicity] = useState(PUBLICITY_OPTIONS[0].title);
   const [selectedPublicityImg, setSelectedPublicityImg] = useState(PUBLICITY_OPTIONS[0].image);
   const [isPublicityDropdownOpen, setIsPublicityDropdownOpen] = useState(false);
+
   const attachmentRef = useRef();
   const gifRef = useRef();
   const [showGifs, setShowGifs] = useState(false);
@@ -67,29 +73,39 @@ function MobileCreatePost() {
   };
   // uploading file
   const uploadAttachment = async () => {
-    if (attachmentFileName === '') {
+    if (!selectedImage && !selectedVideo && !selectedGif) {
       return;
     }
+
     setLoading(true);
 
     try {
-      // Convert the file to a Base64 string
-      const base64String = await fileToBase64(selectedImage || selectedVideo);
+      let attachmentFile = null;
+      let attachmentFileName = '';
 
-      // Store the Base64 string in localStorage
-      addDataIntoCache('attachmentFile', base64String);
+      if (selectedImage) {
+        attachmentFile = await fileToBase64(selectedImage);
+        attachmentFileName = selectedImage.name;
+      } else if (selectedVideo) {
+        attachmentFile = await fileToBase64(selectedVideo);
+        attachmentFileName = selectedVideo.name;
+      } else if (selectedGif) {
+        attachmentFile = selectedGif;
+        attachmentFileName = selectedGif.name;
+      }
 
-      addDataIntoCache('gif', selectedGif)
-      // Update state or perform other actions as needed
+      setAttachmentFile(attachmentFile);
+      setAttachmentFileName(attachmentFileName);
 
       console.log('Upload successful');
-      setLoading(false);
     } catch (error) {
       console.error('Upload error:', error);
+      // Handle error (e.g., show error message)
+    } finally {
       setLoading(false);
-      // toast('Upload error');
     }
   };
+
 
   // Function to convert a File object to a Base64 string
   const fileToBase64 = (file) => {
@@ -101,22 +117,7 @@ function MobileCreatePost() {
     });
   };
 
-  // if the attachment file is not empty, create post
-  // useEffect(() => {
-  //   if (attachmentFile !== '') {
-  //     createPost();
-  //   }
-  // }, [attachmentFile]);
 
-  // fetch user
-  useEffect(() => {
-    const fetchUser = async () => {
-      setLoading(true);
-      var _u = await getAppUser();
-      setUser(_u);
-    };
-    fetchUser();
-  }, []);
   // remove file
   const removeAttachment = () => {
     setSelectedVideo(null);
@@ -195,37 +196,45 @@ function MobileCreatePost() {
 
     setLoading(true);
 
-
-
-
-
     try {
-      // if (!user) {
-      //   throw new Error("User object is null, cannot create post.");
-      // }
-      const post = new Post();
-      const userId = user.getUserId();
-  
-      // Retrieve the user ID
-      post.setUserId(userId);
-      post.setCaption(postText === '' ? "" : postText);
-      post.setAttachmentFile(attachmentFile);
-      post.setAttachmentFileName(attachmentFileName);
-      post.setAttachmentType(attachmentType);
-      post.setPostPrivacy(selectedPublicity);
-      post.setCreationDate(Date.now());
-      post.setCommentsPrivacy(null);
-      post.setLikes(null);
-      post.setTips(null);
+      const postId = new Date().getTime();
+      const userId = dbHelper.getUserId();
+      console.log(userId)
 
-      await uploadAttachment(); // Ensure this is awaited if it's asynchronous
-      await dbHelper.createPost(post); // Ensure this is awaited if it's asynchronous
+      if (!userId) {
+        alert("Error: User ID not found.");
+        setLoading(false);
+        return;
+      }
 
-      // Save to local storage
-      // const storedPosts = getDataFromLocalStorage('posts') || [];
-      const storedPosts = []
-      storedPosts.push(post);
+      // Create a new post object using the Post class constructor
+      const post = new Post(
+        postId,
+        userId,
+        postText === '' ? "" : postText,
+        null, null, null,
+        attachmentFile,
+        attachmentFileName,
+        attachmentType,
+        null,
+        selectedPublicity,
+        null,
+        Date.now(),
+        null, // commentsPrivacy
+        null, null,
+        null, // likes
+        null  // tips
+      );
+
+      console.log(post);
+
+      await uploadAttachment();
+      await dbHelper.createPost(post);
+
+      const storedPosts = dbHelper.getPostsByUserID(userId);
       addDataIntoCache('posts', storedPosts);
+      setPosts(storedPosts); // Update state
+      navigate('/home');
     } catch (error) {
       console.error("Failed to create post:", error);
     } finally {
@@ -235,6 +244,8 @@ function MobileCreatePost() {
       setLoading(false);
     }
   };
+
+
 
 
 
@@ -259,24 +270,24 @@ function MobileCreatePost() {
 
 
   return (
-    <> {!Loading && <LoadingSpinner />}
+    <> {Loading && <LoadingSpinner />}
       <section className="h-[100vh] py-8">
         <div className=" md:hidden rounded-lg overflow-hidden bg-color-white space-y-8 px-4 pt-4">
           <div className="flex justify-between items-center">
-            <img className="cursor-pointer" onClick={() => window.history.back()} src="../src/assets/icons/arrow-left.png" alt="go back" />
-            <button onClick={createPost} className="bg-color-pink text-color-white text-[0.9rem] font-semibold py-1 px-2 rounded opacity-50" type="submit" disabled={postText.trim() === '' && !selectedImage && !selectedVideo && !selectedGif}>Post</button>
+            <img className="cursor-pointer" onClick={() => window.history.back()} src="../public/icons/arrow-left.png" alt="go back" />
+            <button onClick={createPost} className="bg-color-pink text-color-white text-[0.9rem] font-semibold py-1 px-2 rounded opacity-50 " type="submit" disabled={postText.trim() === '' ? !selectedImage && !selectedVideo && !selectedGif : 'opacity-100'}>Post</button>
           </div>
           <hr className="border-1 border-color-lightGrey " />
           <div className="flex items-center ">
             {/* Dynamic image per user */}
             <div className="-mt-[35px]">
-            {user ? <img src={user.getProfilePicture()} alt={user.firstname} /> : <img src='../src/assets/profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />}
+              {user ? <img src={user.getProfilePicture()} alt={user.firstname} className="w-12 h-12 p-[1px] bg-color-pink rounded-full object-cover"/> : <img src='../public/profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />}
             </div>
-          
+
             <div> <div className="flex gap-4  ml-[15px] px-[15px] w-max h-6 rounded border border-color-lightGrey items-center cursor-pointer" onClick={togglePublicityDropdown}>
-              <img className="w-4 h-4 relative right-1" src={selectedPublicityImg} alt="Image" />
-              <p className="text-color-black font-Lato text-sm font-medium items-center">{selectedPublicity}</p>
-              <img className="w-3 h-3 relative mt-1 left-0" src="../src/assets/icons/chevron-down.png" alt="Image" />
+              <img className="w-4 h-4 relative right-1 cursor-pointer" src={selectedPublicityImg} alt="Image" />
+              <p className="text-color-black font-Lato text-sm font-medium items-center cursor-pointer">{selectedPublicity}</p>
+              <img className="w-3 h-3 relative mt-1 left-0" src="../public/icons/chevron-down.png" alt="Image" />
             </div> <div> <TextareaAutosize
               className="w-[80%] mt-4 text-[12px] ml-4 font-inter-serif text-left flex flex-col items-center justify-center resize-none pb-2 border-none outline-none shadow-none "
               placeholder="What's happening!?"
@@ -331,7 +342,7 @@ function MobileCreatePost() {
             {attachmentType !== '' &&
               <div className="flex items-center justify-center">
                 <div onClick={removeAttachment} className="absolute right-0 top-0 mt-4 w-6 h-6 rounded-full bg-color-grey mr-5 flex items-center justify-center cursor-pointer">
-                  <img className="w-2 h-2 " src="../src/assets/icons/close.png" alt="remove attatchment and close" />
+                  <img className="w-2 h-2 " src="../public/icons/close.png" alt="remove attatchment and close" />
                 </div>
                 {(selectedImage || selectedVideo) && <div className="mt-4 cursor-pointer absolute top-0 right-7 w-auto px-2 h-7 rounded-lg bg-color-grey mr-7 flex items-center justify-center"><h4 className="text-[12px] font-normal font-lato text-color-white">Edit</h4></div>}
               </div>
@@ -341,13 +352,13 @@ function MobileCreatePost() {
           <hr className="border-1 border-color-lightGrey w-full mx-auto" />
           <div className="flex justify-start space-x-2 items-center">
             <div className="element" onClick={() => setShowEmojiPicker((prev) => !prev)}>
-              <img className="w-4 h-4" src="../src/assets/icons/emoji.png" alt="emoji" />
+              <img className="w-4 h-4" src="../public/icons/emoji.png" alt="emoji" />
             </div>
             <div className="element" onClick={openFileChooser}>
-              <img className="w-4 h-4" src="../src/assets/icons/image.png" alt="image" />
+              <img className="w-4 h-4" src="../public/icons/image.png" alt="image" />
             </div>
             <div className="element" onClick={() => setShowGifs((prev) => !prev)}>
-              <img className="w-4 h-4" src="../src/assets/icons/gif.png" alt="GIF" />
+              <img className="w-4 h-4" src="../public/icons/gif.png" alt="GIF" />
             </div>
             <input type="file" className="hidden" accept="image/gif, video/gif" ref={gifRef} onChange={handleGifAttachment} />
 

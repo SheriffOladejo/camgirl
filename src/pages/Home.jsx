@@ -5,13 +5,14 @@ import CreatePost from '../components/CreatePost'
 import Filter from '../components/Filter'
 import Posts from '../components/Posts'
 import LoadingSpinner from '../components/LoadingSpinner';
+import DbHelper from '../utils/DbHelper'
 
 
 function Home() {
   const [loading, setLoading] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifs, setShowGifs] = useState(false);
-
+  const dbHelper = new DbHelper()
   const removeDialogs = async () => {
     if (showEmojiPicker) {
       setShowEmojiPicker(false);
@@ -31,7 +32,7 @@ function Home() {
       <Filter />
 
       <hr className="border-1 border-color-grey/40 my-[20px]" />
-      <Posts user_id={'123'}/>
+      <Posts />
       {/*  bottom nav */}
       
       </div>

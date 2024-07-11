@@ -86,7 +86,7 @@ function TipModal({ isOpen, cancel, currency, currency_symbol }) {
         <div className="flex justify-around items-center w-full">
           <button onClick={cancel} className="outline-none border-none font-semibold text-color-grey w-[50%]">Cancel</button>
           <button onClick={tip} className="flex items-center justify-center bg-color-pink text-color-white w-[50%] space-x-2 rounded-md font-semibold px-6 py-2">
-            <img src="../src/assets/icons/tip.png" alt="" />
+            <img src="../icons/tip.png" alt="" />
             <span>Tip</span>
           </button>
         </div>

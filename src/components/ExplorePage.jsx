@@ -16,7 +16,7 @@ function ExplorePage() {
         <div className="relative messages-chat-search-container mr-4 md:mb-4 w-full md:w-72 ">
           <img
             className="w-3 h-3 cursor-text absolute top-2.5 left-4"
-            src="../src/assets/icons/search-black.png"
+            src="../icons/search-black.png"
             alt="search"
           />
           <input
@@ -72,11 +72,11 @@ function ExplorePage() {
         <div className="grid grid-cols-2 md:grid-cols-3  gap-3 text-color-white">
           <div className="rounded relative overflow-hidden cursor-pointer">
             <div>
-              <img src="../src/assets/signup_bg.png" alt="" className="h-52 object-cover"/>
+              <img src="../signup_bg.png" alt="" className="h-52 object-cover"/>
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../src/assets/icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -84,11 +84,11 @@ function ExplorePage() {
           </div>
           <div className="rounded relative overflow-hidden cursor-pointer">
             <div>
-              <img src="../src/assets/signup_bg.png" alt="" className="h-52 object-cover"/>
+              <img src="../signup_bg.png" alt="" className="h-52 object-cover"/>
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../src/assets/icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -96,11 +96,11 @@ function ExplorePage() {
           </div>
           <div className="rounded relative overflow-hidden cursor-pointer">
             <div>
-              <img src="../src/assets/signup_bg.png" alt="" className="h-52 object-cover"/>
+              <img src="../signup_bg.png" alt="" className="h-52 object-cover"/>
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../src/assets/icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -108,11 +108,11 @@ function ExplorePage() {
           </div>
           <div className="rounded relative overflow-hidden cursor-pointer">
             <div>
-              <img src="../src/assets/signup_bg.png" alt="" className="h-52 object-cover"/>
+              <img src="../signup_bg.png" alt="" className="h-52 object-cover"/>
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../src/assets/icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -120,11 +120,11 @@ function ExplorePage() {
           </div>
           <div className="rounded relative overflow-hidden cursor-pointer">
             <div>
-              <img src="../src/assets/signup_bg.png" alt="" className="h-52 object-cover"/>
+              <img src="../signup_bg.png" alt="" className="h-52 object-cover"/>
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../src/assets/icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -132,11 +132,11 @@ function ExplorePage() {
           </div>
           <div className="rounded relative overflow-hidden cursor-pointer">
             <div>
-              <img src="../src/assets/signup_bg.png" alt="" className="h-52 object-cover"/>
+              <img src="../signup_bg.png" alt="" className="h-52 object-cover"/>
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../src/assets/icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>

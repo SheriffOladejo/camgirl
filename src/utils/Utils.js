@@ -28,24 +28,24 @@ function isUserSignedIn() {
   };
 }
 
-async function getAppUser() {
-  let dbHelper = new DbHelper();
-  const userId = dbHelper.getAppUserByID()
-  const signinData = isUserSignedIn();
+// async function getAppUser() {
+//   let dbHelper = new DbHelper();
+//   const userId = dbHelper.getAppUserByID()
+//   const signinData = isUserSignedIn();
 
-  const username = signinData["username"];
-  const email = signinData["email"];
-  var user = null;
-  if (email === null || email === undefined) {
-    user = await dbHelper.getAppUserByUsername(username);
-  }
-  else {
-    user = await dbHelper.getAppUserByEmail(email);
-  }
-  return user && userId;
+//   const username = signinData["username"];
+//   const email = signinData["email"];
+//   var user = null;
+//   if (email === null || email === undefined) {
+//     user = await dbHelper.getAppUserByUsername(username);
+//   }
+//   else {
+//     user = await dbHelper.getAppUserByEmail(email);
+//   }
+//   return user && userId;
 
  
-}
+// }
 
 async function sha256(message) {
   const buffer = await crypto.subtle.digest("SHA-256", message);
@@ -96,19 +96,16 @@ function calculateTimeAgo(timestamp) {
   return result;
 }
 
-function addDataIntoCache(key, data) {
-  console.log(data);
-  localStorage.setItem(key, JSON.stringify(data));
+function addDataIntoCache(key, newData) {
+  let existingData = getDataFromLocalStorage(key) || []; // Retrieve existing data or initialize as empty array
+  existingData.push(newData); // Add new data to the array
+  localStorage.setItem(key, JSON.stringify(existingData)); // Store updated array in localStorage
   console.log("Data Added into localStorage!");
 }
 
 function getDataFromLocalStorage(key) {
   const data = localStorage.getItem(key);
-  if (data) {
-    return JSON.parse(data);
-  } else {
-    return null;
-  }
+  return data ? JSON.parse(data) : null;
 }
 
 
@@ -121,6 +118,6 @@ export {
   stringToUint8Array,
   sha256,
   isUserSignedIn,
-  getAppUser,
+  // getAppUser,
   scrollToTop,
 };

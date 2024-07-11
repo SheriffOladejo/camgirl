@@ -97,19 +97,19 @@ function Menu({ isOpen, cancel, username }) {
           <div className="bg-color-white rounded p-4">
             <div className="flex justify-between items-center">
               <h3 className="font-bold text-center text-[12px]">Post Analytics</h3>
-              <img onClick={closeModal} src="../src/assets/icons/close-dark.png" alt="close" className='w-2 h-2 cursor-pointer' />
+              <img onClick={closeModal} src="../icons/close-dark.png" alt="close" className='w-2 h-2 cursor-pointer' />
             </div>
             <div className='flex justify-between items-center mt-10'>
               <div className='flex flex-col justify-center items-center space-y-1'>
-                <img src="../src/assets/icons/like.png" alt="likes" className='w-3 h-3'/>
+                <img src="../icons/like.png" alt="likes" className='w-3 h-3'/>
                 <span className='text-[10px] text-color-grey/80 font-semibold'>200 Likes</span>
               </div>
               <div className='flex flex-col justify-center items-center space-y-1'>
-                <img src="../src/assets/icons/comment.png" alt="comments" className='w-3 h-3'/>
+                <img src="../icons/comment.png" alt="comments" className='w-3 h-3'/>
                 <span className='text-[10px] text-color-grey/80 font-semibold'>30 Comments</span>
               </div>
               <div className='flex flex-col justify-center items-center space-y-1'>
-                <img src="../src/assets/icons/tip.png" alt="tips"  className='w-3 h-3'/><span className='text-[10px] text-color-grey/80 font-semibold'>$10000 Tips</span>
+                <img src="../icons/tip.png" alt="tips"  className='w-3 h-3'/><span className='text-[10px] text-color-grey/80 font-semibold'>$10000 Tips</span>
               </div>
             </div>
             <div className='flex justify-between items-center mt-10'>

@@ -28,7 +28,7 @@ function ProfileSettings() {
       className="flex flex-col right-bar overflow-y-scroll h-[135vh] bg-color-white  md:h-full md:sticky rounded shadow pb-6 md:pb-4 md:mt-7 w-full"
     >
       <div className='flex py-3  ml-4 justify-start items-center space-x-2'>
-        <img src="../src/assets/icons/back-arrow.png" alt="go back" className='w-4 h-4' onClick={() => navigate("/settings")} />
+        <img src="../icons/back-arrow.png" alt="go back" className='w-4 h-4' onClick={() => navigate("/settings")} />
         <h4 className='font-bold'>Profile Settings</h4>
       </div>
       <div className="w-full h-64">
@@ -38,11 +38,11 @@ function ProfileSettings() {
         ) : (
           <div className=' h-[30vh] relative cursor-pointer before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-color-black/30 before:z-10 before:pointer-events-none hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-full hover:before:h-full hover:before:bg-color-black/30 hover:before:z-10 hover:before:pointer-events-none'>
             <img
-              src="../src/assets/background/bgimg.jpg"
+              src="../background/bgimg.jpg"
               alt="Profile Pic"
               className="w-full h-full object-cover "
             />
-            <img alt='add cover photo' className='profile-settings-gallery-add absolute top-[40%] left-[48%]   transition-opacity transition-visibility duration-300 ease-in-out hover:opacity-100 hover:visible z-20' src='../src/assets/icons/gallery-add.png' />
+            <img alt='add cover photo' className='profile-settings-gallery-add absolute top-[40%] left-[48%]   transition-opacity transition-visibility duration-300 ease-in-out hover:opacity-100 hover:visible z-20' src='../icons/gallery-add.png' />
             {/* <div className='absolute z-40 w-full h-full  bg-color-black/30 left-4 top-0'></div> */}
           </div>
         )}
@@ -50,11 +50,11 @@ function ProfileSettings() {
         {/* profile picture */}
         <div className='relative bottom-12 ml-2 w-24 h-24 rounded-full z-50  flex items-center justify-center cursor-pointer before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-color-black/30  before:rounded-full before:z-10 before:pointer-events-none hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-full hover:before:h-full hover:before:bg-color-black/30 hover:before:z-10 hover:before:pointer-events-none   transition-opacity transition-visibility duration-300 ease-in-out group-hover:opacity-100 group-hover:visible '>
           <img
-            src="../src/assets/images/safari-adventure.jpg"
+            src="../images/safari-adventure.jpg"
             alt="profile picture"
             className="  p-1 bg-color-pink w-full h-full object-cover rounded-full"
           />
-          <img alt='add profile photo' className='profile-settings-gallery-add absolute top-[40%] left-[39%]   transition-opacity transition-visibility duration-300 ease-in-out hover:opacity-100 hover:visible z-20' src='../src/assets/icons/gallery-add.png' />
+          <img alt='add profile photo' className='profile-settings-gallery-add absolute top-[40%] left-[39%]   transition-opacity transition-visibility duration-300 ease-in-out hover:opacity-100 hover:visible z-20' src='../icons/gallery-add.png' />
 
 
         </div>
@@ -115,7 +115,7 @@ function ProfileSettings() {
         </form>
         <hr className='mt-4 border-color-lightGrey ' />
         <button className='flex items-center justify-start mt-4 text-[14px] text-color-grey font-semibold'>
-          <img src="../src/assets/icons/profile.png" alt="" className='mr-2'/>
+          <img src="../icons/profile.png" alt="" className='mr-2'/>
           switch to Creator
         </button>
       </div>

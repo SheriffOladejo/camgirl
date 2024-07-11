@@ -1,46 +1,55 @@
-import DbHelper from '../utils/DbHelper'
+import DbHelper from '../utils/DbHelper';
 import usePostDetails from '../hooks/usePostDetails';
-
-import PostCommentModel from '../models/PostCommentModel'
-
-import TextareaAutosize from '../../node_modules/react-textarea-autosize';
-import Menu from './Menu'
+import PostCommentModel from '../models/PostCommentModel';
+import TextareaAutosize from 'react-textarea-autosize';
+import Menu from './Menu';
 import { useRef, useState, useEffect } from 'react';
-import TipModal from './TipModal'
+import TipModal from './TipModal';
 import { useNavigate } from 'react-router-dom';
-import { getAppUser, getDataFromLocalStorage } from '../utils/Utils';
+// import { getAppUser, getDataFromLocalStorage } from '../utils/Utils';
 import AppUser from '../models/AppUser';
-function EachPost({ post, postReaction }) {
 
+function EachPost({ post, postReaction, user_id }) {
   const dbHelper = new DbHelper();
-  const user = getAppUser()
-  let verified = true
   const navigate = useNavigate();
   const textareaRef = useRef(null);
-
-
+  const verified = true;
   const { likesCount, commentsCount, likedByUser, updateLikes, setCommentsCount } = usePostDetails(post);
-  // const [postOwner, setPostOwner] = useState(dbHelper.getAppUserByID(user_id));
+  const [postOwner, setPostOwner] = useState(null);
   const [showComment, setShowComment] = useState(false);
-
-  const [postOwner, setPostOwner] = useState(undefined)
+  const [user, setUser] = useState(new AppUser());
   const [comment, setComment] = useState('');
-
   const [showTipModal, setShowTipModal] = useState(false);
-  const [showMenu , setShowMenu] = useState(false)
- 
+  const [showMenu, setShowMenu] = useState(false);
 
-    // Function to close the menu
-    const closeMenu = () => {
-      setShowMenu(false);
-  
-    };
-    const openMenu = () => {
-      setShowMenu(true);
-  
-    };
-  const makeComment = async (e) => {
+  // useEffect(() => {
+  //   async function fetchPostOwner() {
+  //     try {
+  //       // console.log("Fetching post owner for post:", post);
 
+  //       if (post.user_id == null) return
+  //       const ownerData = await dbHelper.getAppUserByID(post.user_id);
+  //       // console.log("Fetched owner data:", ownerData);
+  //       const owner = new AppUser(ownerData);
+  //       setPostOwner(owner);
+  //     } catch (error) {
+  //       console.error("Error fetching post owner:", error);
+  //     }
+  //   }
+
+  //   fetchPostOwner();
+  // }, [post, dbHelper]);
+
+  const closeMenu = () => {
+    setShowMenu(false);
+  };
+
+  const openMenu = () => {
+    setShowMenu(true);
+  };
+
+  const makeComment = async () => {
+    console.log("Making comment:", comment);
     let user_ids = JSON.stringify([]);
     let privacy = -1;
     let post_comment = new PostCommentModel(
@@ -60,8 +69,10 @@ function EachPost({ post, postReaction }) {
     setComment("");
     let c = Number(commentsCount) + 1;
     setCommentsCount(`${c}`);
-  }
-  const openComment = (event) => {
+    console.log("Comment made successfully.");
+  };
+
+  const openComment = () => {
     setShowComment(true);
     let post_id = post.getId();
     let owner_id = postOwner.getUserId();
@@ -71,7 +82,8 @@ function EachPost({ post, postReaction }) {
         owner_id
       }
     });
-  }
+  };
+
   const formatCommentCount = () => {
     if (commentsCount <= 1) {
       return `${commentsCount} Comment`;
@@ -79,26 +91,14 @@ function EachPost({ post, postReaction }) {
       return `${commentsCount} Comments`;
     }
   };
+
   const formatLikesCount = (count) => {
     if (count === 1) {
-      return `${count} Comment`;
+      return `${count} Like`;
     } else {
-      return `${count} Comments`;
+      return `${count} Likes`;
     }
   };
-  useEffect(() => {
-    async function fetchPostOwner() {
-      try {
-        const owner = await dbHelper.getAppUserByID(post.getUserId());
-        setPostOwner(owner);
-        console.log(postOwner)
-      } catch (error) {
-        console.error("Error fetching post owner:", error);
-      }
-    }
-
-    fetchPostOwner();
-  }, [post, dbHelper]);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && comment.trim()) {
@@ -106,43 +106,37 @@ function EachPost({ post, postReaction }) {
       makeComment();
     }
   };
-  // Function to close the tip modal
+
   const closeTipModal = () => {
     setShowTipModal(false);
-
   };
+
   const openTipModal = () => {
     setShowTipModal(true);
-
   };
 
   const renderPostContent = (post) => {
     if (!post || !post.getAttachmentType) {
       return (
-        <div >
-          {post.image &&
-            <div className='flex flex-col space-y-3 '>
-              <p className='text-[12px] font-semibold'>{post.caption}</p>
-              <div className="w-[100%] h-[20rem] shadow ">
-
-                <img src={post.image} alt="Post Media" className="object-cover absolute  rounded-md w-full h-full " />
-              </div>
-
-            </div>
-
-          }
-          {post.video &&
+        <div>
+          {post.image && (
             <div className='flex flex-col space-y-3'>
               <p className='text-[12px] font-semibold'>{post.caption}</p>
               <div className="w-[100%] h-[20rem] shadow">
-                <video src={post.video} alt="Post Media" className="object-cover absolute  rounded-md w-full h-full " controls />
+                <img src={post.image} alt="Post Media" className="object-cover absolute rounded-md w-full h-full" />
               </div>
-
             </div>
-
-          }
-          {/* <p className='text-[12px] font-semibold'>{post.caption}</p> */}
-        </div>);
+          )}
+          {post.video && (
+            <div className='flex flex-col space-y-3'>
+              <p className='text-[12px] font-semibold'>{post.caption}</p>
+              <div className="w-[100%] h-[20rem] shadow">
+                <video src={post.video} alt="Post Media" className="object-cover absolute rounded-md w-full h-full" controls />
+              </div>
+            </div>
+          )}
+        </div>
+      );
     }
 
     switch (post.getAttachmentType()) {
@@ -179,187 +173,151 @@ function EachPost({ post, postReaction }) {
     }
   };
 
-
   return (
     <div className='bg-color-white p-4 rounded-lg  flex flex-col space-y-4 relative  w-[100%]'>
-      {showTipModal === true && <TipModal isOpen={showTipModal} cancel={closeTipModal} currency={user.currency} currency_symbol={user.currencySymbol} />}
-
+      {showTipModal === true && <TipModal isOpen={showTipModal} cancel={closeTipModal} currency={user.currency} currency_symbol={user.currency_symbol} />}
 
       {postOwner ? (
-        <>
-
-          <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
-            <a href="#" className="flex-shrink-0 group block">
-              <div className="flex items-center ">
-                <div className='p-[1px] bg-color-pink rounded-full'>
-                  {postOwner ? <img className="inline-block h-8 w-8 rounded-full" src={postOwner.profile_picture} alt="{`${postOwner}'s profile picture`}" /> :
-                    <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />}
-                </div>
-                <div className="ml-3">
-                  <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
-                    {postOwner ? postOwner.getFirstName() + postOwner.getLastName() : 'Sonali Hirave'}
-
-
-                    {verified && <img src='../src/assets/icons/certified.png' className='w-4 h-4' alt='certified' />}
-                    <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
-                      {postOwner ? postOwner.getUsername() : '@ShonaDesign'}
-
-                    </span>
-                  </p>
-                  <p className='text-[10px]'>
-                    {post.getCreationDate()}
-                    13h ago</p>
-                </div>
-              </div>
-            </a>
-            <a href="/menu">
-              <img src="../src/assets/icons/menu.png" alt="post-menu" className='w-3 h-3' />
-            </a>
-          </div>
-        </>
-      ) :
-        <>
-
-          <div className="flex  pb-0 justify-between items-center w-full">
-            <a href="#" className="flex-shrink-0 group block">
-              <div className="flex items-center ">
-                <div className='p-[1px] bg-color-pink rounded-full'>
-
+        <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
+          <a href="#" className="flex-shrink-0 group block">
+            <div className="flex items-center">
+              <div className='p-[1px] bg-color-pink rounded-full'>
+                {postOwner ? (
+                  <img className="inline-block h-8 w-8 rounded-full" src={postOwner.profile_picture} alt={`${postOwner.firstname}'s profile picture`} />
+                ) : (
                   <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
-                </div>
-                <div className="ml-3">
-                  <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
-                    Sonali Hirave
-
-
-                    {verified && <img src='../src/assets/icons/certified.png' className='w-4 h-4' alt='certified' />}
-                    <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
-                      @ShonaDesign
-
-                    </span>
-                  </p>
-                  <p className='text-[10px]'>
-
-                    13h ago</p>
-                </div>
+                )}
               </div>
-            </a>
-            <div className='relative'>
-            <a  onClick={openMenu} className='cursor-pointer '>
-              <img src="../src/assets/icons/menu.png" alt="post-menu" className='w-3 h-3' />
+              <div className="ml-3">
+                <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
+                  {postOwner.firstname} {postOwner.lastname}
+                  {verified && <img src='../icons/Certified.png' className='w-4 h-4' alt='certified' />}
+                  <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
+                    {postOwner.getUserName()}
+                  </span>
+                </p>
+                <p className='text-[10px]'>
+                  {post ? post.creation_date : '13h ago'} 
+                </p>
+              </div>
+            </div>
+          </a>
+          <a href="/menu">
+            <img src="../icons/menu.png" alt="post-menu" className='w-3 h-3' />
+          </a>
+        </div>
+      ) : (
+        <div className="flex pb-0 justify-between items-center w-full">
+          <a href="#" className="flex-shrink-0 group block">
+            <div className="flex items-center">
+              <div className='p-[1px] bg-color-pink rounded-full'>
+                <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+              </div>
+              <div className="ml-3">
+                <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
+                  Sonali Hirave
+                  {verified && <img src='../icons/Certified.png' className='w-4 h-4' alt='certified' />}
+                  <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
+                    @ShonaDesign
+                  </span>
+                </p>
+                <p className='text-[10px]'>13h ago</p>
+              </div>
+            </div>
+          </a>
+          <div className='relative'>
+            <a onClick={openMenu} className='cursor-pointer'>
+              <img src="../icons/menu.png" alt="post-menu" className='w-3 h-3' />
             </a>
             {showMenu === true && <Menu isOpen={showMenu} cancel={closeMenu} />}
-            </div>
-           
           </div>
-        </>}
-      {/* Post Content */}
+        </div>
+      )}
+
       <div className='w-full relative'>
         {renderPostContent(post)}
       </div>
-      <div className=" py-6 w-full">
-
-
-
+      <div className="py-6 w-full">
         <hr className="border-1 border-color-grey/40 my-[20px]" />
-        <div className="flex  items-center">
+        <div className="flex items-center">
           <div className="text-[14px]">😀</div>
           <div className="text-[14px] ml-[-8px]">😂</div>
           <div className="text-[14px] ml-[-8px]">😎</div>
-          {/* <div className="font-medium text-[14px] ml-1"> Daniel jams and 20 others reacted</div> */}
           <div className="feeditem-text">
-            {/* {`${post.getLikes()} liked`} */}
           </div>
         </div>
         {postReaction}
-        {/* Action Buttons */}
         <div className="flex mt-4">
           <div className="w-full">
-
             <div className="flex items-center justify-between">
-              {/* like */}
               <div className="reaction" onClick={() => updateLikes(user)}>
-                <button className=" flex items-center text-color-grey  font-medium hover:text-color-pink">
-                  {/* add image for action */}
-                  <img src={likedByUser ? '' : "../src/assets/icons/like.png"} alt="Like" className="w-4 h-4 mr-1" />
-                  <p className="text-[10px]">{likesCount}Like</p>
+                <button className="flex items-center text-color-grey font-medium hover:text-color-pink">
+                  <img src={likedByUser ? '' : "../icons/like.png"} alt="Like" className="w-4 h-4 mr-1" />
+                  <p className="text-[10px]">{likesCount} Like</p>
                 </button>
               </div>
-              {/* comment */}
               <div onClick={openComment} className="reaction">
-                <button className=" flex items-center text-color-grey  font-medium rounded-full hover:text-color-pink">
-                  <img src="../src/assets/icons/comment.png" alt="comment" className="mr-1 w-4 h-4" />
+                <button className="flex items-center text-color-grey font-medium rounded-full hover:text-color-pink">
+                  <img src="../icons/comment.png" alt="comment" className="mr-1 w-4 h-4" />
                   <p className="text-[10px]">{formatCommentCount(commentsCount)}</p>
                 </button>
               </div>
-              {/* tip */}
               <div onClick={openTipModal} className="reaction">
-                <button className=" flex items-center text-color-grey font-medium rounded-full hover:text-color-pink" >
-                  <img src="../src/assets/icons/tip.png" alt="tip user" className="mr-1 w-4 h-4" />
+                <button className="flex items-center text-color-grey font-medium rounded-full hover:text-color-pink">
+                  <img src="../icons/tip.png" alt="tip user" className="mr-1 w-4 h-4" />
                   <p className="text-[10px]">Tip</p>
                 </button>
               </div>
-              {/* bookmark */}
-              <div className=" ">
-                <button href="#" className=" flex items-center text-color-grey text-base leading-6 font-medium rounded-full hover:text-color-pink">
-                  <img src="../src/assets/icons/post-bookmark.png" alt="bookmark post" className="mr-1 w-4 h-4" />
+              <div>
+                <button href="#" className="flex items-center text-color-grey text-base leading-6 font-medium rounded-full hover:text-color-pink">
+                  <img src="../icons/post-bookmark.png" alt="bookmark post" className="mr-1 w-4 h-4" />
                   <p className="text-[10px]">Bookmark</p>
                 </button>
               </div>
-
-
             </div>
           </div>
-
-
         </div>
-
       </div>
-      {showComment === true ? <div className="bg-color-2 rounded h-auto w-full flex flex-row items-center">
-        <div className='w-full flex flex-row items-center'>
-          <div className="ml-2">
-            {!user ? <img src={user.profile_picture} alt={user.firstname} /> : <img src='../src/assets/profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />}
-          </div>
-          <div className="w-full min-h-[40px] bg-color-white rounded-xl pl-[20px] flex flex-row m-[10px] justify-between items-center">
-            <TextareaAutosize
-              className="feed-item-input"
-              placeholder="Add a comment"
-              ref={textareaRef}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault(); // Prevent default behavior of Enter key
-                  if (comment.trim() !== '') { // Check if comment is not empty or whitespace
-                    makeComment(); // Call makeComment function
+
+      {showComment === true ? (
+        <div className="bg-color-2 rounded h-auto w-full flex flex-row items-center">
+          <div className='w-full flex flex-row items-center'>
+            <div className="ml-2">
+              {!user ? (
+                <img src={user.profile_picture} alt={user.firstname} />
+              ) : (
+                <img src='../profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />
+              )}
+            </div>
+            <div className="w-full min-h-[40px] bg-color-white rounded-xl pl-[20px] flex flex-row m-[10px] justify-between items-center">
+              <TextareaAutosize
+                className="feed-item-input"
+                placeholder="Add a comment"
+                ref={textareaRef}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault(); // Prevent default behavior of Enter key
+                    if (comment.trim() !== '') { // Check if comment is not empty or whitespace
+                      makeComment(); // Call makeComment function
+                    }
                   }
-
-                }
-              }}
-            />
-
-            <button className='pr-[10px]' onClick={
-              (e) => {
-
-
+                }}
+              />
+              <button className='pr-[10px]' onClick={() => {
                 if (comment.trim() !== '') {
                   makeComment(); // Call makeComment function
                 }
-
               }}>
-              <img
-                src='../src/assets/icons/send.png'
-                alt="Send"
-              />
-            </button>
-
+                <img src='../icons/send.png' alt="Send" />
+              </button>
+            </div>
           </div>
         </div>
-      </div> : ''}
-
-
+      ) : ''}
     </div>
-  )
+  );
 }
 
-export default EachPost
+export default EachPost;

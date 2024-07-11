@@ -44,8 +44,31 @@ class AppUser {
         user_id: ${this.user_id}, 
         username: ${this.username}, 
         email: ${this.email}, 
-        // ... include other properties ...
-        profile_setup: ${this.profile_setup} 
+        phone_number: ${this.phone_number},
+        password: ${this.password},
+        firstname: ${this.firstname},
+        lastname: ${this.lastname},
+        dob: ${this.dob},
+        country: ${this.country},
+        location: ${this.location},
+        verification_doc: ${this.verification_doc},
+        docs_verified: ${this.docs_verified},
+        bio: ${this.bio},
+        date_joined: ${this.date_joined},
+        last_updated: ${this.last_updated},
+        profile_picture: ${this.profile_picture},
+        cover_picture: ${this.cover_picture},
+        subscribers: ${this.subscribers},
+        connections: ${this.connections},
+        subscription_price: ${this.subscription_price},
+        currency_symbol: ${this.currency_symbol},
+        currency: ${this.currency},
+        creator_mode: ${this.creator_mode},
+        verified: ${this.verified},
+        live_mode: ${this.live_mode},
+        profile_setup: ${this.profile_setup},
+        account_type: ${this.account_type},
+        creator_mode_desc_dismissed: ${this.creator_mode_desc_dismissed}
       }`;
     }
 

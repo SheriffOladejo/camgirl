@@ -3,37 +3,37 @@ export const navigation = [
     id: "0",
     title: "Home",
     url: "/home",
-    img: "../src/assets/icons/home.png"
+    img: "../public/icons/home.png"
   },
   {
     id: "1",
     title: "Explore",
     url: "/discover",
-    img: "../src/assets/icons/discover.png"
+    img: "../public/icons/discover.png"
   },
   {
     id: "2",
     title: "Dashboard",
     url: "/dashboard",
-    img: "../src/assets/icons/wallet.png"
+    img: "../public/icons/wallet.png"
   },
   {
     id: "3",
     title: "Messages",
     url: "/messages",
-    img: "../src/assets/icons/message.png"
+    img: "../public/icons/message.png"
   },
   {
     id: "4",
     title: "Subscriptions",
     url: "/subscriptions",
-    img: "../src/assets/icons/subscriptions.png"
+    img: "../public/icons/subscriptions.png"
   },
   {
     id: "5",
     title: "Settings",
     url: "/settings",
-    img: "../src/assets/icons/setting.png"
+    img: "../public/icons/setting.png"
   },
   
 ];
@@ -78,25 +78,25 @@ export const menu = [
     // id: "0",
     alt: "subscribe",
  text: 'Subscribe to ',
-    img: "../src/assets/icons/profile-tick.png"
+    img: "../public/icons/profile-tick.png"
   },
   {
     // id: "1",
     alt: "insight",
     text: 'View Insight',
-    img: "../src/assets/icons/chart.png"
+    img: "../public/icons/chart.png"
   },
   {
     // id: "2",
     alt: "block",
     text: 'Block ',
-    img: "../src/assets/icons/slash.svg"
+    img: "../public/icons/slash.svg"
   },
   {
     // id: "3",
     alt: "Report",
     text: 'Report ',
-    img: "../src/assets/icons/flag.png"
+    img: "../public/icons/flag.png"
   },
   
  
@@ -107,25 +107,25 @@ export const mobileNav = [
     // id: "0",
     title: "Home",
     url: "/home",
-    img: "../src/assets/icons/home.png"
+    img: "../public/icons/home.png"
   },
   {
     // id: "1",
     title: "Explore",
     url: "/discover",
-    img: "../src/assets/icons/discover.png"
+    img: "../public/icons/discover.png"
   },
   {
     // id: "2",
     title: "Notifications",
     url: "/notifications",
-    img: "../src/assets/icons/notification.png"
+    img: "../public/icons/notification.png"
   },
   {
     // id: "3",
     title: "Messages",
     url: "/messages",
-    img: "../src/assets/icons/message.png"
+    img: "../public/icons/message.png"
   },
   
  
@@ -137,25 +137,25 @@ export const profileMenu = [
     // id: "0",
     title: "Profile",
     url: "/profile",
-    img: "../src/assets/icons/profile.png"
+    img: "../public/icons/profile.png"
   },
   {
     // id: "1",
     title: "Settings",
     url: "/settings",
-    img: "../src/assets/icons/setting.png"
+    img: "../public/icons/setting.png"
   },
   {
     // id: "2",
     title: "bookmark",
     url: "/bookmark",
-    img: "../src/assets/icons/bookmark.png"
+    img: "../public/icons/bookmark.png"
   },
   {
     // id: "3",
     title: "Subscriptions",
     url: "/subscriptions",
-    img: "../src/assets/icons/subscriptions.png"
+    img: "../public/icons/subscriptions.png"
   },
   
   {
@@ -163,7 +163,7 @@ export const profileMenu = [
     title: "Log out",
     // logout
     url: "/",
-    img: "../src/assets/icons/logout.png"
+    img: "../public/icons/logout.png"
   },
   
   
@@ -196,175 +196,173 @@ export const stories = [
   {
       
       name: "Adventure Time",
-      img: "../src/assets/background/bgimg.jpg"
+      img: "../public/background/bgimg.jpg"
   },
   {
           name: "Lost in Space",
-      img: "../src/assets/background/bgimg.jpg"
+      img: "../public/background/bgimg.jpg"
   },
   {
    
       name: "Mystery Island",
-      img: "../src/assets/background/bgimg.jpg"
+      img: "../public/background/bgimg.jpg"
   },
   {
      
       name: "The Forest",
-      img: "../src/assets/background/bgimg.jpg"
+      img: "../public/background/bgimg.jpg"
   },
   {
      
       name: "Underwater Quest",
-      img: "../src/assets/background/bgimg.jpg"
+      img: "../public/background/bgimg.jpg"
   },
   {
   
     name: "Adventure Time",
-    img: "../src/assets/background/bgimg.jpg"
+    img: "../public/background/bgimg.jpg"
 },
 {
  
     name: "Lost in Space",
-    img: "../src/assets/background/bgimg.jpg"
+    img: "../public/background/bgimg.jpg"
 },
 {
  
     name: "Mystery Island",
-    img: "../src/assets/background/bgimg.jpg"
+    img: "../public/background/bgimg.jpg"
 },
 {
    
     name: "The Forest",
-    img: "../src/assets/background/bgimg.jpg"
+    img: "../public/background/bgimg.jpg"
 },
 {
    
     name: "Underwater Quest",
-    img: "../src/assets/background/bgimg.jpg"
+    img: "../public/background/bgimg.jpg"
 },
 {
   
   name: "Adventure Time",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
       
   name: "Adventure Time",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
       name: "Lost in Space",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
 
   name: "Mystery Island",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
  
   name: "The Forest",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
  
   name: "Underwater Quest",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
 
 name: "Adventure Time",
-img: "../src/assets/background/bgimg.jpg"
+img: "../public/background/bgimg.jpg"
 },
 {
 
 name: "Lost in Space",
-img: "../src/assets/background/bgimg.jpg"
+img: "../public/background/bgimg.jpg"
 },
 {
 
 name: "Mystery Island",
-img: "../src/assets/background/bgimg.jpg"
+img: "../public/background/bgimg.jpg"
 },
 {
 
 name: "The Forest",
-img: "../src/assets/background/bgimg.jpg"
+img: "../public/background/bgimg.jpg"
 },
 {
 
 name: "Underwater Quest",
-img: "../src/assets/background/bgimg.jpg"
+img: "../public/background/bgimg.jpg"
 },
 {
 
 name: "Adventure Time",
-img: "../src/assets/background/bgimg.jpg"
+img: "../public/background/bgimg.jpg"
 },
 {
   name: "Lost in Space",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
 
   name: "Mystery Island",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
 
   name: "The Forest",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 },
 {
  
   name: "Underwater Quest",
-  img: "../src/assets/background/bgimg.jpg"
+  img: "../public/background/bgimg.jpg"
 }
 ];
 export const liveUsers = [
-  { id: 1, username: 'user1', avatar: '../src/assets/profileImg.png' },
-  { id: 2, username: 'user2', avatar: '../src/assets/profileImg.png' },
-  { id: 3, username: 'user3', avatar: '../src/assets/profileImg.png' },
-  { id: 4, username: 'user4', avatar: '../src/assets/profileImg.png' },
-  { id: 5, username: 'user5', avatar: '../src/assets/profileImg.png' },
+  { id: 1, username: 'user1', avatar: '../public/profileImg.png' },
+  { id: 2, username: 'user2', avatar: '../public/profileImg.png' },
+  { id: 3, username: 'user3', avatar: '../public/profileImg.png' },
+  { id: 4, username: 'user4', avatar: '../public/profileImg.png' },
+  { id: 5, username: 'user5', avatar: '../public/profileImg.png' },
   // Add more users as needed
 ];
-export const posts = [
+// placeholderPosts.js
+export const placeholderPosts = [
   {
     user_id: "0",
-    image: "../src/assets/images/cascade-caverns.jpg",
+    image: "../public/images/cascade-caverns.jpg",
     caption: "Embark on an unforgettable adventure with a visit to the spectacular Cascade Caverns."
   },
   {
     user_id: "1",
-    image: "../src/assets/images/local-eats.jpg",
+    image: "../public/images/local-eats.jpg",
     caption: "Dive into the world of culinary wonders and discover the best local foods that tantalize your taste buds."
   },
   {
     user_id: "2",
-   
-    video:"../src/assets/videos/city-landscapes.mp4" ,
+    video: "../public/videos/city-landscapes.mp4",
     caption: "Get close to nature and experience wildlife like never before on a thrilling safari adventure."
   },
   {
     user_id: "3",
-   
-    image: "../src/assets/images/safari-adventure.jpg",
+    image: "../public/images/safari-adventure.jpg",
     caption: "Join us as we uncover the secrets and sights of the world's most fascinating urban landscapes."
   },
   {
     user_id: "4",
-   
-    video:  "../src/assets/videos/mahogany.mp4",
+    video: "../public/videos/mahogany.mp4",
     caption: "Soak up the sun and enjoy the serene beauty of our handpicked tropical paradise beaches."
   },
   {
     user_id: "5",
-   
-    video:  "../src/assets/videos/Happy Penis.mp4",
+    video: "../public/videos/Happy Penis.mp4",
     caption: "Soak up the sun and enjoy the serene beauty of our handpicked tropical paradise beaches."
   }
 ];
+
 
 
 export const creatorGallery =  [
@@ -373,72 +371,72 @@ export const creatorGallery =  [
     
      width: 10,
      height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
     
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
     
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
   
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
   
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
   
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
   
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
     
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
     
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
    
      width: 10,
      height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
    
     width: 10,
     height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   },
   {
     
      width: 10,
      height:  10,
-    src: "../src/assets/images/safari-adventure.jpg",
+    src: "../public/images/safari-adventure.jpg",
   }
 ]

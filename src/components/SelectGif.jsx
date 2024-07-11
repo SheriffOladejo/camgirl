@@ -98,11 +98,11 @@ function SelectGif({ onSelect, onClose }) {
       <div className='bg-white rounded-lg p-4 overflow-y-auto max-h-full'>
         <div className='flex justify-between items-center pb-4'>
           <div onClick={closeGif} className=" w-6 h-6 rounded-full bg-color-pink  flex items-center justify-center cursor-pointer">
-            <img className="w-2 h-2 " src="../src/assets/icons/close.png" alt="remove attachment and close" />
+            <img className="w-2 h-2 " src="../icons/close.png" alt="remove attachment and close" />
           </div>
 
           <div className="relative ">
-            <img className="w-4 h-4 cursor-text absolute top-2 left-2" src="../src/assets/icons/search-normal.png" alt="search" />
+            <img className="w-4 h-4 cursor-text absolute top-2 left-2" src="../icons/search-normal.png" alt="search" />
             <input className="placeholder:text-color-pink text-[12px] outline-none border border-color-pink rounded-full pl-8 pr-4 py-2 "
               type="search"
               value={searchQuery}
