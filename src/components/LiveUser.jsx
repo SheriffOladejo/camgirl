@@ -3,7 +3,7 @@ import { AuthContext } from '../context/authContext';
 import { useLiveUsers } from '../context/liveUserContext';
 function LiveUser({userId, avatar}) {
   const {currentUser} = useContext(AuthContext)
-  const profilePic = currentUser ? currentUser.profilePic : null;
+  const { profile_picture } = currentUser || {};
   const { liveUsers} = useLiveUsers();
   const isLive = liveUsers.some(user => user.id === userId);
     // Render nothing if the user is not live
@@ -17,7 +17,7 @@ function LiveUser({userId, avatar}) {
       <div className='absolute bg-color-pink w-[90%] h-4 text-color-white bottom-2 text-center text-[0.7rem] overflow-x-hidden'>Live</div>
 
        {/* <img src={avatar} alt="profile image" className='w-16 h-16 '  /> */}
-      {profilePic && <img src={profilePic} alt="Profile Pic" className='bg-gradient-to-t from-color-pink via-color-3 to-color-pink rounded-full'/>}
+       <img src={profile_picture} alt="Profile Pic" className='bg-gradient-to-t from-color-pink via-color-3 to-color-pink rounded-full'/>
     </div>
   )
 }

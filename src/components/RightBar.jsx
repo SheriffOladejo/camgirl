@@ -4,8 +4,15 @@ import Carousel from './Carousel';
 import { liveUsers } from '.';
 import LiveUser from './LiveUser';
 import ImgGallery from './ImgGallery';
+import { AuthContext } from "../context/authContext";
+import { useContext } from "react";
 
 function RightBar({ className, showGallery }) {
+
+  const { currentUser } = useContext(AuthContext);
+   
+  const { username, firstname,lastname  } = currentUser || {};
+
   const groupedUsers = fauxUsers.reduce((acc, user, index) => {
     const groupIndex = Math.floor(index / 4);
     if (!acc[groupIndex]) {

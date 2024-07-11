@@ -7,16 +7,26 @@ import ProfileMenu from "./ProfileMenu";
 function Header({ placeholder }) {
   const navigate = useNavigate();
   const { currentUser, setCurrentUserType } = useContext(AuthContext);
-  const { userType } = currentUser;
-  const profilePic = (currentUser[userType]?.picture) || null;
-  const username = (currentUser[userType]?.username) || null;
-  const handle = (currentUser[userType]?.handle) || null;
+
+
+
+  
+  const { creator_mode, profile_picture,  username, firstname,lastname  } = currentUser || {};
+  // const usersname = (currentUser.firstname && currentUser.lastname) || null;
+  // const handle = (currentUser.username) || null;
+
+
+  const profilePic = profile_picture || null;
+
   const toggleMode = () => {
-    const newUserType = userType === "creator" ? "fan" : "creator";
-    setCurrentUserType(newUserType);
-    const homePageRoute = newUserType === "creator" ? "/home" : "/fanhome";
-    navigate(homePageRoute);
+    const newMode = creator_mode === "creator" ? "fan" : "creator";
+    if (newMode !== creator_mode) {
+      setCurrentUserType(newMode);
+      const homePageRoute = newMode === "creator" ? "/home" : "/home:fan";
+      navigate(homePageRoute);
+    }
   };
+
 
    const [profileClicked, setProfileClicked] = useState(false)
   
@@ -52,15 +62,15 @@ function Header({ placeholder }) {
           <Link to="/notifications">
             <img className="w-4 h-4" src="../icons/notification.png" alt="" />
           </Link>
-          <div className={` relative bg-color-lightGrey rounded-xl cursor-pointer w-8 h-2 items-center transition-all duration-200 ease-in-out ${userType === 'creator' ? 'justify-start' : 'justify-end'}`} onClick={toggleMode}>
-            <div className={`absolute transform ${userType === 'creator'  ? 'left-0' : 'right-0'}`}>
-              {userType === 'creator'  ? <img className="w-4 h-4 mt-[-4px]" src="../icons/people-frame.png" alt="" /> : <img className="w-4 h-4 p-1 mt-[-4px] bg-color-pink rounded-full" src="../icons/profile-white.png" alt="" />}
+          <div className={` relative bg-color-lightGrey rounded-xl cursor-pointer w-8 h-2 items-center transition-all duration-200 ease-in-out ${creator_mode === 'creator' ? 'justify-start' : 'justify-end'}`} onClick={toggleMode}>
+            <div className={`absolute transform ${creator_mode === 'creator'  ? 'left-0' : 'right-0'}`}>
+              {creator_mode === 'creator'  ? <img className="w-4 h-4 mt-[-4px]" src="../icons/people-frame.png" alt="" /> : <img className="w-4 h-4 p-1 mt-[-4px] bg-color-pink rounded-full" src="../icons/profile-white.png" alt="" />}
             </div>
           </div>
          
          
            <div>
-            <ProfileMenu profilePic={profilePic} username={username} handle={handle} profileClicked={profileClicked } toggleProfileMenu={toggleProfileMenu}  closeProfileMenu={closeProfileMenu}/>
+            <ProfileMenu profilePic={profilePic} name={firstname && lastname} username={username} profileClicked={profileClicked } toggleProfileMenu={toggleProfileMenu}  closeProfileMenu={closeProfileMenu}/>
           </div>
         </div>
       </div>
