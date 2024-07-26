@@ -5,7 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Menu from './Menu';
 import { useRef, useState, useEffect } from 'react';
 import TipModal from './TipModal';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import { getAppUser, getDataFromLocalStorage } from '../utils/Utils';
 import AppUser from '../models/AppUser';
 
@@ -179,7 +179,7 @@ function EachPost({ post, postReaction, user_id }) {
 
       {postOwner ? (
         <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
-          <a href="#" className="flex-shrink-0 group block">
+          <Link to={`/profile/${post.user_id}`} className="flex-shrink-0 group block">
             <div className="flex items-center">
               <div className='p-[1px] bg-color-pink rounded-full'>
                 {postOwner ? (
@@ -197,18 +197,18 @@ function EachPost({ post, postReaction, user_id }) {
                   </span>
                 </p>
                 <p className='text-[10px]'>
-                  {post ? post.creation_date : '13h ago'} 
+                  {post ? post.creation_date : '13h ago'}
                 </p>
               </div>
             </div>
-          </a>
+          </Link>
           <a href="/menu">
             <img src="../icons/menu.png" alt="post-menu" className='w-3 h-3' />
           </a>
         </div>
       ) : (
         <div className="flex pb-0 justify-between items-center w-full">
-          <a href="#" className="flex-shrink-0 group block">
+          {<Link to={`/profile`} className="flex-shrink-0 group block">
             <div className="flex items-center">
               <div className='p-[1px] bg-color-pink rounded-full'>
                 <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
@@ -224,7 +224,7 @@ function EachPost({ post, postReaction, user_id }) {
                 <p className='text-[10px]'>13h ago</p>
               </div>
             </div>
-          </a>
+          </Link>}
           <div className='relative'>
             <a onClick={openMenu} className='cursor-pointer'>
               <img src="../icons/menu.png" alt="post-menu" className='w-3 h-3' />

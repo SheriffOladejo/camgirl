@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import MobileFooterNav from '../../components/MobileFooterNav';
 import { useMediaQuery } from 'react-responsive';
 import LeftBar from '../../components/LeftBar';
@@ -6,22 +6,44 @@ import RightBar from '../../components/RightBar';
 import Header from '../../components/Header';
 import Posts from '../../components/Posts';
 import { AuthContext } from "../../context/authContext";
-
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
+import axiosInstance from "../../api/axiosInstance";
+import ProfileImageModal from '../../components/ProfileImageModal';
 function CreatorProfile() {
+  const { id } = useParams();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const headerImg = null;
   const isVerified = true;
   const isOnline = true;
 
   const [activeTab, setActiveTab] = useState('Posts');
+  const [profileData, setProfileData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { currentUser } = useContext(AuthContext);
+  // const { currentUser } = useContext(AuthContext);
 
-  const { profile_picture } = currentUser || {};
+  // const { profile_picture  } = currentUser || {};
 
+  
+
+  useEffect(() => {
+    async function fetchProfileData() {
+      try {
+        const response = await axiosInstance.get(`users/${id}`);
+        setProfileData(response.data);
+        console.log(response.data)
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    }
+    fetchProfileData();
+  }, [id]);
+  if (!profileData) {
+    return <div>Loading...</div>;
+  }
+  const { profile_picture,first_name, last_name, username, bio, location, subscribers, country, phone_number } = profileData;
   const profilePic = profile_picture || null;
-
-
   return (
     <>
       <section className="w-full">
@@ -37,44 +59,49 @@ function CreatorProfile() {
                 ) : (
                   <img src="../background/bgimg.jpg" alt="Profile Pic" className="w-full h-[30vh]  object-cover" />
                 )}
-                <img src="../icons/settings-icon.png" alt="settings" className="w-4 h-4 absolute top-4 right-4" />
+                {/* click event */}
+                <button >
+                  <img src="../icons/settings-icon.png" alt="settings" className="w-4 h-4 absolute top-4 right-4" />
+                </button>
               </div>
-              <div>
+              <div className='absolute left-4 top-28'>
                 {/* profile picture */}
 
                 {profilePic ? (
-                  <img src={profilePic} alt="Profile Pic" className="rounded-full w-20 h-20 absolute  left-4 transform -translate-y-1/2 border-2 border-color-pink" />
+                  <img src={profilePic} alt="Profile Pic" className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full border-4  cover border-color-pink cursor-pointer object-cover " onClick={() => setIsModalOpen(true)} />
                 ) : (
-                  <img src="../images/safari-adventure.jpg" alt="profile picture" className="rounded-full w-20 h-20 absolute  left-4 transform -translate-y-1/2 border-2 border-color-pink" />
+                  <img src="../images/safari-adventure.jpg" alt="profile picture" className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full border-4  cover top-10 border-color-pink cursor-pointer object-cover" onClick={() => setIsModalOpen(true)} />
                 )}
               </div>
             </div>
-
-            <div className="bg-color-white  space-y-2 pt-16">
+            {isModalOpen && (
+              <ProfileImageModal isOpen={isModalOpen} imageSrc={profilePic} onClose={() => setIsModalOpen(false)} />
+            )}
+            <div className="bg-color-white  space-y-2 pt-8">
               {/* profile details */}
               <div className="flex items-center px-4 justify-between ">
                 <div>
                   <h1 className="font-bold text-[16px] flex items-center">
-                    Case Cert {isVerified && <span><img src="../icons/verifiied.png" alt="is verified" className="w-4 h-4 ml-2" /></span>}
+                 {`${first_name && last_name}`? `${first_name && last_name}` : ' Case Cert'} {isVerified && <span><img src="../icons/verifiied.png" alt="is verified" className="w-4 h-4 ml-2" /></span>}
                   </h1>
-                  <p className="font-thin text-[12px]">@handle {isOnline && <span>Online now</span>}</p>
+                  <p className="font-thin text-[12px]">@{username? username : 'casecert'} {isOnline && <span>Online now</span>}</p>
                 </div>
                 <div className="flex justify-end items-center space-x-2  cursor-pointer z-100 bg-color-white">
                   {/* direct message */}
-                  <a href="#" className="border px-2 border-color-pink cursor-pointer">
+                  <Link to="/messages" className="border px-2 border-color-pink cursor-pointer">
                     <img src="../icons/icon2.png" alt="direct message" className="w-8 h-8" />
-                  </a>
+                  </Link>
                   {/* subscribe btn */}
                   <button className="shadow bg-color-pink py-2 px-4 rounded-md text-color-white text-[12px] cursor-pointer">Subscribe ₦3,000.00/month</button>
                 </div>
               </div>
               {/* bio */}
               <div className="px-4 space-y-2">
-                <p className="text-[12px] font-medium">I'm a 90s baby without a baby! - Just fur babies - 1 dog 🐶 and 2 cats 😺😺 I Love Working Out 💪 Chilling at Home</p>
+                <p className="text-[12px] font-medium">{bio ? bio : "I'm a 90s baby without a baby! - Just fur babies - 1 dog 🐶 and 2 cats 😺😺 I Love Working Out 💪 Chilling at Home"}</p>
                 {/* location */}
-                <p className="text-[12px]">Lagos State, Nigeria <span><a href="#" className="text-color-pink">Contact info</a></span></p>
+                <p className="text-[12px]"> {country ? country : " Nigeria"} <span><a href={`#${phone_number}`} className="text-color-pink">Contact info</a></span></p>
                 {/* amount of subscribers */}
-                <p className="text-[12px]">20k subscribers</p>
+                <p className="text-[12px]">{subscribers ? `${subscribers} subscribers` : "20k subscribers"}</p>
               </div>
               <div className="">
                 <div className="flex w-full justify-around text-[12px] mt-6">

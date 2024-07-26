@@ -485,7 +485,8 @@ class DbHelper {
                     userData.live_mode,
                     userData.profile_setup,
                     userData.account_type,
-                    userData.creator_mode_desc_dismissed
+                    userData.creator_mode_desc_dismissed,
+                    userData.last_active
                 );
                 return user;
             }
@@ -540,7 +541,8 @@ class DbHelper {
                     user.live_mode,
                     user.profile_setup,
                     user.account_type,
-                    user.creator_mode_desc_dismissed
+                    user.creator_mode_desc_dismissed,
+                    user.last_active
                 );
             } else {
                 console.error('No user found with the provided user_id');
@@ -592,7 +594,8 @@ class DbHelper {
                     userData.live_mode,
                     userData.profile_setup,
                     userData.account_type,
-                    userData.creator_mode_desc_dismissed
+                    userData.creator_mode_desc_dismissed,
+                    userData.last_active
                 );
                 console.log("User found:", user); // Log the user object
                 return user;
@@ -635,6 +638,7 @@ class DbHelper {
             profile_setup: user.profile_setup || "",
             account_type: user.account_type || "",
             creator_mode_desc_dismissed: user.creator_mode_desc_dismissed || "",
+            last_active: user.last_active || "",
         };
 
         try {
@@ -677,7 +681,9 @@ class DbHelper {
             live_mode: user.live_mode || "",
             profile_setup: user.profile_setup || "",
             account_type: user.account_type || "",
+           
             creator_mode_desc_dismissed: user.creator_mode_desc_dismissed || "",
+            last_active: user.last_active || "",
         };
 
         try {

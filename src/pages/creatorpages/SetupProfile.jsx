@@ -244,12 +244,15 @@ function SetupProfile() {
       document: formInput.document,
       country: formInput.country,
     };
+    
     console.log("Input form data:", data);
+
+    const currentDateTime = new Date().toISOString();
     const user2 = new AppUser(
       null, user.user_id, user.username, user.email, null, user.password,
       data.firstname, data.lastname, data.dob, data.country, null, data.document,
       null, data.bio, user.date_joined, null, data.profile_picture, null, null,
-      null, null, null, null, user.creator_mode, null, null, null, user.account_type, null
+      null, null, null, null, user.creator_mode, null, null, null, user.account_type, null, currentDateTime
     );
     await updateCurrentUser(user2)
 

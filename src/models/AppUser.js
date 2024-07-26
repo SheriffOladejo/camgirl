@@ -4,7 +4,7 @@ class AppUser {
       dob, country, location, verification_doc, docs_verified, bio, date_joined,
       last_updated, profile_picture, cover_picture, subscribers, connections,
       subscription_price, currency_symbol, currency, creator_mode, verified,
-      live_mode, profile_setup, account_type, creator_mode_desc_dismissed
+      live_mode, profile_setup, account_type, creator_mode_desc_dismissed, last_active
     ) {
       this.id = id;
       this.user_id = user_id;
@@ -26,6 +26,7 @@ class AppUser {
       this.cover_picture = cover_picture;
       this.subscribers = subscribers;
       this.connections = connections;
+      // let them be able to choose their price , function to get the currency symbol based in their country
       this.subscription_price = subscription_price;
       this.currency_symbol = currency_symbol;
       this.currency = currency;
@@ -35,6 +36,7 @@ class AppUser {
       this.profile_setup = profile_setup;
       this.account_type = account_type;
       this.creator_mode_desc_dismissed = creator_mode_desc_dismissed;
+      this.last_active = last_active;
      
     }
 
@@ -68,7 +70,8 @@ class AppUser {
         live_mode: ${this.live_mode},
         profile_setup: ${this.profile_setup},
         account_type: ${this.account_type},
-        creator_mode_desc_dismissed: ${this.creator_mode_desc_dismissed}
+        creator_mode_desc_dismissed: ${this.creator_mode_desc_dismissed},
+        last_active: ${this.last_active}
       }`;
     }
 
@@ -191,6 +194,9 @@ class AppUser {
     getProfileSetup() {
       return this.profile_setup;
     }
+    getLastActive() {
+      return this.last_active;
+    }
 
     setAccountType(account_type) {
       this.account_type = account_type;
@@ -302,6 +308,9 @@ class AppUser {
   
     setProfileSetup(newProfileSetup) {
       this.profile_setup = newProfileSetup;
+    }
+    setLastActive() {
+      return this.last_active;
     }
   }
   
