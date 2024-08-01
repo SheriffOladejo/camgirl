@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext} from "react";
 import { PUBLICITY_OPTIONS, ATTACHMENT_GIF, ATTACHMENT_IMAGE, ATTACHMENT_VIDEO } from "../utils/Constants";
 import PublicityOptions from './PublicityOptions';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -10,16 +10,18 @@ import Post from "../models/Post";
 import {  addDataIntoCache } from '../utils/Utils';
 import EmojiPicker from "emoji-picker-react";
 import LoadingSpinner from './LoadingSpinner';
+import { AuthContext } from '../context/authContext';
 
-function CreatePost({ addPost }) {
+function CreatePost({addPost}) {
   const dbHelper = new DbHelper();
+  const { currentUser: user } = useContext(AuthContext);
+
   const [postText, setPostText] = useState('');
   const textareaRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedGif, setSelectedGif] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(new AppUser());
   const [attachmentType, setAttachmentType] = useState('');
   const [attachmentFileName, setAttachmentFileName] = useState('');
   const [attachmentFile, setAttachmentFile] = useState('');
@@ -146,23 +148,51 @@ function CreatePost({ addPost }) {
   };
 
   const createPost = async () => {
+    console.log('clicked');
+    console.log('Creating post with:', { postText, user });
+    console.log(user.user_id)
     setLoading(true);
+    if (!user || !user.user_id) {
+      console.error('User not authenticated or missing user ID.');
+      alert('Error: User not authenticated.');
+      return;
+  }    setLoading(true);
     try {
-      const post = new Post();
-      const userId = user.getUserId();
-      post.setUserId(userId);
-      post.setCaption(postText === '' ? "" : postText);
-      post.setAttachmentFile(attachmentFile);
-      post.setAttachmentFileName(attachmentFileName);
-      post.setAttachmentType(attachmentType);
-      post.setPostPrivacy(selectedPublicity);
-      post.setCreationDate(Date.now());
-      post.setCommentsPrivacy(null);
-      post.setLikes(null);
-      post.setTips(null);
+      const postId = new Date().getTime();
+      const userId = user.user_id;
+      console.log('User ID:', userId);
+
+      if (!userId) {
+        alert("Error: User ID not found.");
+        setLoading(false);
+        return;
+      }
+
       await uploadAttachment();
+
+      const post = new Post(
+        postId,
+        userId,
+        postText === '' ? "" : postText,
+        null, null, null,
+        attachmentFile,
+        attachmentFileName,
+        attachmentType,
+        null,
+        selectedPublicity,
+        null,
+        Date.now(),
+        null, // commentsPrivacy
+        null, null,
+        null, // likes
+        null  // tips
+      );
+
+      console.log('Post object:', post);
+
       await dbHelper.createPost(post);
-      addPost(post);
+      addPost(post); // Add the new post to the parent state
+
     } catch (error) {
       console.error("Failed to create post:", error);
     } finally {
@@ -172,6 +202,7 @@ function CreatePost({ addPost }) {
       setLoading(false);
     }
   };
+
 
   const removeDialogs = async () => {
     if (showEmojiPicker) {
@@ -190,7 +221,7 @@ function CreatePost({ addPost }) {
       {loading && <LoadingSpinner />}
       <div className="hidden md:flex flex-col rounded-lg overflow-hidden bg-color-white space-y-4 px-4 pt-4">
         <div className="flex items-center ">
-          {user ? <img src={user.getProfilePicture()} alt="" /> : <img src='../profileImg.png' className="w-8 h-8 p-[1px] bg-color-5 rounded-full" alt="" />}
+          {user ? <img src={user.getProfilePicture()} alt={user.firstname} className="w-8 h-8 p-[1px] bg-color-5 rounded-full" /> : <img src='../profileImg.png' className="w-8 h-8 p-[1px] bg-color-5 rounded-full" alt="" />}
           <div className="flex gap-4  ml-[15px] px-[15px] w-max h-6 rounded border border-color-lightGrey items-center cursor-pointer" onClick={togglePublicityDropdown}>
             <img className="w-4 h-4 relative right-1" src={selectedPublicityImg} alt="Image" />
             <p className="text-color-black font-Lato text-sm font-medium items-center">{selectedPublicity}</p>

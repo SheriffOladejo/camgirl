@@ -70,9 +70,8 @@ function App() {
         <Route path="/discover" element={<Explore />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/stories" element={<Stories />} />
-        <Route path='/profile' element={<CreatorProfile />} >
-          <Route path='/profile/:id' element={<CreatorProfile />} />
-        </Route>
+        <Route path="/profile" element={<CreatorProfile />} />
+        <Route path="/profile/:user_id" element={<CreatorProfile />} />
         {/* Protected routes */}
         {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}
 

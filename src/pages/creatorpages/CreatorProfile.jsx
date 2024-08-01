@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import MobileFooterNav from '../../components/MobileFooterNav';
 import { useMediaQuery } from 'react-responsive';
 import LeftBar from '../../components/LeftBar';
 import RightBar from '../../components/RightBar';
 import Header from '../../components/Header';
 import Posts from '../../components/Posts';
-import { AuthContext } from "../../context/authContext";
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
-import axiosInstance from "../../api/axiosInstance";
 import ProfileImageModal from '../../components/ProfileImageModal';
+import { AuthContext } from '../../context/authContext'; // Import your AuthContext
+import DbHelper from '../../utils/DbHelper';
+import MediaPosts from '../../components/MediaPosts';
+import LoadingSpinner from '../../components/LoadingSpinner';
+
 function CreatorProfile() {
-  const { id } = useParams();
+  const { user_id } = useParams();
+  console.log(user_id)
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const headerImg = null;
   const isVerified = true;
@@ -24,25 +27,32 @@ function CreatorProfile() {
   // const { currentUser } = useContext(AuthContext);
 
   // const { profile_picture  } = currentUser || {};
+  const { currentUser } = useContext(AuthContext);
+  const currentUserId = currentUser ? currentUser.user_id : null;
+  const userId = user_id || currentUserId; 
 
-  
 
   useEffect(() => {
     async function fetchProfileData() {
       try {
-        const response = await axiosInstance.get(`users/${id}`);
-        setProfileData(response.data);
-        console.log(response.data)
+        const dbHelper = new DbHelper()
+        const user = await dbHelper.getAppUserByID(userId);
+        setProfileData(user);
+        console.log(user); // Check the fetched user data
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
     }
-    fetchProfileData();
-  }, [id]);
+    if (userId) {
+      fetchProfileData();
+    }
+  }, [userId]);
+
   if (!profileData) {
-    return <div>Loading...</div>;
+    return <div><LoadingSpinner/></div>; // Display a loading state while fetching the data
   }
-  const { profile_picture,first_name, last_name, username, bio, location, subscribers, country, phone_number } = profileData;
+
+  const { profile_picture, firstname, lastname, username, bio, location, subscribers, country, phone_number } = profileData;
   const profilePic = profile_picture || null;
   return (
     <>
@@ -82,17 +92,17 @@ function CreatorProfile() {
               <div className="flex items-center px-4 justify-between ">
                 <div>
                   <h1 className="font-bold text-[16px] flex items-center">
-                 {`${first_name && last_name}`? `${first_name && last_name}` : ' Case Cert'} {isVerified && <span><img src="../icons/verifiied.png" alt="is verified" className="w-4 h-4 ml-2" /></span>}
+                  {firstname && lastname ? `${firstname} ${lastname}` : 'Case Cert'} {isVerified && <span><img src="../icons/verifiied.png" alt="is verified" className="w-4 h-4 ml-2" /></span>}
                   </h1>
                   <p className="font-thin text-[12px]">@{username? username : 'casecert'} {isOnline && <span>Online now</span>}</p>
                 </div>
                 <div className="flex justify-end items-center space-x-2  cursor-pointer z-100 bg-color-white">
                   {/* direct message */}
                   <Link to="/messages" className="border px-2 border-color-pink cursor-pointer">
-                    <img src="../icons/icon2.png" alt="direct message" className="w-8 h-8" />
+                    <img src="../icons/icon2.png" alt="direct message" className="w-6 h-6 md:w-8 md:h-8" />
                   </Link>
                   {/* subscribe btn */}
-                  <button className="shadow bg-color-pink py-2 px-4 rounded-md text-color-white text-[12px] cursor-pointer">Subscribe ₦3,000.00/month</button>
+                  <button className="shadow text-[10px] py-2.5 px-4 bg-color-pink md:py-2 md:px-4 rounded-md text-color-white md:text-[12px] cursor-pointer">Subscribe ₦3,000.00/month</button>
                 </div>
               </div>
               {/* bio */}
@@ -123,7 +133,7 @@ function CreatorProfile() {
 
             </div>
             <div className='mt-4'>
-              {activeTab === 'Posts' && <Posts />}
+              {activeTab === 'Posts' ? <Posts /> :  <MediaPosts userId={userId} />}
             </div>
           </section>
           <RightBar className="w-1/4 mt-0" showGallery={window.location.pathname === '/profile'} />

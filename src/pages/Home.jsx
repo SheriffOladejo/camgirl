@@ -1,19 +1,18 @@
-import React from 'react'
+
 import Stories from '../components/Stories'
 import { useState } from 'react'
 import CreatePost from '../components/CreatePost'
 import Filter from '../components/Filter'
 import Posts from '../components/Posts'
 import LoadingSpinner from '../components/LoadingSpinner';
-import DbHelper from '../utils/DbHelper'
+
 
 
 function Home() {
   const [loading, setLoading] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifs, setShowGifs] = useState(false);
-  const dbHelper = new DbHelper()
-  const removeDialogs = async () => {
+    const removeDialogs = async () => {
     if (showEmojiPicker) {
       setShowEmojiPicker(false);
     }
@@ -28,11 +27,12 @@ function Home() {
        { loading && <LoadingSpinner/> }
        { !loading && ( <div>
       <Stories />
-      <CreatePost />
+      <CreatePost  />
       <Filter />
 
       <hr className="border-1 border-color-grey/40 my-[20px]" />
-      <Posts />
+      <Posts posts={posts} setPosts={setPosts} />
+
       {/*  bottom nav */}
       
       </div>

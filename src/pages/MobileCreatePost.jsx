@@ -1,16 +1,13 @@
-import { useState, useRef, useEffect, useContext } from "react"
+import { useState, useRef, useContext } from "react"
 import { PUBLICITY_OPTIONS, ATTACHMENT_GIF, ATTACHMENT_IMAGE, ATTACHMENT_VIDEO } from "../utils/Constants";
 import PublicityOptions from '../components/PublicityOptions';
 import TextareaAutosize from '../../node_modules/react-textarea-autosize';
 import ReactPlayer from 'react-player'
-import AppUser from '../models/AppUser';
 import SelectGif from "../components/SelectGif";
 import DbHelper from '../utils/DbHelper';
 import Post from "../models/Post";
 import { AuthContext } from '../context/authContext';
-import {  addDataIntoCache} from '../utils/Utils';
-
-// import { getAppUser, addDataIntoCache, getDataFromLocalStorage } from '../utils/Utils';
+import { addDataIntoCache } from '../utils/Utils';
 import EmojiPicker from "emoji-picker-react";
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useNavigate } from "react-router-dom";
@@ -188,18 +185,19 @@ function MobileCreatePost() {
   };
 
   const createPost = async () => {
-    console.log('postText:', postText);
-    console.log('selectedImage:', selectedImage);
-    console.log('selectedVideo:', selectedVideo);
-    console.log('selectedGif:', selectedGif);
-    console.log('User:', user); // Log the entire user object to see what it contains
-
+    console.log('clicked');
+    console.log('Creating post with:', { postText, user });
+    console.log(user.user_id)
     setLoading(true);
-
+    if (!user || !user.user_id) {
+      console.error('User not authenticated or missing user ID.');
+      alert('Error: User not authenticated.');
+      return;
+  }    setLoading(true);
     try {
       const postId = new Date().getTime();
-      const userId = dbHelper.getUserId();
-      console.log(userId)
+      const userId = user.user_id;
+      console.log('User ID:', userId);
 
       if (!userId) {
         alert("Error: User ID not found.");
@@ -207,7 +205,8 @@ function MobileCreatePost() {
         return;
       }
 
-      // Create a new post object using the Post class constructor
+      await uploadAttachment();
+
       const post = new Post(
         postId,
         userId,
@@ -226,14 +225,14 @@ function MobileCreatePost() {
         null  // tips
       );
 
-      console.log(post);
+      console.log('Post object:', post);
 
-      await uploadAttachment();
       await dbHelper.createPost(post);
 
-      const storedPosts = dbHelper.getPostsByUserID(userId);
-      addDataIntoCache('posts', storedPosts);
-      setPosts(storedPosts); // Update state
+      // const storedPosts = await dbHelper.getPostsByUserID(userId);
+      // console.log('Stored Posts:', storedPosts);
+      // addDataIntoCache('posts', storedPosts);
+      // setPosts(storedPosts); // Update state
       navigate('/home');
     } catch (error) {
       console.error("Failed to create post:", error);
@@ -244,6 +243,7 @@ function MobileCreatePost() {
       setLoading(false);
     }
   };
+
 
 
 
@@ -275,13 +275,13 @@ function MobileCreatePost() {
         <div className=" md:hidden rounded-lg overflow-hidden bg-color-white space-y-8 px-4 pt-4">
           <div className="flex justify-between items-center">
             <img className="cursor-pointer" onClick={() => window.history.back()} src="../public/icons/arrow-left.png" alt="go back" />
-            <button onClick={createPost} className="bg-color-pink text-color-white text-[0.9rem] font-semibold py-1 px-2 rounded opacity-50 " type="submit" disabled={postText.trim() === '' ? !selectedImage && !selectedVideo && !selectedGif : 'opacity-100'}>Post</button>
+            <button onClick={ createPost} className="bg-color-pink text-color-white text-[0.9rem] font-semibold py-1 px-2 rounded " type="submit" >Post</button>
           </div>
           <hr className="border-1 border-color-lightGrey " />
           <div className="flex items-center ">
             {/* Dynamic image per user */}
             <div className="-mt-[35px]">
-              {user ? <img src={user.getProfilePicture()} alt={user.firstname} className="w-12 h-12 p-[1px] bg-color-pink rounded-full object-cover"/> : <img src='../public/profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />}
+              {user ? <img src={user.getProfilePicture()} alt={user.firstname} className="w-12 h-12 p-[1px] bg-color-pink rounded-full object-cover" /> : <img src='../public/profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />}
             </div>
 
             <div> <div className="flex gap-4  ml-[15px] px-[15px] w-max h-6 rounded border border-color-lightGrey items-center cursor-pointer" onClick={togglePublicityDropdown}>

@@ -3,43 +3,60 @@ import usePostDetails from '../hooks/usePostDetails';
 import PostCommentModel from '../models/PostCommentModel';
 import TextareaAutosize from 'react-textarea-autosize';
 import Menu from './Menu';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import TipModal from './TipModal';
 import { Link, useNavigate } from 'react-router-dom';
-// import { getAppUser, getDataFromLocalStorage } from '../utils/Utils';
-import AppUser from '../models/AppUser';
+import { AuthContext } from '../context/authContext';
+import axiosInstance from '../api/axiosInstance';
 
 function EachPost({ post, postReaction, user_id }) {
   const dbHelper = new DbHelper();
   const navigate = useNavigate();
   const textareaRef = useRef(null);
   const verified = true;
+
+  const { currentUser: comment_maker } = useContext(AuthContext);
   const { likesCount, commentsCount, likedByUser, updateLikes, setCommentsCount } = usePostDetails(post);
+
   const [postOwner, setPostOwner] = useState(null);
-  const [showComment, setShowComment] = useState(false);
-  const [user, setUser] = useState(new AppUser());
-  const [comment, setComment] = useState('');
+  const [showComment, setShowComment] = useState(false);  const [comment, setComment] = useState('');
   const [showTipModal, setShowTipModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const fetchPostOwner = async () => {
+      try {
+        if (post.user_id) {
+          const response = await axiosInstance.get(`users/${post.user_id}`);
+          setPostOwner(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
 
-  // useEffect(() => {
-  //   async function fetchPostOwner() {
-  //     try {
-  //       // console.log("Fetching post owner for post:", post);
+    fetchPostOwner();
+  }, [post.user_id]);
 
-  //       if (post.user_id == null) return
-  //       const ownerData = await dbHelper.getAppUserByID(post.user_id);
-  //       // console.log("Fetched owner data:", ownerData);
-  //       const owner = new AppUser(ownerData);
-  //       setPostOwner(owner);
-  //     } catch (error) {
-  //       console.error("Error fetching post owner:", error);
-  //     }
-  //   }
+  useEffect(() => {
+    // Fetch user info if needed
 
-  //   fetchPostOwner();
-  // }, [post, dbHelper]);
+    const fetchUser = async () => {
+      console.log('Fetching user with ID:', user_id); // Debug log
 
+      try {
+        const response = await axiosInstance.get(`users/${user_id}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+  
+    if (user_id) { // Ensure user_id is not undefined or null
+      fetchUser();
+    }
+  }, [user_id]);
+  
   const closeMenu = () => {
     setShowMenu(false);
   };
@@ -54,11 +71,11 @@ function EachPost({ post, postReaction, user_id }) {
     let privacy = -1;
     let post_comment = new PostCommentModel(
       -1,
-      user.getUserId(),
+      comment_maker.user_id,
       comment,
       Date.now(),
       "false",
-      post.getId(),
+      post.id,
       "hey",
       "hy",
       user_ids,
@@ -74,8 +91,8 @@ function EachPost({ post, postReaction, user_id }) {
 
   const openComment = () => {
     setShowComment(true);
-    let post_id = post.getId();
-    let owner_id = postOwner.getUserId();
+    let post_id = post.id;
+    let owner_id = postOwner.user_id;
     navigate('/post-comment', {
       state: {
         post_id,
@@ -118,20 +135,22 @@ function EachPost({ post, postReaction, user_id }) {
   const renderPostContent = (post) => {
     if (!post || !post.getAttachmentType) {
       return (
+     
         <div>
-          {post.image && (
+          
+          {post.attachment_type === 'image' && (
             <div className='flex flex-col space-y-3'>
               <p className='text-[12px] font-semibold'>{post.caption}</p>
               <div className="w-[100%] h-[20rem] shadow">
-                <img src={post.image} alt="Post Media" className="object-cover absolute rounded-md w-full h-full" />
+                <img src={post.attachment_file} alt="Post Media" className="object-cover absolute rounded-md w-full h-full" />
               </div>
             </div>
           )}
-          {post.video && (
+          {post.attachment_type === 'video' && (
             <div className='flex flex-col space-y-3'>
               <p className='text-[12px] font-semibold'>{post.caption}</p>
               <div className="w-[100%] h-[20rem] shadow">
-                <video src={post.video} alt="Post Media" className="object-cover absolute rounded-md w-full h-full" controls />
+                <video src={post.attachment_file} alt="Post Media" className="object-cover absolute rounded-md w-full h-full" controls />
               </div>
             </div>
           )}
@@ -143,17 +162,19 @@ function EachPost({ post, postReaction, user_id }) {
       case 'image':
         return (
           <>
+            <p>{post.getCaption()}</p>
             {post.getAttachmentFile() !== '' && (
               <div className="media">
                 <img src={post.getAttachmentFile()} alt="Post Media" className="post-image" />
               </div>
             )}
-            <p>{post.getCaption()}</p>
+          
           </>
         );
       case 'video':
         return (
           <>
+            <p>{post.getCaption()}</p>
             {post.getAttachmentFile() !== '' && (
               <div className="media">
                 <video controls src={post.getAttachmentFile()} className="post-video">
@@ -161,7 +182,7 @@ function EachPost({ post, postReaction, user_id }) {
                 </video>
               </div>
             )}
-            <p>{post.getCaption()}</p>
+         
           </>
         );
       default:
@@ -179,7 +200,7 @@ function EachPost({ post, postReaction, user_id }) {
 
       {postOwner ? (
         <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
-          <Link to={`/profile/${post.user_id}`} className="flex-shrink-0 group block">
+          <Link to={`/profile/${postOwner.user_id}`} className="flex-shrink-0 group block">
             <div className="flex items-center">
               <div className='p-[1px] bg-color-pink rounded-full'>
                 {postOwner ? (
@@ -193,7 +214,7 @@ function EachPost({ post, postReaction, user_id }) {
                   {postOwner.firstname} {postOwner.lastname}
                   {verified && <img src='../icons/Certified.png' className='w-4 h-4' alt='certified' />}
                   <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
-                    {postOwner.getUserName()}
+                    {postOwner.username}
                   </span>
                 </p>
                 <p className='text-[10px]'>
@@ -215,13 +236,13 @@ function EachPost({ post, postReaction, user_id }) {
               </div>
               <div className="ml-3">
                 <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
-                  Sonali Hirave
+               {user ? ` ${user.firstname} ${user.lastname}` : ' Sonali Hirave'}  
                   {verified && <img src='../icons/Certified.png' className='w-4 h-4' alt='certified' />}
                   <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
-                    @ShonaDesign
+                    @{user ? ` ${user.username} ` : ' ShonaDesign'}  
                   </span>
                 </p>
-                <p className='text-[10px]'>13h ago</p>
+                <p className='text-[10px]'>{post ? post.creation_date : '9hr ago'}</p>
               </div>
             </div>
           </Link>}
@@ -247,13 +268,15 @@ function EachPost({ post, postReaction, user_id }) {
           </div>
         </div>
         {postReaction}
+
         <div className="flex mt-4">
           <div className="w-full">
             <div className="flex items-center justify-between">
-              <div className="reaction" onClick={() => updateLikes(user)}>
+              <div className="reaction" onClick={updateLikes}>
                 <button className="flex items-center text-color-grey font-medium hover:text-color-pink">
-                  <img src={likedByUser ? '' : "../icons/like.png"} alt="Like" className="w-4 h-4 mr-1" />
-                  <p className="text-[10px]">{likesCount} Like</p>
+                  <img src="../icons/like.png" alt="Like" className="w-4 h-4 mr-1" />
+                  <span className="text-xs">{likesCount ? formatLikesCount((likesCount)): ' like'}</span>
+                 
                 </button>
               </div>
               <div onClick={openComment} className="reaction">
@@ -283,8 +306,8 @@ function EachPost({ post, postReaction, user_id }) {
         <div className="bg-color-2 rounded h-auto w-full flex flex-row items-center">
           <div className='w-full flex flex-row items-center'>
             <div className="ml-2">
-              {!user ? (
-                <img src={user.profile_picture} alt={user.firstname} />
+              {comment_maker ? (
+                <img src={comment_maker.profile_picture} alt={comment_maker.firstname}  className="w-8 h-8 p-[1px] bg-color-pink rounded-full"/>
               ) : (
                 <img src='../profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />
               )}

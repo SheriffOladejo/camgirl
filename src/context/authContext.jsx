@@ -1,8 +1,9 @@
 import React, { createContext, useEffect, useState } from "react";
 import DbHelper from "../utils/DbHelper";
-import { getDataFromLocalStorage } from "../utils/Utils";
-
+import { getDataFromLocalStorage, updateUserOnlineStatus } from "../utils/Utils";
+import axiosInstance from "../api/axiosInstance";
 export const AuthContext = createContext();
+
 
 export const AuthContextProvider = ({ children }) => {
   const dbHelper = new DbHelper();
@@ -25,6 +26,7 @@ export const AuthContextProvider = ({ children }) => {
         if (user) {
           setCurrentUserType(user.creator_mode);
           setCurrentUser(user);
+          await updateUserOnlineStatus(user.id, true)
         }
 
       }
@@ -40,11 +42,15 @@ export const AuthContextProvider = ({ children }) => {
       if (user) {
         localStorage.setItem("users", JSON.stringify([user]));
         setCurrentUser(user);
+        await updateUserOnlineStatus(userId, true); 
       }
     }
   };
 
-  const logoutUser = () => {
+  const logoutUser = async () => {
+    if (currentUser) {
+      await updateUserOnlineStatus(currentUser.id, false); // Set online status to false on logout
+    }
     localStorage.removeItem("users");
     setCurrentUser(null);
   };
