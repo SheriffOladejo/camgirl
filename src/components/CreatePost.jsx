@@ -82,14 +82,6 @@ function CreatePost({addPost}) {
     });
   };
 
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     setLoading(true);
-  //     var _u = await getAppUser();
-  //     setUser(_u);
-  //   };
-  //   fetchUser();
-  // }, []);
 
   const removeAttachment = () => {
     setSelectedVideo(null);

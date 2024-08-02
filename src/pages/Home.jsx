@@ -12,32 +12,40 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifs, setShowGifs] = useState(false);
-    const removeDialogs = async () => {
+
+
+  const [posts, setPosts] = useState([]);
+
+  const addPost = (newPost) => {
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
+  };
+
+  const removeDialogs = async () => {
     if (showEmojiPicker) {
       setShowEmojiPicker(false);
     }
     if (showGifs) {
       setShowGifs(false);
     }
-    
+
   }
   return (
     <>
-    <section onClick={removeDialogs} className='w-full h-full pt-4'>
-       { loading && <LoadingSpinner/> }
-       { !loading && ( <div>
-      <Stories />
-      <CreatePost  />
-      <Filter />
+      <section onClick={removeDialogs} className='w-full h-full pt-4'>
+        {loading && <LoadingSpinner />}
+        {!loading && (<div>
+          <Stories />
+          <CreatePost addPost={addPost} />
+          <Filter />
 
-      <hr className="border-1 border-color-grey/40 my-[20px]" />
-      <Posts posts={posts} setPosts={setPosts} />
+          <hr className="border-1 border-color-grey/40 my-[20px]" />
+          <Posts posts={posts} setPosts={setPosts} />
 
-      {/*  bottom nav */}
-      
-      </div>
+          {/*  bottom nav */}
+
+        </div>
         )}
-    </section>
+      </section>
     </>
   )
 }

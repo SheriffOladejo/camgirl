@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 import axiosInstance from '../api/axiosInstance';
 
-function EachPost({ post, postReaction, user_id }) {
+function PostCard({ post, postReaction, user_id }) {
   const dbHelper = new DbHelper();
   const navigate = useNavigate();
   const textareaRef = useRef(null);
@@ -133,16 +133,17 @@ function EachPost({ post, postReaction, user_id }) {
   };
 
   const renderPostContent = (post) => {
-    if (!post || !post.getAttachmentType) {
+    console.log("Post object:", post);
+  
+    if (!post || !post.attachment_type) {
+      console.log("No post or attachment_type found");
       return (
-     
         <div>
-          
           {post.attachment_type === 'image' && (
             <div className='flex flex-col space-y-3'>
-              <p className='text-[12px] font-semibold'>{post.caption}</p>
+              <p className='text-[12px] font-semibold pl-2'>{post.caption}</p>
               <div className="w-[100%] h-[20rem] shadow">
-                <img src={post.attachment_file} alt="Post Media" className="object-cover absolute rounded-md w-full h-full" />
+                <img src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-full" />
               </div>
             </div>
           )}
@@ -150,56 +151,60 @@ function EachPost({ post, postReaction, user_id }) {
             <div className='flex flex-col space-y-3'>
               <p className='text-[12px] font-semibold'>{post.caption}</p>
               <div className="w-[100%] h-[20rem] shadow">
-                <video src={post.attachment_file} alt="Post Media" className="object-cover absolute rounded-md w-full h-full" controls />
+                <video src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-full" controls />
               </div>
             </div>
           )}
         </div>
       );
     }
-
-    switch (post.getAttachmentType()) {
+  
+    console.log("Attachment type:", post.attachment_type);
+  
+    switch (post.attachment_type) {
       case 'image':
+        console.log("Rendering image", post.attachment_file);
         return (
           <>
-            <p>{post.getCaption()}</p>
-            {post.getAttachmentFile() !== '' && (
+            <p>{post.caption}</p>
+            {post.attachment_file !== '' && (
               <div className="media">
-                <img src={post.getAttachmentFile()} alt="Post Media" className="post-image" />
+                <img src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-auto" />
               </div>
             )}
-          
           </>
         );
       case 'video':
+        console.log("Rendering video");
         return (
           <>
-            <p>{post.getCaption()}</p>
-            {post.getAttachmentFile() !== '' && (
+            <p>{post.caption}</p>
+            {post.attachment_file !== '' && (
               <div className="media">
-                <video controls src={post.getAttachmentFile()} className="post-video">
+                <video controls src={post.attachment_file} className="object-cover rounded-md w-full h-auto">
                   Your browser does not support the video tag.
                 </video>
               </div>
             )}
-         
           </>
         );
       default:
+        console.log("Rendering text only");
         return (
           <div className="post-text">
-            <p>{post.getCaption()}</p>
+            <p>{post.caption}</p>
           </div>
         );
     }
   };
+  
 
   return (
     <div className='bg-color-white p-4 rounded-lg  flex flex-col space-y-4 relative  w-[100%]'>
       {showTipModal === true && <TipModal isOpen={showTipModal} cancel={closeTipModal} currency={user.currency} currency_symbol={user.currency_symbol} />}
 
       {postOwner ? (
-        <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
+        <div className="flex flex-shrink-0  pb-0 justify-between">
           <Link to={`/profile/${postOwner.user_id}`} className="flex-shrink-0 group block">
             <div className="flex items-center">
               <div className='p-[1px] bg-color-pink rounded-full'>
@@ -343,4 +348,4 @@ function EachPost({ post, postReaction, user_id }) {
   );
 }
 
-export default EachPost;
+export default PostCard;

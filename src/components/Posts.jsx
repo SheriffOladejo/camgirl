@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import EachPost from './EachPost';
+import PostCard from './PostCard';
 import LoadingSpinner from './LoadingSpinner';
 import Header from './Header';
 import DbHelper from '../utils/DbHelper';
@@ -11,9 +11,9 @@ import { AuthContext } from '../context/authContext';
 
 // gsap.registerPlugin(ScrollTrigger);
 
-function Posts() {
+function Posts({ addPost, posts, setPosts }) {
   const [loading, setLoading] = useState(false);
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
   const [visiblePosts, setVisiblePosts] = useState([]);
   const [error, setError] = useState(null);
   const containerRef = useRef(null);
@@ -97,10 +97,10 @@ function Posts() {
        {posts.map((post) => {
        return(
         
-        <EachPost key={post.id} post={post} user_id={currentUser?.id} />)
+        <PostCard key={post.id} post={post} user_id={currentUser?.id} />)
       })}
        {placeholderPosts.map((placeholder) => {
-         return <EachPost key={placeholder.id} post={placeholder} user_id={currentUser?.id} />
+         return <PostCard key={placeholder.id} post={placeholder} user_id={currentUser?.id} />
        })}
      
 

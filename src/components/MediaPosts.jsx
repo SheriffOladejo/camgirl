@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../api/axiosInstance';
-import EachPost from '../components/EachPost';
+import PostCard from '../components/PostCard';
 import { creatorGallery } from '.';
 
 function MediaPosts({ userId }) {
@@ -14,7 +14,7 @@ function MediaPosts({ userId }) {
         // no attachment file in the post json
         const media = response.data.filter(post => post.attachment_file); 
         if (media.length === 0) {
-          setMediaPosts(creatorGallery); // Use default media if no posts are found
+          setMediaPosts(creatorGallery); 
         } else {
           setMediaPosts(media);
         }
@@ -33,7 +33,7 @@ function MediaPosts({ userId }) {
     <div className="space-y-4">
       {mediaPosts.length > 0 ? (
         mediaPosts.map((post, index) => (
-          <EachPost key={index} post={post}   user_id={userId}/> // Pass the user data to EachPost
+          <PostCard key={index} post={post}   user_id={userId}/> // Pass the user data to PostCard
         ))
       ) : (
         <p>No media posts available.</p>
