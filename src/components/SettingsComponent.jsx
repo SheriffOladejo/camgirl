@@ -76,7 +76,7 @@ function SettingsComponent({ setActiveUrl, className }) {
               placeholder="Search Settings"
             />
           </div>
-          <div className={`col-span-1 overflow-y-hidden  hidden md:flex`}>{renderComponent()}</div>
+          <div className={`col-span-1 overflow-y-hidden  hidden md:flex`}> {renderSettingsLinks()}</div>
         </div>
       </div>
     </>
