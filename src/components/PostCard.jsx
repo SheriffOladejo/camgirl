@@ -135,32 +135,40 @@ function PostCard({ post, postReaction, user_id }) {
   const renderPostContent = (post) => {
     console.log("Post object:", post);
   
-    if (!post || !post.attachment_type) {
-      console.log("No post or attachment_type found");
-      return (
-        <div>
-          {post.attachment_type === 'image' && (
-            <div className='flex flex-col space-y-3'>
-              <p className='text-[12px] font-semibold pl-2'>{post.caption}</p>
-              <div className="w-[100%] h-[20rem] shadow">
-                <img src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-full" />
-              </div>
-            </div>
-          )}
-          {post.attachment_type === 'video' && (
-            <div className='flex flex-col space-y-3'>
-              <p className='text-[12px] font-semibold'>{post.caption}</p>
-              <div className="w-[100%] h-[20rem] shadow">
-                <video src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-full" controls />
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-  
-    console.log("Attachment type:", post.attachment_type);
-  
+    // if (!post || (!post.attachment_type && !post.caption)) {
+    //   return null; // No content to render
+    // }
+
+    // if (!post || !post.attachment_type ||  !post.caption) {
+    //   return (
+    //     <div>
+    //       {post.attachment_type === 'image' && (
+    //         <div className='flex flex-col space-y-3'>
+    //           <p className='text-[12px] font-semibold pl-2'>{post.caption}</p>
+    //           <div className="w-[100%] h-[20rem] shadow">
+    //             <img src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-full" />
+    //           </div>
+    //         </div>
+    //       )}
+    //       {post.attachment_type === 'video' && (
+    //         <div className='flex flex-col space-y-3'>
+    //           <p className='text-[12px] font-semibold'>{post.caption}</p>
+    //           <div className="w-[100%] h-[20rem] shadow">
+    //             <video src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-full" controls />
+    //           </div>
+    //         </div>
+    //       )}
+    //     </div>
+    //   );
+    // }
+    
+  if (!post.attachment_type) {
+    return (
+      <div className="text-color-grey">
+        <p>{post.caption}</p>
+      </div>
+    );
+  }
     switch (post.attachment_type) {
       case 'image':
         console.log("Rendering image", post.attachment_file);
@@ -191,7 +199,7 @@ function PostCard({ post, postReaction, user_id }) {
       default:
         console.log("Rendering text only");
         return (
-          <div className="post-text">
+          <div className="text-color-grey">
             <p>{post.caption}</p>
           </div>
         );
@@ -237,7 +245,7 @@ function PostCard({ post, postReaction, user_id }) {
           {<Link to={`/profile`} className="flex-shrink-0 group block">
             <div className="flex items-center">
               <div className='p-[1px] bg-color-pink rounded-full'>
-                <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+              {user ?  <img className="inline-block h-8 w-8 rounded-full" src={user.profile_picture} alt="" /> :  <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />} 
               </div>
               <div className="ml-3">
                 <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">

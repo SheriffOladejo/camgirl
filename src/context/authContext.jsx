@@ -26,7 +26,7 @@ export const AuthContextProvider = ({ children }) => {
         if (user) {
           setCurrentUserType(user.creator_mode);
           setCurrentUser(user);
-          await updateUserOnlineStatus(user.id, true)
+          
         }
 
       }
@@ -36,22 +36,24 @@ export const AuthContextProvider = ({ children }) => {
     loadCurrentUser();
   }, []);
 
-  const loginUser = async (userId) => {
-    if (userId) {
-      const user = await dbHelper.getAppUserByID(userId);
-      if (user) {
-        localStorage.setItem("users", JSON.stringify([user]));
-        setCurrentUser(user);
-        await updateUserOnlineStatus(userId, true); 
+  const loginUser = async (id) => {
+    if (id) {
+      const loggedInUser = await dbHelper.getAppUserById(id);
+      console.log(`Logging in user with id: ${loggedInUser}`); // Debugging statement
+      if (loggedInUser) {
+        localStorage.setItem("users", JSON.stringify([loggedInUser]));
+        // setCurrentUser(loggedInUser);
+        await updateUserOnlineStatus(loggedInUser.id, true); 
       }
     }
   };
 
   const logoutUser = async () => {
     if (currentUser) {
-      await updateUserOnlineStatus(currentUser.id, false); // Set online status to false on logout
+      await updateUserOnlineStatus(currentUser.user_id, false); // Set online status to false on logout
     }
     localStorage.removeItem("users");
+    localStorage.removeItem("Loggedin");
     setCurrentUser(null);
   };
 

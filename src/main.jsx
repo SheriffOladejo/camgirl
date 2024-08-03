@@ -44,7 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 );
 
 function App() {
-  // const { isAuthenticated, isLoading } = useContext(AuthContext);
+  // const { isAuthenticated } = useContext(AuthContext);
 
   // if (isLoading) {
   //   return <div>Loading...</div>;
@@ -73,17 +73,17 @@ function App() {
         <Route path="/profile" element={<CreatorProfile />} />
         <Route path="/profile/:user_id" element={<CreatorProfile />} />
         {/* Protected routes */}
-        {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}
+        <Route path="/" element={<ProtectedRoutes/>}>
 
-        <Route element={<Layout />}>
+          <Route element={<Layout />}>
 
 
-          <Route path="/home" element={<Home />} />
+            <Route path="/home" element={<Home />} />
 
+
+          </Route>
 
         </Route>
-
-        {/* </Route> */}
 
         {/* Redirect root to login if not authenticated */}
         <Route path="/" element={<Navigate to="/login" />} />

@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie';
-import DbHelper from './DbHelper';
 import axiosInstance from '../api/axiosInstance';
 function isValidEmail(email) {
   // Regular expression for a basic email validation
@@ -27,13 +26,33 @@ function isUserSignedIn() {
     "username": username
   };
 }
-const updateUserOnlineStatus = async (userId, isOnline) => {
+const checkUserExists = async (id) => {
   try {
-    await axiosInstance.patch(`users/${userId}`, { is_online: isOnline });
+    const response = await axiosInstance.get(`/users/${id}`);
+
+    console.log('User Data:',id, response.data); // Log the entire user data
+    return response.status === 200;
   } catch (error) {
-    console.error("Error updating online status:", error);
+    return false;
   }
 };
+
+const updateUserOnlineStatus = async (id, isOnline) => {
+  const userExists = await checkUserExists(id);
+  if (!userExists) {
+    console.error(`User with ID ${id} does not exist.`);
+    return;
+  }
+
+  try {
+    console.log(`Updating user ${id} to online status: ${isOnline}`);
+    const response = await axiosInstance.patch(`/users/${id}`, { is_online: isOnline });
+    console.log('Response:',id, response.data);
+  } catch (error) {
+    console.error("Error updating online status:", error.response ? error.response.data : error.message);
+  }
+};
+
 
 // async function getAppUser() {
 //   let dbHelper = new DbHelper();
@@ -123,6 +142,7 @@ export {
   calculateTimeAgo,
   isValidEmail,
   stringToUint8Array,
+  checkUserExists,
   sha256,
   isUserSignedIn,
   updateUserOnlineStatus,

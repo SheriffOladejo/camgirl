@@ -373,7 +373,7 @@ class DbHelper {
     async getPostsByUserID(userId) {
         let posts = [];
         try {
-            const response = await axiosInstance.get(`/posts?user_id=${userId}`);
+            const response = await axiosInstance.get(`/posts?${userId}`);
             const postData = response.data;
 
             if (postData && postData.posts) {
@@ -466,7 +466,12 @@ class DbHelper {
         try {
             const response = await axiosInstance.get("users");
             const users = response.data;
-
+    
+            if (!Array.isArray(users) || users.length === 0) {
+                console.warn("No users found.");
+                return false; // or handle as required
+            }
+    
             const isUsernameTaken = users.some((user) => user.username === username);
             return isUsernameTaken;
         } catch (error) {
@@ -474,6 +479,7 @@ class DbHelper {
             throw error; // Rethrow the error to handle it in the caller function
         }
     }
+    
 
     async checkForEmail(email) {
         try {
@@ -549,7 +555,7 @@ class DbHelper {
             console.log('All users fetched:', users); // Debugging statement
 
             const user = users.find(user => user.user_id === user_id);
-            console.log('User fetched by user_id:', user); // Debugging statement
+            console.log('User fetched by user_id:', user.user_id, user); // Debugging statement
 
             if (user) {
                 return new AppUser(

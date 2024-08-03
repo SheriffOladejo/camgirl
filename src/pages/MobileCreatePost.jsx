@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from "react"
+import { useState, useRef, useContext, useEffect } from "react"
 import { PUBLICITY_OPTIONS, ATTACHMENT_GIF, ATTACHMENT_IMAGE, ATTACHMENT_VIDEO } from "../utils/Constants";
 import PublicityOptions from '../components/PublicityOptions';
 import TextareaAutosize from '../../node_modules/react-textarea-autosize';
@@ -13,7 +13,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { useNavigate } from "react-router-dom";
 
 function MobileCreatePost() {
-  const dbHelper = new DbHelper()
+  const dbHelper = new DbHelper();
   const navigate = useNavigate();
   const { currentUser: user } = useContext(AuthContext);
 
@@ -22,15 +22,15 @@ function MobileCreatePost() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedGif, setSelectedGif] = useState(null);
-  const [Loading, setLoading] = useState(false)
+  const [Loading, setLoading] = useState(false);
   const [attachmentType, setAttachmentType] = useState('');
   const [attachmentFileName, setAttachmentFileName] = useState('');
   const [attachmentFile, setAttachmentFile] = useState('');
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  const [posts, setPosts] = useState([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [selectedPublicity, setSelectedPublicity] = useState(PUBLICITY_OPTIONS[0].title);
   const [selectedPublicityImg, setSelectedPublicityImg] = useState(PUBLICITY_OPTIONS[0].image);
   const [isPublicityDropdownOpen, setIsPublicityDropdownOpen] = useState(false);
+
   const attachmentRef = useRef();
   const gifRef = useRef();
   const [showGifs, setShowGifs] = useState(false);
@@ -41,7 +41,7 @@ function MobileCreatePost() {
 
   const handleDone = () => {
     setIsPublicityDropdownOpen(!isPublicityDropdownOpen);
-  }
+  };
 
   const handlePublicityOptionClick = (option) => {
     setSelectedPublicityImg(option.image);
@@ -65,6 +65,19 @@ function MobileCreatePost() {
     setShowEmojiPicker(false);
   };
 
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const uploadAttachment = async () => {
     if (!selectedImage && !selectedVideo && !selectedGif) {
       return;
@@ -73,26 +86,31 @@ function MobileCreatePost() {
     setLoading(true);
 
     try {
-     
+      let fileData = '';
+      let fileName = '';
 
       if (selectedImage) {
         console.log("Converting image to base64...");
-        attachmentFile = await fileToBase64(selectedImage);
-        attachmentFileName = selectedImage.name;
+        fileData = await fileToBase64(selectedImage);
+        fileName = selectedImage.name;
       } else if (selectedVideo) {
         console.log("Converting video to base64...");
-        attachmentFile = await fileToBase64(selectedVideo);
-        attachmentFileName = selectedVideo.name;
+        fileData = await fileToBase64(selectedVideo);
+        fileName = selectedVideo.name;
       } else if (selectedGif) {
         console.log("Using selected GIF...");
-        attachmentFile = selectedGif;
-        attachmentFileName = selectedGif.name;
+        fileData = selectedGif;
+        fileName = selectedGif.name;
       }
 
-      setAttachmentFile(attachmentFile);
-      setAttachmentFileName(attachmentFileName);
+      // Log before state update
+      console.log('Before setting state:', { fileData, fileName });
 
-      console.log('Upload successful:', { attachmentFile, attachmentFileName });
+      setAttachmentFile(fileData);
+      setAttachmentFileName(fileName);
+
+      // Log after state update (Note: This will not show updated state immediately due to async nature)
+      console.log('Upload successful:', { fileData, fileName });
     } catch (error) {
       console.error('Upload error:', error);
     } finally {
@@ -100,17 +118,16 @@ function MobileCreatePost() {
     }
   };
 
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        console.log("File converted to base64:", reader.result);
-        resolve(reader.result);
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  useEffect(() => {
+    console.log('Selected Image:', selectedImage);
+    console.log('Selected Video:', selectedVideo);
+    console.log('Selected Gif:', selectedGif);
+  }, [selectedImage, selectedVideo, selectedGif]);
+
+  useEffect(() => {
+    console.log('Attachment file updated:', attachmentFile);
+    console.log('Attachment file name updated:', attachmentFileName);
+  }, [attachmentFile, attachmentFileName]);
 
   const removeAttachment = () => {
     setSelectedVideo(null);
@@ -143,12 +160,22 @@ function MobileCreatePost() {
         setSelectedGif(null);
         setAttachmentType(ATTACHMENT_IMAGE);
         setAttachmentFileName(selectedFile.name);
+
+        // Convert image to base64 and set as attachment file
+        fileToBase64(selectedFile).then((base64) => {
+          setAttachmentFile(base64);
+        });
       } else if (isVideo) {
         setSelectedVideo(selectedFile);
         setSelectedImage(null);
         setSelectedGif(null);
         setAttachmentType(ATTACHMENT_VIDEO);
         setAttachmentFileName(selectedFile.name);
+
+        // Convert video to base64 and set as attachment file
+        fileToBase64(selectedFile).then((base64) => {
+          setAttachmentFile(base64);
+        });
       } else {
         console.error('Invalid file type. Please select an image or a video.');
       }
@@ -158,9 +185,6 @@ function MobileCreatePost() {
   const handleGifAttachment = (e) => {
     const gif = e.target.value;
     setSelectedGif(gif);
-    setSelectedImage(null);
-    setSelectedVideo(null);
-    setAttachmentFileName(gif.name);
     setAttachmentType(ATTACHMENT_GIF);
     setShowGifs(false);
   };
@@ -179,25 +203,33 @@ function MobileCreatePost() {
 
   const createPost = async () => {
     console.log('Creating post with:', { postText, user });
-    console.log('User ID:', user.user_id);
-    setLoading(true);
     if (!user || !user.user_id) {
       console.error('User not authenticated or missing user ID.');
       alert('Error: User not authenticated.');
       return;
     }
-  
-    
+
+    setLoading(true);
     try {
       const postId = new Date().getTime();
       const userId = user.user_id;
+      const now = new Date();
+      const formattedDate = now.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
 
       await uploadAttachment();
 
       const post = new Post(
         postId,
         userId,
-        postText === '' ? "" : postText,
+        postText || "",
         null, null, null,
         attachmentFile,
         attachmentFileName,
@@ -205,7 +237,7 @@ function MobileCreatePost() {
         null,
         selectedPublicity,
         null,
-        Date.now(),
+        formattedDate,
         null,
         null, null,
         null,
@@ -215,7 +247,6 @@ function MobileCreatePost() {
       console.log('Post object:', post);
 
       await dbHelper.createPost(post);
-
       navigate('/home');
     } catch (error) {
       console.error("Failed to create post:", error);
@@ -243,6 +274,7 @@ function MobileCreatePost() {
       setIsPublicityDropdownOpen(false);
     }
   };
+
 
 
   return (

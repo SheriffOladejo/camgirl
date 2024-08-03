@@ -11,7 +11,7 @@ import { AuthContext } from '../context/authContext';
 
 // gsap.registerPlugin(ScrollTrigger);
 
-function Posts({ addPost, posts, setPosts }) {
+function Posts({ addPost, posts= [], setPosts }) {
   const [loading, setLoading] = useState(false);
   // const [posts, setPosts] = useState([]);
   const [visiblePosts, setVisiblePosts] = useState([]);
@@ -96,7 +96,6 @@ function Posts({ addPost, posts, setPosts }) {
     <div ref={containerRef} className="flex flex-col overflow-y-auto gap-8 h-auto">
        {posts.map((post) => {
        return(
-        
         <PostCard key={post.id} post={post} user_id={currentUser?.id} />)
       })}
        {placeholderPosts.map((placeholder) => {

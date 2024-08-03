@@ -56,30 +56,57 @@ function CreatePost({addPost}) {
     setShowEmojiPicker(false);
   };
 
-  const uploadAttachment = async () => {
-    if (attachmentFileName === '') {
-      return;
-    }
-    setLoading(true);
-    try {
-      const base64String = await fileToBase64(selectedImage || selectedVideo);
-      addDataIntoCache('attachmentFile', base64String);
-      addDataIntoCache('gif', selectedGif);
-      console.log('Upload successful');
-      setLoading(false);
-    } catch (error) {
-      console.error('Upload error:', error);
-      setLoading(false);
-    }
-  };
-
   const fileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
     });
+  };
+
+  const uploadAttachment = async () => {
+    if (!selectedImage && !selectedVideo && !selectedGif) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      let fileData = '';
+      let fileName = '';
+
+      if (selectedImage) {
+        console.log("Converting image to base64...");
+        fileData = await fileToBase64(selectedImage);
+        fileName = selectedImage.name;
+      } else if (selectedVideo) {
+        console.log("Converting video to base64...");
+        fileData = await fileToBase64(selectedVideo);
+        fileName = selectedVideo.name;
+      } else if (selectedGif) {
+        console.log("Using selected GIF...");
+        fileData = selectedGif;
+        fileName = selectedGif.name;
+      }
+
+      // Log before state update
+      console.log('Before setting state:', { fileData, fileName });
+
+      setAttachmentFile(fileData);
+      setAttachmentFileName(fileName);
+
+      // Log after state update (Note: This will not show updated state immediately due to async nature)
+      console.log('Upload successful:', { fileData, fileName });
+    } catch (error) {
+      console.error('Upload error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
 
@@ -102,20 +129,32 @@ function CreatePost({addPost}) {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
+
       const isImage = fileType.startsWith('image/');
       const isVideo = fileType.startsWith('video/');
+
       if (isImage) {
         setSelectedImage(selectedFile);
         setSelectedVideo(null);
         setSelectedGif(null);
         setAttachmentType(ATTACHMENT_IMAGE);
         setAttachmentFileName(selectedFile.name);
+
+        // Convert image to base64 and set as attachment file
+        fileToBase64(selectedFile).then((base64) => {
+          setAttachmentFile(base64);
+        });
       } else if (isVideo) {
         setSelectedVideo(selectedFile);
         setSelectedImage(null);
         setSelectedGif(null);
         setAttachmentType(ATTACHMENT_VIDEO);
         setAttachmentFileName(selectedFile.name);
+
+        // Convert video to base64 and set as attachment file
+        fileToBase64(selectedFile).then((base64) => {
+          setAttachmentFile(base64);
+        });
       } else {
         console.error('Invalid file type. Please select an image or a video.');
       }
@@ -152,6 +191,17 @@ function CreatePost({addPost}) {
     try {
       const postId = new Date().getTime();
       const userId = user.user_id;
+      const now = new Date();
+      const formattedDate = now.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
+
       console.log('User ID:', userId);
 
       if (!userId) {
@@ -173,7 +223,7 @@ function CreatePost({addPost}) {
         null,
         selectedPublicity,
         null,
-        Date.now(),
+        formattedDate,
         null, // commentsPrivacy
         null, null,
         null, // likes
