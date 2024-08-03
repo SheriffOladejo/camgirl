@@ -789,7 +789,7 @@ class DbHelper {
         };
 
         try {
-            const response = await axiosInstance.put(`/users/${user.user_id}`, data);
+            const response = await axiosInstance.put(`/users/${user.id}`, data);
             return {
                 success: true,
                 data: response.data,
