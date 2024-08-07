@@ -64,8 +64,8 @@ function Login() {
         toast.error("Incorrect password");
         return;
     }
-
-    loginUser(userData.id);
+  console.log(userData.id)
+   await loginUser(userData.id);
     localStorage.setItem('Loggedin', true);
     navigate('/home');
 };

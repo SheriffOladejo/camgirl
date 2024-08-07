@@ -73,11 +73,11 @@ class DbHelper {
 
     async getUserId() {
         try {
-            const userData = getDataFromLocalStorage("users");
+            const userData = axiosInstance.get("users");
             if (userData) {
                 return userData.user_id; // Return the user_id from the stored data
             } else {
-                console.error("User data not found in local storage");
+                console.error("User data not found in server");
                 return null;
             }
         } catch (error) {
@@ -112,8 +112,8 @@ class DbHelper {
 
     async createPost(post) {
         const data = {
+            id: post.getId(),
             user_id: post.getUserId(),
-
             caption: post.getCaption(),
             attachment_file: post.getAttachmentFile(),
             comments_privacy: post.getCommentsPrivacy(),
@@ -129,24 +129,33 @@ class DbHelper {
         };
 
         try {
-            // Retrieve the existing posts from local storage or initialize an empty array if no posts exist
-            let existingPosts = getDataFromLocalStorage("posts");
-            if (!existingPosts) {
-                existingPosts = [];
+            // Get the user by user_id to retrieve existing posts
+            const userResponse = await axiosInstance.get(`users`);
+            const users = userResponse.data;
+
+            // Find the user by user_id
+            const user = users.find(user => user.user_id === data.user_id);
+            const id = user.user_id
+            if (!user) {
+                throw new Error("User not found");
             }
+            // Initialize user's posts if they do not exist
+            const userPosts = user.posts ? [...user.posts, data] : [data];
 
-            // Add the new post to the array of existing posts
-            existingPosts.push(data);
 
-            // Save the updated array back to local storage
-            addDataIntoCache("posts", existingPosts);
+            // Update the user’s data with the new posts
+            await axiosInstance.put(`users/${user.id}`, {
+                ...user,
+                posts: userPosts,
+            });
 
-            // Return the updated list of posts
-            return existingPosts;
-        } catch (error) {
-            console.error("An error occurred: " + error);
+            // Optionally, return the updated list of posts for the user
+            return userPosts;
+        }catch (error) {
+            console.error("Error creating post:", error.response ? error.response.data : error.message);
             return null;
         }
+        
     }
 
     async updateComment(comment) {
@@ -277,116 +286,147 @@ class DbHelper {
     async getPosts() {
         const list = [];
         try {
-            const storedData = getDataFromLocalStorage("posts");
-            // Check if data is available in local storage
-            if (storedData !== null) {
-                storedData.sort((a, b) => b.creation_date - a.creation_date);
-                for (let post of storedData) {
-                    const {
-                        id,
-                        user_id,
-                        caption,
-                        post_link,
-                        post_link_title,
-                        post_link_image,
-                        attachment_file,
-                        attachment_file_name,
-                        attachment_type,
-                        post_share,
-                        post_privacy,
-                        post_type,
-                        creation_date,
-                        comments_privacy,
-                        comments,
-                        reactions,
-                        likes,
-                    } = post;
-
-                    const newPost = new Post(
-                        id,
-                        user_id,
-                        caption,
-                        post_link,
-                        post_link_title,
-                        post_link_image,
-                        attachment_file,
-                        attachment_file_name,
-                        attachment_type,
-                        post_share,
-                        post_privacy,
-                        post_type,
-                        creation_date,
-                        comments_privacy,
-                        comments,
-                        reactions,
-                        likes
-                    );
-                    list.push(newPost);
+            // Make the request and wait for the response
+            const response = await axiosInstance.get('users');
+            const users = response.data;
+            
+            console.log('Fetched users:', users); // Debug log
+    
+            // Check if the users data is an array and not empty
+            if (Array.isArray(users)) {
+                // Use reduce to flatten the posts from each user
+                const storedData = users.reduce((acc, user) => {
+                    // Ensure each user object has a posts property
+                    console.log('Processing user:', user); // Debug log
+                    return user.posts ? [...acc, ...user.posts] : acc;
+                }, []);
+    
+                console.log('Flattened posts data:', storedData); // Debug log
+    
+                // Check if data is available and is an array
+                if (Array.isArray(storedData)) {
+                    // Sort the posts by creation date
+                    storedData.sort((a, b) => new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime());
+    
+                    console.log('Sorted posts:', storedData); // Debug log
+    
+                    // Create Post instances and add to the list
+                    for (let post of storedData) {
+                        const {
+                            id,
+                            user_id,
+                            caption,
+                            post_link,
+                            post_link_title,
+                            post_link_image,
+                            attachment_file,
+                            attachment_file_name,
+                            attachment_type,
+                            post_share,
+                            post_privacy,
+                            post_type,
+                            creation_date,
+                            comments_privacy,
+                            comments,
+                            reactions,
+                            likes,
+                        } = post;
+    
+                        // Debug log for each post
+                        console.log('Creating post:', post);
+    
+                        const newPost = new Post(
+                            id,
+                            user_id,
+                            caption,
+                            post_link,
+                            post_link_title,
+                            post_link_image,
+                            attachment_file,
+                            attachment_file_name,
+                            attachment_type,
+                            post_share,
+                            post_privacy,
+                            post_type,
+                            creation_date,
+                            comments_privacy,
+                            comments,
+                            reactions,
+                            likes
+                        );
+                        list.push(newPost);
+                    }
+                } else {
+                    console.warn('No posts data available.');
                 }
             } else {
-                // console.log(null);
+                console.warn('Users data is not in the expected format.');
             }
         } catch (error) {
-            console.log("getPostsByUserID error: " + error);
+            console.error("getPosts error: ", error);
         }
         return list;
     }
+    
+    
 
-    async getPostByID(post_id) {
-        var post = new Post();
+    async getPostsByUserID(userId) {
+        let posts = [];
         try {
-            const data = { post_id: post_id };
-            let response = null;
-            if (getDataFromLocalStorage("getPostByID") !== null) {
-                response = (getDataFromLocalStorage("getPostByID"), data);
-            }
-            // else {
-            //     const axiosResponse = await axios.get(`${Constants.BASE_API_URL}/getCommentCountByPostID`, { params: data });
-            //     response = { data: axiosResponse.data }; // Use the response from Axios
-            // }
-            for (let i = 0; i < response.data.length; i++) {
-                const id = response.data[i]["id"];
-                const user_id = response.data[i]["user_id"];
-                const caption = response.data[i]["caption"];
-                const post_link = response.data[i]["post_link"];
-                const post_link_title = response.data[i]["post_link_title"];
-                const post_link_image = response.data[i]["post_link_image"];
-                const attachment_file = response.data[i]["attachment_file"];
-                const attachment_file_name = response.data[i]["attachment_file_name"];
-                const attachment_type = response.data[i]["attachment_type"];
-                const post_share = response.data[i]["post_share"];
-                const post_privacy = response.data[i]["post_privacy"];
-                const post_type = response.data[i]["post_type"];
-                const creation_date = response.data[i]["creation_date"];
-                const comments_privacy = response.data[i]["comments_privacy"];
-                const comments = response.data[i]["comments"];
-                const reactions = response.data[i]["reactions"];
-                const likes = response.data[i]["likes"];
+            const response = await axiosInstance.get(`/posts?${userId}`);
+            const postData = response.data;
 
-                post = new Post(
-                    id,
-                    user_id,
-                    caption,
-                    post_link,
-                    post_link_title,
-                    post_link_image,
-                    attachment_file,
-                    attachment_file_name,
-                    attachment_type,
-                    post_share,
-                    post_privacy,
-                    post_type,
-                    creation_date,
-                    comments_privacy,
-                    comments,
-                    reactions,
-                    likes
-                );
+            if (postData && postData.posts) {
+                posts = postData.posts.map(postData => new Post(
+                    postData.id,
+                    userId,
+                    postData.caption,
+                    postData.post_link,
+                    postData.post_link_title,
+                    postData.post_link_image,
+                    postData.attachment_file,
+                    postData.attachment_file_name,
+                    postData.attachment_type,
+                    postData.post_share,
+                    postData.post_privacy,
+                    postData.post_type,
+                    postData.creation_date,
+                    postData.comments_privacy,
+                    postData.comments,
+                    postData.reactions,
+                    postData.likes
+                ));
             }
         } catch (error) {
-            console.log("getPostByID error: " + error);
+            console.error("getPostsByUserID error:", error);
         }
-        return post;
+        return posts;
+    }
+
+    async getPostsForUserAndFollowers(userId) {
+        try {
+            // Fetch posts for the current user
+            const userPostsResponse = await axiosInstance.get(`/posts?user_id=${userId}`);
+            const userPosts = userPostsResponse.data;
+
+            // Fetch posts for users the current user follows
+            const followedUsersResponse = await axiosInstance.get(`/users/${userId}/following`);
+            const followedUsers = followedUsersResponse.data;
+
+            let followedUserPosts = [];
+            if (followedUsers && followedUsers.length > 0) {
+                const followedUserIds = followedUsers.map(user => user.id);
+                const followedPostsResponses = await Promise.all(followedUserIds.map(id => axiosInstance.get(`/posts?user_id=${id}`)));
+                followedUserPosts = followedPostsResponses.flatMap(response => response.data);
+            }
+
+            // Combine user posts with followed users' posts
+            const allPosts = [...userPosts, ...followedUserPosts];
+            return allPosts;
+        } catch (error) {
+            console.error("getPostsForUserAndFollowers error:", error);
+            return [];
+        }
     }
 
     async updatePost(post) {
@@ -426,7 +466,12 @@ class DbHelper {
         try {
             const response = await axiosInstance.get("users");
             const users = response.data;
-
+    
+            if (!Array.isArray(users) || users.length === 0) {
+                console.warn("No users found.");
+                return false; // or handle as required
+            }
+    
             const isUsernameTaken = users.some((user) => user.username === username);
             return isUsernameTaken;
         } catch (error) {
@@ -434,6 +479,7 @@ class DbHelper {
             throw error; // Rethrow the error to handle it in the caller function
         }
     }
+    
 
     async checkForEmail(email) {
         try {
@@ -509,7 +555,7 @@ class DbHelper {
             console.log('All users fetched:', users); // Debugging statement
 
             const user = users.find(user => user.user_id === user_id);
-            console.log('User fetched by user_id:', user); // Debugging statement
+            console.log('User fetched by user_id:', user.user_id, user); // Debugging statement
 
             if (user) {
                 return new AppUser(
@@ -554,7 +600,63 @@ class DbHelper {
         }
     }
 
+    async getAppUserById(id) {
+        try {
+            console.log('getAppUserByID called with user_id:', id); // Debugging statement
+            if (!id) {
+                console.error("User ID is not provided");
+                return null;
+            }
 
+            const response = await axiosInstance.get('users');
+            const users = response.data;
+            console.log('All users fetched:', users); // Debugging statement
+
+            const user = users.find(user => user.id === id);
+            console.log('User fetched by user_id:', user); // Debugging statement
+
+            if (user) {
+                return new AppUser(
+                    user.id,
+                    user.user_id,
+                    user.username,
+                    user.email,
+                    user.phone_number,
+                    user.password,
+                    user.firstname,
+                    user.lastname,
+                    user.dob,
+                    user.country,
+                    user.location,
+                    user.verification_doc,
+                    user.docs_verified,
+                    user.bio,
+                    user.date_joined,
+                    user.last_updated,
+                    user.profile_picture,
+                    user.cover_picture,
+                    user.subscribers,
+                    user.connections,
+                    user.subscription_price,
+                    user.currency_symbol,
+                    user.currency,
+                    user.creator_mode,
+                    user.verified,
+                    user.live_mode,
+                    user.profile_setup,
+                    user.account_type,
+                    user.creator_mode_desc_dismissed,
+                    user.last_active
+                );
+            } else {
+                console.error('No user found with the provided user_id');
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching user by user_id:", error);
+            return null;
+        }
+    }
 
     async getAppUserByEmail(email) {
         try {
@@ -681,13 +783,13 @@ class DbHelper {
             live_mode: user.live_mode || "",
             profile_setup: user.profile_setup || "",
             account_type: user.account_type || "",
-           
+
             creator_mode_desc_dismissed: user.creator_mode_desc_dismissed || "",
             last_active: user.last_active || "",
         };
 
         try {
-            const response = await axiosInstance.put(`/users/${user.user_id}`, data);
+            const response = await axiosInstance.put(`/users/${user.id}`, data);
             return {
                 success: true,
                 data: response.data,

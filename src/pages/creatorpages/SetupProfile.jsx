@@ -27,7 +27,7 @@ function SetupProfile() {
     firstname: user.firstname || "",
     lastname: user.lastname || "",
     dob: user.dob || "",
-    country: user.country || "",
+    country: user.country || "Nigeria",
     document: null,
     message: user.bio || "",
     profilePicture: user.profile_picture || null,
@@ -304,7 +304,7 @@ function SetupProfile() {
             <div>
               <label htmlFor="country" className="font-semibold text-sm">Country of Residence</label>
               <select name="country" className="w-full mt-3 p-1 rounded border-2 border-color-lightGrey outline-none text-color-grey text-sm bg-color-grey/10" value={formInput.country} onChange={handleInputChange}>
-                <option value="" className="text-color-lightGrey text-sm">Nigeria</option>
+                <option value=" Nigeria" className="text-color-lightGrey text-sm" ></option>
                 {countries.map((country) => (
                   <option className="text-color-grey text-sm" key={country} value={country}>{country}</option>
                 ))}

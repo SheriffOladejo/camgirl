@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoutes from './services/ProtectedRoutes';
@@ -44,7 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 );
 
 function App() {
-  // const { isAuthenticated, isLoading } = useContext(AuthContext);
+  // const { isAuthenticated } = useContext(AuthContext);
 
   // if (isLoading) {
   //   return <div>Loading...</div>;
@@ -70,21 +70,20 @@ function App() {
         <Route path="/discover" element={<Explore />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/stories" element={<Stories />} />
-        <Route path='/profile' element={<CreatorProfile />} >
-          <Route path='/profile/:id' element={<CreatorProfile />} />
-        </Route>
+        <Route path="/profile" element={<CreatorProfile />} />
+        <Route path="/profile/:user_id" element={<CreatorProfile />} />
         {/* Protected routes */}
-        {/* <Route path="/" element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}> */}
+        <Route path="/" element={<ProtectedRoutes/>}>
 
-        <Route element={<Layout />}>
+          <Route element={<Layout />}>
 
 
-          <Route path="/home" element={<Home />} />
+            <Route path="/home" element={<Home />} />
 
+
+          </Route>
 
         </Route>
-
-        {/* </Route> */}
 
         {/* Redirect root to login if not authenticated */}
         <Route path="/" element={<Navigate to="/login" />} />

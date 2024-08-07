@@ -1,8 +1,9 @@
 import React, { createContext, useEffect, useState } from "react";
 import DbHelper from "../utils/DbHelper";
-import { getDataFromLocalStorage } from "../utils/Utils";
-
+import { getDataFromLocalStorage, updateUserOnlineStatus } from "../utils/Utils";
+import axiosInstance from "../api/axiosInstance";
 export const AuthContext = createContext();
+
 
 export const AuthContextProvider = ({ children }) => {
   const dbHelper = new DbHelper();
@@ -25,6 +26,7 @@ export const AuthContextProvider = ({ children }) => {
         if (user) {
           setCurrentUserType(user.creator_mode);
           setCurrentUser(user);
+          
         }
 
       }
@@ -34,18 +36,24 @@ export const AuthContextProvider = ({ children }) => {
     loadCurrentUser();
   }, []);
 
-  const loginUser = async (userId) => {
-    if (userId) {
-      const user = await dbHelper.getAppUserByID(userId);
-      if (user) {
-        localStorage.setItem("users", JSON.stringify([user]));
-        setCurrentUser(user);
+  const loginUser = async (id) => {
+    if (id) {
+      const loggedInUser = await dbHelper.getAppUserById(id);
+      console.log(`Logging in user with id: ${loggedInUser}`); // Debugging statement
+      if (loggedInUser) {
+        localStorage.setItem("users", JSON.stringify([loggedInUser]));
+        // setCurrentUser(loggedInUser);
+        await updateUserOnlineStatus(loggedInUser.id, true); 
       }
     }
   };
 
-  const logoutUser = () => {
+  const logoutUser = async () => {
+    if (currentUser) {
+      await updateUserOnlineStatus(currentUser.user_id, false); // Set online status to false on logout
+    }
     localStorage.removeItem("users");
+    localStorage.removeItem("Loggedin");
     setCurrentUser(null);
   };
 

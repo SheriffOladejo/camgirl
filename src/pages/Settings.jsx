@@ -33,7 +33,7 @@ function Settings() {
       <section className="w-[100%]  ">
         {isMobile ? '' : <Header />}
         <div className="grid gap-x-4 md:grid-cols-2 lg:grid-cols-3 md:px-16 overflow-y-visible bg-color-lightGrey md:h-[135vh]">
-          <LeftBar className={`col-span-1 w-[100%]`} />
+          <LeftBar className={`col-span-1 w-[100%] top-[19%]`} />
           <SettingsComponent className={`col-span-1 `} setActiveUrl={setActiveUrl} />
           <div className={`col-span-1 overflow-y-hidden  hidden md:flex`}>{renderComponent()}</div>
         </div>

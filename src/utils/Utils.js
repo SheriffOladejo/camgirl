@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie';
-import DbHelper from './DbHelper';
-
+import axiosInstance from '../api/axiosInstance';
 function isValidEmail(email) {
   // Regular expression for a basic email validation
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -27,6 +26,33 @@ function isUserSignedIn() {
     "username": username
   };
 }
+const checkUserExists = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/users/${id}`);
+
+    console.log('User Data:',id, response.data); // Log the entire user data
+    return response.status === 200;
+  } catch (error) {
+    return false;
+  }
+};
+
+const updateUserOnlineStatus = async (id, isOnline) => {
+  const userExists = await checkUserExists(id);
+  if (!userExists) {
+    console.error(`User with ID ${id} does not exist.`);
+    return;
+  }
+
+  try {
+    console.log(`Updating user ${id} to online status: ${isOnline}`);
+    const response = await axiosInstance.patch(`/users/${id}`, { is_online: isOnline });
+    console.log('Response:',id, response.data);
+  } catch (error) {
+    console.error("Error updating online status:", error.response ? error.response.data : error.message);
+  }
+};
+
 
 // async function getAppUser() {
 //   let dbHelper = new DbHelper();
@@ -60,17 +86,17 @@ function scrollToTop(window) {
   });
 }
 
-function formatNumber(number) {
-  if (number < 1000) {
-    return number.toString(); // No formatting needed for numbers less than 1000
-  } else if (number < 1000000) {
-    // Format numbers between 1000 and 999999 as '1k', '1.5k', '100k', etc.
-    return (number / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-  } else {
-    // Format numbers equal to or greater than 1000000 as '1M', '1.5M', '100M', etc.
-    return (number / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-  }
-}
+// function formatNumber(number) {
+//   if (number < 1000) {
+//     return number.toString(); // No formatting needed for numbers less than 1000
+//   } else if (number < 1000000) {
+//     // Format numbers between 1000 and 999999 as '1k', '1.5k', '100k', etc.
+//     return (number / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+//   } else {
+//     // Format numbers equal to or greater than 1000000 as '1M', '1.5M', '100M', etc.
+//     return (number / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+//   }
+// }
 
 function calculateTimeAgo(timestamp) {
   const currentTime = new Date().getTime();
@@ -112,12 +138,14 @@ function getDataFromLocalStorage(key) {
 export {
   getDataFromLocalStorage,
   addDataIntoCache,
-  formatNumber,
+  // formatNumber,
   calculateTimeAgo,
   isValidEmail,
   stringToUint8Array,
+  checkUserExists,
   sha256,
   isUserSignedIn,
+  updateUserOnlineStatus,
   // getAppUser,
   scrollToTop,
 };

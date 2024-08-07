@@ -76,7 +76,7 @@ function ExplorePage() {
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/Certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -88,7 +88,7 @@ function ExplorePage() {
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/Certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -100,7 +100,7 @@ function ExplorePage() {
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/Certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -112,7 +112,7 @@ function ExplorePage() {
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/Certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -124,7 +124,7 @@ function ExplorePage() {
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/Certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>
@@ -136,7 +136,7 @@ function ExplorePage() {
             </div>
             <div className="absolute bottom-0 bg-color-pink w-full px-3 pb-1">
               <div className="flex justify-between items-center">
-                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
+                <h1 className="flex text-[14px] items-center ">Case Cert <span><img src="../icons/Certified.png" alt="verified" className="w-4 h-4 ml-1"/></span></h1>
                 <p className="text-color-white text-[12px]">Free</p>
               </div>
               <p className="text-[12px] font-thin">@casey123</p>

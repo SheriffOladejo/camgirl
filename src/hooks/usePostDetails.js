@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import DbHelper from '../utils/DbHelper';
 // import { getAppUser, calculateTimeAgo } from '../utils/Utils';
 import AppUser from '../models/AppUser';
-import Post from '../models/Post';
-const usePostDetails = () => {
+import axiosInstance from '../api/axiosInstance'
+const usePostDetails = ({post}) => {
   const [likesCount, setLikesCount] = useState("");
   const [commentsCount, setCommentsCount] = useState("");
   const [likedByUser, setLikedByUser] = useState(false);
@@ -54,15 +54,77 @@ const usePostDetails = () => {
   //   };
   //   getUser();
   // }, []);
+  // useEffect(() => {
+  //   const fetchPostDetails = async () => {
+  //     try {
+  //       // Fetch user data
+  //       const userResponse = await axiosInstance.get(`users/${post.user_id}`);
+  //       const userData = userResponse.data;
+  //       const appUser = new AppUser(userData);
+  //       setUser(appUser);
 
-  const updateLikes = async () => {
-    if (!user || !user.getUserId()) {
-      console.error("User or user ID is not available.");
-      return;
+  //       // Set likes count and liked by user
+  //       if (post.likes) {
+  //         const likesArray = JSON.parse(post.likes);
+  //         setLikesCount(likesArray.length > 0 ? `${likesArray.length}` : '');
+  //         setLikedByUser(likesArray.includes(appUser.getUserId()));
+  //       }
+
+  //       // Fetch comments count
+  //       const commentsCount = await dbHelper.getCommentCountByPostID(post.getId());
+  //       setCommentsCount(commentsCount !== 0 ? `${commentsCount}` : '');
+
+  //       // Calculate time ago
+  //       setTimeAgo(calculateTimeAgo(post.creation_date));
+
+  //     } catch (error) {
+  //       console.error('Error fetching post details:', error);
+  //     }
+  //   };
+
+  //   fetchPostDetails();
+  // }, [post, dbHelper]);
+
+  
+  
+  // const updateLikes = async () => {
+  //   try {
+  //     // Determine the user ID, use 123 as default if user ID is not available
+  //     const userId = user.getUserId() || 123;
+      
+  //     const response = await axiosInstance.post(`/posts/${post.getId()}/likes`, {
+  //       userId: userId,
+  //     });
+  
+  //     if (response.status === 200) {
+  //       // Update the likes count and liked status
+  //       setLikesCount(response.data);
+  //       setLikedByUser(response.data.likedByUser);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating likes:', error);
+  //   }
+  // };
+  
+  const updateLikes = () => {
+    try {
+      // // Determine the user ID, use 123 as default if user ID is not available
+      // const userId = user.getUserId() || 123;
+  
+      // Increment the likes count locally
+      const newLikesCount = Number(likesCount) + 1;
+  
+      // Update the likes count and liked status locally
+      setLikesCount(newLikesCount);
+      setLikedByUser(true);
+  
+      // // Optionally log the user ID for debugging
+      // console.log('User ID:', userId);
+    } catch (error) {
+      console.error('Error updating likes:', error);
     }
-    // Update likes logic
   };
-
+  
   // const fetchUser = useCallback(async () => {
   //   let user = await getAppUser();
   //   if (user !== null) {
