@@ -6,7 +6,8 @@ import Logo from "../components/Logo";
 import FormInput from "../components/FormInput";
 import { AuthContext } from "../context/authContext";
 import { GOOGLE_CLIENT_ID } from "../utils/Constants";
-
+import showPasswordImg from '/icons/password.png';
+import closePasswordImg from '/icons/closePass.png';
 function Login() {
   const dbHelper = new DbHelper();
   const { loginUser } = useContext(AuthContext);
@@ -42,33 +43,33 @@ function Login() {
     const { email, password } = formInput;
 
     if (!email) {
-        toast.error('Email is required');
-        return;
+      toast.error('Email is required');
+      return;
     }
     if (!password) {
-        toast.error('Password is required');
-        return;
+      toast.error('Password is required');
+      return;
     }
 
     console.log('Attempting to fetch user for email:', email); // Debugging statement
 
     const userData = await dbHelper.getAppUserByEmail(email);
     if (!userData) {
-        toast.error("User not found");
-        return;
+      toast.error("User not found");
+      return;
     }
 
     console.log('User data retrieved:', userData); // Debugging statement
 
     if (password !== userData.password) {
-        toast.error("Incorrect password");
-        return;
+      toast.error("Incorrect password");
+      return;
     }
-  console.log(userData.id)
-   await loginUser(userData.id);
+    console.log(userData.id)
+    await loginUser(userData.id);
     localStorage.setItem('Loggedin', true);
     navigate('/home');
-};
+  };
 
 
   const togglePassword = () => {
@@ -141,7 +142,7 @@ function Login() {
                 />
                 <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0 flex items-center px-2">
                   {showPassword ? (
-                    <img className="h-4 w-4" src="/icons/password.png" alt="show-password" />
+                    <img className="h-4 w-4" src={showPasswordImg} alt="show-password" />
                   ) : (
                     <img className="h-3 w-3" src="/icons/closePass.png" alt="close-password" />
                   )}
@@ -151,7 +152,7 @@ function Login() {
               <a href="#" className="flex justify-end text-[0.9rem] text-color-grey">Forgot Password?</a>
               <div>
                 <button
-                onClick={handleSubmit}
+                  onClick={handleSubmit}
                   type="submit"
                   className="bg-color-pink w-full rounded-full py-2 text-color-white font-semibold text-[0.8rem] hover:bg-color-pink/80"
                 >
@@ -176,7 +177,7 @@ function Login() {
           </div>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </section>
   );
 }
