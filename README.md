@@ -1,7 +1,10 @@
 # camgirl
 
 # start
-- npm run dev
+- run: npm run dev
 
 # start json server
-- npx json-server -p 5000  data.json5
+- run: npx json-server -p 5000  data.json5
+
+  ## if you fork it:
+  - run: npm install    
