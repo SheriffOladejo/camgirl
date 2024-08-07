@@ -339,7 +339,7 @@ function Signup() {
                       login()
                       googleButtonClicked()
                     }} className="bg-color-blue w-full mt-4 py-2 rounded-full flex items-center justify-center text-color-white hover:bg-color-blue/80 font-semibold text-[0.8rem]">
-                      <img src="/icons/google.png" alt="" className="w-4 h-4 mr-2 rounded-full" />
+                      <img src="/icons/google.png" alt="google" className="w-4 h-4 mr-2 rounded-full" />
                       Sign in with Google
                     </button>
                   </div>
