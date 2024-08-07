@@ -322,12 +322,12 @@ function SetupProfile() {
                     <div className="relative">
                       <img src={formInput.document} alt="Uploaded document" className="w-full h-full" />
                       <button type="button" className="absolute top-0 right-0 m-2 bg-color-grey rounded-full p-2" onClick={handleRemoveDocument}>
-                        <img src="/icons/close.png" alt="Remove document" className="w-2 h-2  " />
+                        <img src="../../dist/icons/close.png" alt="Remove document" className="w-2 h-2  " />
                       </button>
                     </div>
                   ) : (
                     <div className="py-6 flex flex-col justify-center items-center">
-                      <img src="/icons/export.png" alt="upload" className="w-8 h-8 mb-4" />
+                      <img src="../../dist/icons/export.png" alt="upload" className="w-8 h-8 mb-4" />
                       <p className="flex font-bold text-color-black text-center text-md">Drag and drop file here or <span className="text-color-pink ml-1 cursor-pointer" onClick={openFileDialog}>Browse</span></p>
                       <p className="text-[12px] text-center w-full">Supported formats JPEG, PNG, PDF, WORD</p>
                     </div>
@@ -354,13 +354,13 @@ function SetupProfile() {
                     <div className="relative w-40 h-40 mx-auto">
                       <img src={formInput.profilePicture} alt="Uploaded profile picture" className="w-full h-full object-cover" />
                       <button type="button" className="absolute top-0 right-0 m-2 bg-color-grey rounded-full p-2" onClick={handleRemoveProfilePicture}>
-                        <img src="/icons/close.png" alt="Remove document" className="w-2 h-2  " />
+                        <img src="../../dist/icons/close.png" alt="Remove document" className="w-2 h-2  " />
                       </button>
                     </div>
                   ) : (
                     <div className="w-full mx-auto text-cente cursor-pointer">
                       <div className="p-3 bg-color-3/20 rounded-full w-14 mx-auto">
-                        <img onClick={openProfilePictureDialog} src="/icons/addImg.png" alt="upload" className="w-7 h-7 mx-auto" />
+                        <img onClick={openProfilePictureDialog} src="../../dist/icons/addImg.png" alt="upload" className="w-7 h-7 mx-auto" />
                       </div>
                       <label htmlFor="picture" className="font-medium text-[0.8rem] block mx-auto text-center">Upload a profile picture</label>
                     </div>
@@ -381,7 +381,7 @@ function SetupProfile() {
         <div className="flex justify-between mt-8">
           {stage >= 1 && (
             <div className="flex items-center space-x-2" onClick={handleBackClick}>
-              <img src="/icons/back.png" alt="go back" className="w-3 h-3" />
+              <img src="../../dist/icons/back.png" alt="go back" className="w-3 h-3" />
               <button type="button" className="border-none rounded-md text-sm">
                 Back
               </button>

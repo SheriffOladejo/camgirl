@@ -302,11 +302,11 @@ function Signup() {
             <p className="text-[0.8rem] text-color-grey font-semibold">Already have an account? <span><Link to="/login" className="text-color-pink">Log In</Link></span></p>
             <div className="flex pt-4">
               <button className={`${creatorMode === 'fan' ? 'bg-color-pink text-color-white' : 'bg-color-lightGrey text-color-grey'} flex px-8 py-2 rounded justify-center items-center space-x-2`} onClick={handleSignupFan}>
-                <img className="w-4 h-4" src="../public/icons/people.png" alt="fan profile" />
+                <img className="w-4 h-4" src="../../dist/icons/people.png" alt="fan profile" />
                 <p className="text-[0.8rem]">fan</p>
               </button>
               <button className={`${creatorMode === 'creator' ? 'bg-color-pink text-color-white' : 'bg-color-lightGrey text-color-grey'} flex px-8 py-2 rounded justify-center items-center space-x-2`} onClick={handleSignupCreator}>
-                <img className="w-4 h-4" src="../public/icons/profile-white.png" alt="creator profile" />
+                <img className="w-4 h-4" src="../../dist/icons/profile-white.png" alt="creator profile" />
                 <p className="text-[0.8rem]">Creator</p>
               </button>
             </div>
@@ -318,7 +318,7 @@ function Signup() {
                   <div className="relative">
                     <FormInput name="password" type={showPassword ? 'text' : 'password'} placeholder="Password" value={formInput.password} onChange={handleInputChange} />
                     <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0 flex items-center px-2">
-                      {showPassword ? <img className="h-4 w-4" src="../public/icons/password.png" alt="show-password" /> : <img className="h-3 w-3" src="../public/icons/closePass.png" alt="close-password" />}
+                      {showPassword ? <img className="h-4 w-4" src="../../dist/icons/password.png" alt="show-password" /> : <img className="h-3 w-3" src="../../dist/icons/closePass.png" alt="close-password" />}
                     </button>
                   </div>
                   <FormInput name="confirmPassword" type={showPassword ? 'text' : 'password'} placeholder="Confirm Password" value={formInput.confirmPassword} onChange={handleInputChange} />
@@ -339,7 +339,7 @@ function Signup() {
                       login()
                       googleButtonClicked()
                     }} className="bg-color-blue w-full mt-4 py-2 rounded-full flex items-center justify-center text-color-white hover:bg-color-blue/80 font-semibold text-[0.8rem]">
-                      <img src="../public/icons/google.png" alt="" className="w-4 h-4 mr-2 rounded-full" />
+                      <img src="../../dist/icons/google.png" alt="" className="w-4 h-4 mr-2 rounded-full" />
                       Sign in with Google
                     </button>
                   </div>

@@ -82,7 +82,7 @@ function CreatorProfile() {
   }
 
   const { profile_picture, firstname, lastname, username, bio, country, phone_number, subscribers } = profileData;
-  const profilePic = profile_picture || '../images/safari-adventure.jpg';
+  const profilePic = profile_picture || '../../dist/images/safari-adventure.jpg';
 
   return (
     <>
@@ -96,10 +96,10 @@ function CreatorProfile() {
                 {headerImg ? (
                   <img src={headerImg} alt="Header" className="w-full h-full object-cover" />
                 ) : (
-                  <img src="../background/bgimg.jpg" alt="Profile Pic" className="w-full h-[30vh] object-cover" />
+                  <img src="../../dist/background/bgimg.jpg" alt="Profile Pic" className="w-full h-[30vh] object-cover" />
                 )}
                 <button>
-                  <img src="../icons/settings-icon.png" alt="settings" className="w-4 h-4 absolute top-4 right-4" />
+                  <img src="../../dist/icons/settings-icon.png" alt="settings" className="w-4 h-4 absolute top-4 right-4" />
                 </button>
               </div>
               <div className="absolute left-4 top-20">
@@ -119,13 +119,13 @@ function CreatorProfile() {
                 <div>
                   <h1 className="font-bold text-[16px] flex items-center">
                     {firstname && lastname ? `${firstname} ${lastname}` : 'Case Cert'}
-                    {isVerified && <img src="../icons/verifiied.png" alt="is verified" className="w-4 h-4 ml-2" />}
+                    {isVerified && <img src="../../dist/icons/verifiied.png" alt="is verified" className="w-4 h-4 ml-2" />}
                   </h1>
                   <p className="font-thin text-[12px]">@{username ? username : 'casecert'} {isOnline && <span>Online now</span>}</p>
                 </div>
                 <div className="flex justify-end items-center space-x-2 cursor-pointer z-100 bg-color-white">
                   <Link to="/messages" className="border px-2 border-color-pink cursor-pointer">
-                    <img src="../icons/icon2.png" alt="direct message" className="w-6 h-6 md:w-8 md:h-8" />
+                    <img src="../../dist/icons/icon2.png" alt="direct message" className="w-6 h-6 md:w-8 md:h-8" />
                   </Link>
                   <button className="shadow text-[10px] py-2.5 px-4 bg-color-pink md:py-2 md:px-4 rounded-md text-color-white md:text-[12px] cursor-pointer">
                     Subscribe ₦3,000.00/month
