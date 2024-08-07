@@ -141,9 +141,9 @@ function Login() {
                 />
                 <button type="button" onClick={togglePassword} className="absolute inset-y-0 right-0 flex items-center px-2">
                   {showPassword ? (
-                    <img className="h-4 w-4" src="../public/icons/password.png" alt="show-password" />
+                    <img className="h-4 w-4" src="../icons/password.png" alt="show-password" />
                   ) : (
-                    <img className="h-3 w-3" src="../public/icons/closePass.png" alt="close-password" />
+                    <img className="h-3 w-3" src="../icons/closePass.png" alt="close-password" />
                   )}
                 </button>
               </div>
@@ -167,7 +167,7 @@ function Login() {
                   className="bg-color-blue w-full mt-4 py-2 rounded-full flex items-center justify-center text-color-white hover:bg-color-blue/80 font-semibold text-[0.8rem]"
                   onClick={handleGoogleSignIn}
                 >
-                  <img src="../public/icons/google.png" alt="" className="w-4 h-4 mr-2 rounded-full" />
+                  <img src="../icons/google.png" alt="" className="w-4 h-4 mr-2 rounded-full" />
                   Sign in with Google
                 </button>
               </div>
