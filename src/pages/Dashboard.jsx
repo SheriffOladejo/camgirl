@@ -10,14 +10,14 @@ function Dashboard() {
       {isMobile ? '' : <Header />}
 
       <div className="flex w-full pb-40 md:pb-20 md:bg-color-lightGrey md:space-x-4 md:px-10">
-        <LeftBar className={` w-[20%]`} />
-        <div className='w-[100%]  px-6  mt-10'>
+        <LeftBar className={` w-[25%]`} />
+        <div className='w-[100%] md:w-[75%] px-6  mt-10'>
           <div className='flex items-center  bg-color-white rounded'>
             <img src="../src/assets/icons/arrow-left.png" alt="back" onClick={() => window.history.back()} className='w-7 h-7 md:hidden' />
             <h1 className=' py-4 md:py-2 pl-3 font-bold text-[1.5rem] md:text-[1.3rem]'>Dashboard</h1>
           </div>
 
-          <div className='flex flex-col space-x-4 w-full md:mt-8  md:flex-row '>
+          <div className='flex flex-col md:space-x-4 w-full md:mt-8  md:flex-row '>
             <div className='py-4  bg-color-white rounded md:px-6 md:w-[50%]'>
               <h2 className='font-bold mb-4 text-[1.5rem] md:text-[1.1rem]'>Quick Actions</h2>
               <div className='md:mt-6'>
@@ -54,7 +54,7 @@ function Dashboard() {
 
             </div>
           </div>
-          <div className='mt-10 bg-color-white p-6 rounded'>
+          <div className='mt-10 bg-color-white md:p-6 rounded'>
             <h2 className='text-[1.4rem] font-bold md:text-[1.2rem]'>Transaction history</h2>
             <div>
               <table className='w-full mt-10 border-b border-color-lightGrey'>

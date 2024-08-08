@@ -10,9 +10,9 @@ function Explore() {
     <section className="w-[100%] ">
         {isMobile ? <MobileHeader/> : <Header />}
         <div className="flex md:space-x-4 w-full md:px-10  overflow-y-visible md:bg-color-lightGrey ">
-          <LeftBar className={` w-[20%]`} />
+          <LeftBar className={` w-[40%]`} />
      
-          <ExplorePage  className={` w-[80%]`} />
+          <ExplorePage  className={` w-[60%]`} />
         
         </div>
       </section>

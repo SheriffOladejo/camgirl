@@ -14,7 +14,9 @@ import { AuthContext } from '../context/authContext';
 
 function CreatePost({addPost}) {
   const dbHelper = new DbHelper();
-  const { currentUser: user } = useContext(AuthContext);
+  const { currentUser: user  } = useContext(AuthContext);
+  console.log(user)
+//  const {profile_picture} = user 
 
   const [postText, setPostText] = useState('');
   const textareaRef = useRef(null);
@@ -270,7 +272,7 @@ function CreatePost({addPost}) {
             <img className="w-3 h-3 relative mt-1 left-0" src="../icons/chevron-down.png" alt="Image" />
           </div>
           {isPublicityDropdownOpen && (
-            <div className='w-56 md:w-72 h-auto border border-color-lightGrey bg-color-white rounded m-4 p-4 absolute top-[14%] shadow '>
+            <div className='w-56 md:w-72 h-auto border border-color-lightGrey bg-color-white rounded m-4 p-4 absolute top-[14%] shadow z-20 '>
               <p className='text-sm font-bold font-inter text-color-black'>Who can see your post?</p>
               <p className='text-sm font-medium font-inter text-color-7'>Your post will show up in Feed, on your profile and in search results.<br /><br />Your default audience is set to Public, but you can change the audience of this specific post.</p>
               <div className="bg-color-white rounded">

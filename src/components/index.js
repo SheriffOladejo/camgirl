@@ -158,13 +158,13 @@ export const profileMenu = [
     img: "../icons/subscriptions.png"
   },
   
-  {
-    // id: "3",
-    title: "Log out",
-    // logout
-    url: "/",
-    img: "../icons/logout.png"
-  },
+  // {
+  //   // id: "3",
+  //   title: "Log out",
+  //   // logout
+  //   url: "/",
+  //   img: "../icons/logout.png"
+  // },
   
   
 ];

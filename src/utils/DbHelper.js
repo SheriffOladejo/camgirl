@@ -91,24 +91,42 @@ class DbHelper {
             caption: comment.getCaption(),
             creation_date: comment.getCreationDate(),
             hidden: comment.isHidden(),
-            parent_id: comment.getParentId(),
+            parent_id: comment.getParentId(),  // ID of the post to which this comment belongs
             likes: comment.getLikes(),
             reactions: comment.getReactions(),
             privacy: comment.getPrivacy(),
             user_ids: comment.getUserIds(),
         };
-
+    
         try {
-            let response = null;
-            if (addDataIntoCache("createComment") !== null) {
-                response = JSON.parse(addDataIntoCache("createComment"), data);
+            // Get all posts to find the post by parent_id
+            const postsResponse = await axiosInstance.get('posts');
+            const posts = postsResponse.data;
+    
+            // Find the post by parent_id
+            const post = posts.find(post => post.id === data.parent_id);
+    
+            if (!post) {
+                throw new Error("Post not found");
             }
-
-            return response;
+    
+            // Initialize post's comments if they do not exist
+            const postComments = post.comments ? [...post.comments, data] : [data];
+    
+            // Update the post’s data with the new comments
+            await axiosInstance.put(`posts/${post.id}`, {
+                ...post,
+                comments: postComments,
+            });
+    
+            // Optionally, return the updated list of comments for the post
+            return postComments;
         } catch (error) {
-            console.error("An error occurred: " + error);
+            console.error("Error creating comment:", error.response ? error.response.data : error.message);
+            return null;
         }
     }
+    
 
     async createPost(post) {
         const data = {
@@ -151,11 +169,11 @@ class DbHelper {
 
             // Optionally, return the updated list of posts for the user
             return userPosts;
-        }catch (error) {
+        } catch (error) {
             console.error("Error creating post:", error.response ? error.response.data : error.message);
             return null;
         }
-        
+
     }
 
     async updateComment(comment) {
@@ -289,9 +307,9 @@ class DbHelper {
             // Make the request and wait for the response
             const response = await axiosInstance.get('users');
             const users = response.data;
-            
+
             console.log('Fetched users:', users); // Debug log
-    
+
             // Check if the users data is an array and not empty
             if (Array.isArray(users)) {
                 // Use reduce to flatten the posts from each user
@@ -300,16 +318,16 @@ class DbHelper {
                     console.log('Processing user:', user); // Debug log
                     return user.posts ? [...acc, ...user.posts] : acc;
                 }, []);
-    
+
                 console.log('Flattened posts data:', storedData); // Debug log
-    
+
                 // Check if data is available and is an array
                 if (Array.isArray(storedData)) {
                     // Sort the posts by creation date
                     storedData.sort((a, b) => new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime());
-    
+
                     console.log('Sorted posts:', storedData); // Debug log
-    
+
                     // Create Post instances and add to the list
                     for (let post of storedData) {
                         const {
@@ -331,10 +349,10 @@ class DbHelper {
                             reactions,
                             likes,
                         } = post;
-    
+
                         // Debug log for each post
                         console.log('Creating post:', post);
-    
+
                         const newPost = new Post(
                             id,
                             user_id,
@@ -367,8 +385,8 @@ class DbHelper {
         }
         return list;
     }
-    
-    
+
+
 
     async getPostsByUserID(userId) {
         let posts = [];
@@ -466,12 +484,12 @@ class DbHelper {
         try {
             const response = await axiosInstance.get("users");
             const users = response.data;
-    
+
             if (!Array.isArray(users) || users.length === 0) {
                 console.warn("No users found.");
                 return false; // or handle as required
             }
-    
+
             const isUsernameTaken = users.some((user) => user.username === username);
             return isUsernameTaken;
         } catch (error) {
@@ -479,7 +497,7 @@ class DbHelper {
             throw error; // Rethrow the error to handle it in the caller function
         }
     }
-    
+
 
     async checkForEmail(email) {
         try {
@@ -602,7 +620,7 @@ class DbHelper {
 
     async getAppUserById(id) {
         try {
-            console.log('getAppUserByID called with user_id:', id); // Debugging statement
+            console.log('getAppUserByID called with id:', id); // Debugging statement
             if (!id) {
                 console.error("User ID is not provided");
                 return null;
@@ -649,11 +667,11 @@ class DbHelper {
                     user.last_active
                 );
             } else {
-                console.error('No user found with the provided user_id');
+                console.error('No user found with the provided id');
                 return null;
             }
         } catch (error) {
-            console.error("Error fetching user by user_id:", error);
+            console.error("Error fetching user by id:", error);
             return null;
         }
     }
@@ -712,6 +730,7 @@ class DbHelper {
 
     async createUser(user) {
         const data = {
+            id: user.id || "",
             user_id: user.user_id || "",
             username: user.username || "",
             email: user.email || "",
@@ -757,6 +776,9 @@ class DbHelper {
 
     async updateUser(user) {
         const data = {
+        
+         id: user.id || "",
+          user_id: user.user_id || "",
             username: user.username || "",
             email: user.email || "",
             phone_number: user.phone_number || "",
