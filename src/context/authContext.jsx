@@ -1,7 +1,8 @@
 import React, { createContext, useEffect, useState } from "react";
 import DbHelper from "../utils/DbHelper";
 import { getDataFromLocalStorage, updateUserOnlineStatus } from "../utils/Utils";
-import axiosInstance from "../api/axiosInstance";
+
+
 export const AuthContext = createContext();
 
 
@@ -10,7 +11,6 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserType, setCurrentUserType] = useState('');
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     console.log('useEffect is running'); // Debugging statement
 
@@ -19,9 +19,9 @@ export const AuthContextProvider = ({ children }) => {
       console.log('Stored users:', storedUsers); // Debugging statement
 
       if (storedUsers && storedUsers.length > 0) {
-        const user_id = storedUsers[0].user_id;
-        console.log('Retrieved user ID from local storage:', user_id); // Debugging statement
-        const user = await dbHelper.getAppUserByID(user_id);
+        const id = storedUsers[0].id;
+        console.log('Retrieved user ID from local storage:', id); // Debugging statement
+        const user = await dbHelper.getAppUserById(id);
         console.log('Retrieved user from DB:', user); // Debugging statement
         if (user) {
           setCurrentUserType(user.creator_mode);
@@ -42,7 +42,7 @@ export const AuthContextProvider = ({ children }) => {
       console.log(`Logging in user with id: ${loggedInUser}`); // Debugging statement
       if (loggedInUser) {
         localStorage.setItem("users", JSON.stringify([loggedInUser]));
-        // setCurrentUser(loggedInUser);
+        setCurrentUser(loggedInUser);
         await updateUserOnlineStatus(loggedInUser.id, true); 
       }
     }
@@ -50,11 +50,12 @@ export const AuthContextProvider = ({ children }) => {
 
   const logoutUser = async () => {
     if (currentUser) {
-      await updateUserOnlineStatus(currentUser.user_id, false); // Set online status to false on logout
+      await updateUserOnlineStatus(currentUser.id, false); // Set online status to false on logout
     }
-    localStorage.removeItem("users");
+    // localStorage.removeItem("users");
     localStorage.removeItem("Loggedin");
-    setCurrentUser(null);
+    // setCurrentUser(null);
+ 
   };
 
   const updateCurrentUser = async (user) => {

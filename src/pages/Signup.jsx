@@ -258,7 +258,7 @@ function Signup() {
         };
 
         const user = new AppUser(
-            null, data.user_id, data.username, data.email, null, data.password, null, null,
+            user_Id, data.user_id, data.username, data.email, null, data.password, null, null,
             null, null, null, null, null, null, data.date_joined,
             null, null, null, null, null,
             null, null, null, data.creator_mode, null,

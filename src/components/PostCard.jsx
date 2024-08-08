@@ -19,10 +19,14 @@ function PostCard({ post, postReaction, user_id }) {
   const { likesCount, commentsCount, likedByUser, updateLikes, setCommentsCount } = usePostDetails(post);
 
   const [postOwner, setPostOwner] = useState(null);
-  const [showComment, setShowComment] = useState(false);  const [comment, setComment] = useState('');
+  const [showComment, setShowComment] = useState(false);
+  const [comment, setComment] = useState('');
   const [showTipModal, setShowTipModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [user, setUser] = useState(null);
+  const [showMoreComments, setShowMoreComments] = useState(false);
+  const [comments, setComments] = useState([]);
+
   useEffect(() => {
     const fetchPostOwner = async () => {
       try {
@@ -51,12 +55,12 @@ function PostCard({ post, postReaction, user_id }) {
         console.error('Error fetching user data:', error);
       }
     };
-  
+
     if (user_id) { // Ensure user_id is not undefined or null
       fetchUser();
     }
   }, [user_id]);
-  
+
   const closeMenu = () => {
     setShowMenu(false);
   };
@@ -64,28 +68,56 @@ function PostCard({ post, postReaction, user_id }) {
   const openMenu = () => {
     setShowMenu(true);
   };
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axiosInstance.get(`posts/${post.id}/comments`);
+        setComments(response.data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
+
+    fetchComments();
+  }, [post.id]);
 
   const makeComment = async () => {
     console.log("Making comment:", comment);
+    const now = new Date();
+    const formattedDate = now.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
     let user_ids = JSON.stringify([]);
     let privacy = -1;
     let post_comment = new PostCommentModel(
       -1,
       comment_maker.user_id,
       comment,
-      Date.now(),
+      formattedDate,
       "false",
       post.id,
-      "hey",
-      "hy",
+      "",
+      "",
       user_ids,
       privacy
     );
 
-    await dbHelper.createComment(post_comment);
-    setComment("");
-    let c = Number(commentsCount) + 1;
-    setCommentsCount(`${c}`);
+    try {
+      await dbHelper.createComment(post_comment);
+      setComment("");
+      setCommentsCount((prevCount) => `${Number(prevCount) + 1}`);
+      
+      // Add new comment to state
+      setComments((prevComments) => [post_comment, ...prevComments]);
+    } catch (error) {
+      console.error("Error making comment:", error);
+    }
     console.log("Comment made successfully.");
   };
 
@@ -95,8 +127,8 @@ function PostCard({ post, postReaction, user_id }) {
     let owner_id = postOwner.user_id;
     navigate('/post-comment', {
       state: {
-        post_id,
-        owner_id
+        post_id: post.id,
+        owner_id: postOwner.user_id
       }
     });
   };
@@ -134,41 +166,14 @@ function PostCard({ post, postReaction, user_id }) {
 
   const renderPostContent = (post) => {
     console.log("Post object:", post);
-  
-    // if (!post || (!post.attachment_type && !post.caption)) {
-    //   return null; // No content to render
-    // }
 
-    // if (!post || !post.attachment_type ||  !post.caption) {
-    //   return (
-    //     <div>
-    //       {post.attachment_type === 'image' && (
-    //         <div className='flex flex-col space-y-3'>
-    //           <p className='text-[12px] font-semibold pl-2'>{post.caption}</p>
-    //           <div className="w-[100%] h-[20rem] shadow">
-    //             <img src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-full" />
-    //           </div>
-    //         </div>
-    //       )}
-    //       {post.attachment_type === 'video' && (
-    //         <div className='flex flex-col space-y-3'>
-    //           <p className='text-[12px] font-semibold'>{post.caption}</p>
-    //           <div className="w-[100%] h-[20rem] shadow">
-    //             <video src={post.attachment_file} alt="Post Media" className="object-cover rounded-md w-full h-full" controls />
-    //           </div>
-    //         </div>
-    //       )}
-    //     </div>
-    //   );
-    // }
-    
-  if (!post.attachment_type) {
-    return (
-      <div className="text-color-grey">
-        <p>{post.caption}</p>
-      </div>
-    );
-  }
+    if (!post.attachment_type) {
+      return (
+        <div className="text-color-grey">
+          <p>{post.caption}</p>
+        </div>
+      );
+    }
     switch (post.attachment_type) {
       case 'image':
         console.log("Rendering image", post.attachment_file);
@@ -205,7 +210,7 @@ function PostCard({ post, postReaction, user_id }) {
         );
     }
   };
-  
+
 
   return (
     <div className='bg-color-white p-4 rounded-lg  flex flex-col space-y-4 relative  w-[100%]'>
@@ -245,14 +250,14 @@ function PostCard({ post, postReaction, user_id }) {
           {<Link to={`/profile`} className="flex-shrink-0 group block">
             <div className="flex items-center">
               <div className='p-[1px] bg-color-pink rounded-full'>
-              {user ?  <img className="inline-block h-8 w-8 rounded-full" src={user.profile_picture} alt="" /> :  <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />} 
+                {user ? <img className="inline-block h-8 w-8 rounded-full" src={user.profile_picture} alt="" /> : <img className="inline-block h-8 w-8 rounded-full" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />}
               </div>
               <div className="ml-3">
                 <p className="text-[14px] leading-6 font-bold text-white flex items-center space-x-1">
-               {user ? ` ${user.firstname} ${user.lastname}` : ' Sonali Hirave'}  
+                  {user ? ` ${user.firstname} ${user.lastname}` : ' Sonali Hirave'}
                   {verified && <img src='../icons/Certified.png' className='w-4 h-4' alt='certified' />}
                   <span className="text-[12px] leading-5 font-thin text-color-grey group-hover:text-color- transition ease-in-out duration-150">
-                    @{user ? ` ${user.username} ` : ' ShonaDesign'}  
+                    @{user ? ` ${user.username} ` : ' ShonaDesign'}
                   </span>
                 </p>
                 <p className='text-[10px]'>{post ? post.creation_date : '9hr ago'}</p>
@@ -273,6 +278,28 @@ function PostCard({ post, postReaction, user_id }) {
       </div>
       <div className="py-6 w-full">
         <hr className="border-1 border-color-grey/40 my-[20px]" />
+        <div className='mt-4'>
+          {comments.length > 0 && (
+            <div>
+              {displayedComments.map((comment, index) => (
+                <div key={index} className="flex items-start mt-2">
+                  <div className='p-[1px] bg-color-pink rounded-full'>
+                    <img className="inline-block h-8 w-8 rounded-full" src={comment_maker.profile_picture || 'default_profile_picture_url'} alt="Profile" />
+                  </div>
+                  <div className='ml-2'>
+                    <p className='text-white font-semibold'>{comment_maker.username}</p>
+                    <p className='text-gray-400'>{comment.caption}</p>
+                  </div>
+                </div>
+              ))}
+              {comments.length > 3 && !showMoreComments && (
+                <button onClick={() => setShowMoreComments(true)} className="text-blue-500 mt-2">
+                  Show More
+                </button>
+              )}
+            </div>
+          )}
+        </div>
         <div className="flex items-center">
           <div className="text-[14px]">😀</div>
           <div className="text-[14px] ml-[-8px]">😂</div>
@@ -288,8 +315,8 @@ function PostCard({ post, postReaction, user_id }) {
               <div className="reaction" onClick={updateLikes}>
                 <button className="flex items-center text-color-grey font-medium hover:text-color-pink">
                   <img src="../icons/like.png" alt="Like" className="w-4 h-4 mr-1" />
-                  <span className="text-xs">{likesCount ? formatLikesCount((likesCount)): ' like'}</span>
-                 
+                  <span className="text-xs">{likesCount ? formatLikesCount((likesCount)) : ' like'}</span>
+
                 </button>
               </div>
               <div onClick={openComment} className="reaction">
@@ -320,7 +347,7 @@ function PostCard({ post, postReaction, user_id }) {
           <div className='w-full flex flex-row items-center'>
             <div className="ml-2">
               {comment_maker ? (
-                <img src={comment_maker.profile_picture} alt={comment_maker.firstname}  className="w-8 h-8 p-[1px] bg-color-pink rounded-full"/>
+                <img src={comment_maker.profile_picture} alt={comment_maker.firstname} className="w-8 h-8 p-[1px] bg-color-pink rounded-full" />
               ) : (
                 <img src='../profileImg.png' className="w-8 h-8 p-[1px] bg-color-pink rounded-full" alt="" />
               )}
@@ -350,6 +377,7 @@ function PostCard({ post, postReaction, user_id }) {
               </button>
             </div>
           </div>
+
         </div>
       ) : ''}
     </div>

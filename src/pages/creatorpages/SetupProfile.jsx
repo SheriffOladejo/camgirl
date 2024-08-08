@@ -246,10 +246,18 @@ function SetupProfile() {
     };
     
     console.log("Input form data:", data);
-
-    const currentDateTime = new Date().toISOString();
+    const now = new Date();
+    const currentDateTime = now.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
     const user2 = new AppUser(
-      null, user.user_id, user.username, user.email, null, user.password,
+      user.id, user.user_id, user.username, user.email, null, user.password,
       data.firstname, data.lastname, data.dob, data.country, null, data.document,
       null, data.bio, user.date_joined, null, data.profile_picture, null, null,
       null, null, null, null, user.creator_mode, null, null, null, user.account_type, null, currentDateTime
