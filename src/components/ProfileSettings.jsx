@@ -1,13 +1,13 @@
 import TextareaAutosize from 'react-textarea-autosize';
 import FormInput from './FormInput';
 import { useState, useRef, useContext, useEffect } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MobileFooterNav from '../components/MobileFooterNav';
 import { useMediaQuery } from 'react-responsive';
 import { AuthContext } from "../context/authContext";
 
 function ProfileSettings() {
- 
+
   const [countries, setCountries] = useState([]);
   const { currentUser, updateCurrentUser } = useContext(AuthContext);
   const { profile_picture, cover_picture, username, bio, location, dob } = currentUser || {};
@@ -85,6 +85,11 @@ function ProfileSettings() {
       profile_picture: profileImage,
       cover_picture: coverImage,
     };
+    // Make sure at least one field is different before submitting
+  if (JSON.stringify(userUpdate) === JSON.stringify(currentUser)) {
+    alert("No changes detected.");
+    return;
+  }
     const response = await updateCurrentUser(userUpdate);
     if (response.success) {
       alert("Profile updated successfully!");

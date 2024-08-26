@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import DbHelper from '../utils/DbHelper';
@@ -16,6 +16,8 @@ function Login() {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("")
+
 
   const handleInputChange = (name, value) => {
     setFormInput({
@@ -23,18 +25,16 @@ function Login() {
       [name]: value,
     });
 
+
     if (name === "email") {
       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
       if (!emailRegex.test(value)) {
-        toast.error("Invalid email address");
-      } else {
-        toast.dismiss();
+        setError("Invalid email address");
       }
     } else if (name === "password" && value.length < 6) {
-      toast.error("Password must be at least 6 characters long");
-    } else {
-      toast.dismiss();
+      setError("Password must be at least 6 characters long");
     }
+
   };
 
   const handleSubmit = async (e) => {
@@ -42,33 +42,33 @@ function Login() {
     const { email, password } = formInput;
 
     if (!email) {
-        toast.error('Email is required');
-        return;
+      setError('Email is required');
+      return;
     }
     if (!password) {
-        toast.error('Password is required');
-        return;
+      setError('Password is required');
+      return;
     }
 
     console.log('Attempting to fetch user for email:', email); // Debugging statement
 
     const userData = await dbHelper.getAppUserByEmail(email);
     if (!userData) {
-        toast.error("User not found");
-        return;
+      setError("User not found");
+      return;
     }
 
     console.log('User data retrieved:', userData); // Debugging statement
 
     if (password !== userData.password) {
-        toast.error("Incorrect password");
-        return;
+      setError("Incorrect password");
+      return;
     }
-  console.log(userData.id)
-   await loginUser(userData.id);
+    console.log(userData.id)
+    await loginUser(userData.id);
     localStorage.setItem('Loggedin', true);
     navigate('/home');
-};
+  };
 
 
   const togglePassword = () => {
@@ -123,6 +123,8 @@ function Login() {
             </p>
 
             <form onSubmit={handleSubmit} method='post' className="space-y-6 pr-4">
+              {error ? <p className="text-color-red text-sm">{error}</p> : ''}
+
               <FormInput
                 name="email"
                 type="text"
@@ -151,7 +153,7 @@ function Login() {
               <a href="#" className="flex justify-end text-[0.9rem] text-color-grey">Forgot Password?</a>
               <div>
                 <button
-                onClick={handleSubmit}
+                  onClick={handleSubmit}
                   type="submit"
                   className="bg-color-pink w-full rounded-full py-2 text-color-white font-semibold text-[0.8rem] hover:bg-color-pink/80"
                 >
@@ -176,7 +178,7 @@ function Login() {
           </div>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </section>
   );
 }
