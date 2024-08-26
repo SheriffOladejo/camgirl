@@ -183,16 +183,16 @@ function CreatePost({addPost}) {
   const createPost = async () => {
     console.log('clicked');
     console.log('Creating post with:', { postText, user });
-    console.log(user.user_id)
+    console.log(user.id)
     setLoading(true);
-    if (!user || !user.user_id) {
+    if (!user || !user.id) {
       console.error('User not authenticated or missing user ID.');
       alert('Error: User not authenticated.');
       return;
   }    setLoading(true);
     try {
       const postId = new Date().getTime();
-      const userId = user.user_id;
+      const userId = user.id;
       const now = new Date();
       const formattedDate = now.toLocaleString('en-US', {
         year: 'numeric',

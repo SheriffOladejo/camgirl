@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
@@ -10,7 +10,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import AppUser from "../models/AppUser";
 import DbHelper from '../utils/DbHelper';
 import { GOOGLE_CLIENT_ID } from "../utils/Constants";
-import { v4 as uuidv4 } from 'uuid'; 
+import { v4 as uuidv4 } from 'uuid';
 
 function Signup() {
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ function Signup() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isGoogleSignIn, setGoogleSignIn] = useState(false);
+  const [error, setError] = useState("")
 
   // useEffect(() => {
   //   setLastUserId(0);
@@ -82,7 +83,7 @@ function Signup() {
 
   const googleButtonClicked = (renderProps) => {
     if (!termsChecked) {
-      toast.error("Read and accept Terms of Service");
+      setError("Read and accept Terms of Service");
     } else {
       setLoading(true);
       renderProps.onClick();
@@ -103,19 +104,19 @@ function Signup() {
           setLoading(false);
           setFirstname("");
           setLastname("");
-          toast.error("This email is already registered");
+          setError("This email is already registered");
         } else {
           setUser(res); // Setting user state after successful login
           setGoogleSignIn(true);
         }
       } catch (error) {
         setLoading(false);
-        toast.error("An error occurred while checking email.");
+        setError("An error occurred while checking email.");
         console.error('Email check failed:', error);
       }
     } else {
       setLoading(false);
-      toast.error("An error occurred");
+      setError("An error occurred");
     }
   };
 
@@ -177,28 +178,33 @@ function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
-    creator_mode: null, 
+    creator_mode: null,
 
   });
+  const typingTimeoutRef = useRef(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormInput((prev) => ({ ...prev, [name]: value }));
-    validateInput(name, value);
+  
   };
 
   const validateInput = (name, value) => {
-    if (name === "email" && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-      toast.error("Invalid email address");
-    } else if (name === "password" && value.length < 6) {
-      toast.error("Password must be at least 6 characters long");
-    } else if (name === "confirmPassword" && value !== formInput.password) {
-      toast.error("Passwords do not match");
-    }
+    // Clear the timeout if the user is still typing
+   
+      if (name === "email") {
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        if (!emailRegex.test(value)) {
+          setError("Invalid email address");
+        }
+      } else if (name === "password" && value.length < 6) {
+        setError("Password must be at least 6 characters long");
+      }
+    
   };
 
   const handleCheckboxChange = () => {
-    setTermsChecked(!termsChecked);
+    setTermsChecked((checked) => !checked);
   };
 
   const handleSignupFan = () => {
@@ -216,67 +222,68 @@ function Signup() {
     setLoading(true);
 
     if (!formInput.email || !formInput.username || !formInput.password || formInput.confirmPassword !== formInput.password) {
-        toast.error('Please fill out all required fields correctly');
-        setLoading(false);
-        return;
+      setError('Please fill out all required fields correctly');
+      setLoading(false);
+      return;
     }
+    validateInput(formInput);
 
     if (!termsChecked) {
-        toast.error("Please accept the terms and conditions to create an account.");
-        setLoading(false);
-        return;
+      setError("Please accept the terms and conditions to create an account.");
+      setLoading(false);
+      return;
     }
 
     try {
-        console.log('Checking username availability...');
-        const isUsernameTaken = await dbHelper.checkForUsername(formInput.username);
-        console.log('Username availability:', isUsernameTaken);
+      console.log('Checking username availability...');
+      const isUsernameTaken = await dbHelper.checkForUsername(formInput.username);
+      console.log('Username availability:', isUsernameTaken);
 
-        console.log('Checking email availability...');
-        const isEmailRegistered = await dbHelper.checkForEmail(formInput.email);
-        console.log('Email availability:', isEmailRegistered);
+      console.log('Checking email availability...');
+      const isEmailRegistered = await dbHelper.checkForEmail(formInput.email);
+      console.log('Email availability:', isEmailRegistered);
 
-        if (isUsernameTaken) {
-            toast.error("This username is already taken");
-            setLoading(false);
-            return;
-        }
+      if (isUsernameTaken) {
+        setError("This username is already taken");
+        setLoading(false);
+        return;
+      }
 
-        if (isEmailRegistered) {
-            toast.error("This email is already registered");
-            setLoading(false);
-            return;
-        }
+      if (isEmailRegistered) {
+        setError("This email is already registered");
+        setLoading(false);
+        return;
+      }
 
-        const account_type = "manual";
-        const user_Id = uuidv4();
-        const data = {
-            ...formInput,
-            user_id: user_Id,
-            date_joined: Date.now(),
-            account_type: account_type,
-        };
+      const account_type = "manual";
+      const user_Id = uuidv4();
+      const data = {
+        ...formInput,
+        user_id: user_Id,
+        date_joined: Date.now(),
+        account_type: account_type,
+      };
 
-        const user = new AppUser(
-            user_Id, data.user_id, data.username, data.email, null, data.password, null, null,
-            null, null, null, null, null, null, data.date_joined,
-            null, null, null, null, null,
-            null, null, null, data.creator_mode, null,
-            null, null, data.account_type, null
-        );
+      const user = new AppUser(
+        user_Id, data.user_id, data.username, data.email, null, data.password, null, null,
+        null, null, null, null, null, null, data.date_joined,
+        null, null, null, null, null,
+        null, null, null, data.creator_mode, null,
+        null, null, data.account_type, null
+      );
 
-        console.log('Creating user:', user);
-        // const result = await dbHelper.createUser(user);
+      console.log('Creating user:', user);
+      // const result = await dbHelper.createUser(user);
 
-        navigate(formInput.creator_mode === 'fan' ? '/profile-setup' : '/setup-profile', { state: { user, profile } });
+      navigate(formInput.creator_mode === 'fan' ? '/profile-setup' : '/setup-profile', { state: { user, profile } });
 
     } catch (error) {
-        toast.error("An error occurred while signing up.");
-        console.error('Signup error:', error);
+      setError("An error occurred while signing up.");
+      console.error('Signup error:', error);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
 
   const togglePassword = () => {
@@ -313,6 +320,7 @@ function Signup() {
             <div>
               {!loading && <>
                 <form onSubmit={handleSubmit} className="space-y-4 pr-4 pt-4">
+                  {error ? <p className="text-color-red text-sm">{error}</p> : ''}
                   <FormInput name="username" type="text" placeholder="Enter Username" value={formInput.username} onChange={handleInputChange} />
                   <FormInput name="email" type="text" placeholder="Email address or phone number" value={formInput.email} onChange={handleInputChange} />
                   <div className="relative">

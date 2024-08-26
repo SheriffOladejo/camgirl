@@ -43,39 +43,6 @@ function Posts({ addPost, posts= [], setPosts }) {
     getPosts();
   }, []);
 
-  // useEffect(() => {
-  //   const loadMorePosts = () => {
-  //     if (loading) return;
-
-  //     const totalVisible = visiblePosts.length;
-  //     const morePosts = posts.slice(totalVisible, totalVisible + 4);
-
-  //     if (morePosts.length > 0) {
-  //       setVisiblePosts((prevPosts) => [...prevPosts, ...morePosts]);
-  //     }
-  //   };
-
-  //   const handleScroll = () => {
-  //     if (containerRef.current) {
-  //       const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-  //       if (scrollTop + clientHeight >= scrollHeight - 5) {
-  //         loadMorePosts();
-  //       }
-  //     }
-  //   };
-
-  //   const tl = gsap.timeline({
-  //     scrollTrigger: {
-  //       trigger: containerRef.current,
-  //       start: 'bottom bottom',
-  //       onEnter: handleScroll,
-  //     },
-  //   });
-
-  //   return () => {
-  //     tl.kill();
-  //   };
-  // }, [visiblePosts, posts, loading]);
 
   if (error) {
     return <div>Error: {error}</div>;
