@@ -7,7 +7,7 @@
 - run: npm run build
 
 ## start json server
-- run: npx json-server -p 5000  data.json5
+- run: npx json-server -p 6000  data.json5
 
 ## if you fork it:
-  - run: npm install    
+  - run: npm install  
