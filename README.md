@@ -10,4 +10,4 @@
 - run: npx json-server -p 6000  data.json5
 
 ## if you fork it:
-  - run: npm install    
+  - run: npm install  
